@@ -28,20 +28,22 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <span className="text-2xl font-heading font-bold gradient-text">
+            <span className={`text-2xl font-heading font-bold transition-colors ${
+              isScrolled ? "gradient-text" : "text-white"
+            }`}>
               NDIGITAL
             </span>
           </a>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-foreground/80 hover:text-primary font-medium transition-colors"
+                className={`font-medium transition-colors ${
+                  isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+                }`}
               >
                 {link.label}
               </a>
@@ -62,7 +64,9 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
+            className={`md:hidden p-2 transition-colors ${
+              isScrolled ? "text-foreground" : "text-white"
+            }`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
