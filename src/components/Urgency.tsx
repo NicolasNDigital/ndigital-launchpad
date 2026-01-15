@@ -8,19 +8,20 @@ const Urgency = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const slots = [
-    { id: 1, status: "available", label: "DISPONIBLE" },
-    { id: 2, status: "available", label: "DISPONIBLE" },
-    { id: 3, status: "reserved", label: "RÉSERVÉ" },
-    { id: 4, status: "available", label: "DISPONIBLE" },
-    { id: 5, status: "complete", label: "COMPLET" },
+    { id: 1, status: "available", label: "Disponible" },
+    { id: 2, status: "available", label: "Disponible" },
+    { id: 3, status: "reserved", label: "Réservé" },
+    { id: 4, status: "available", label: "Disponible" },
+    { id: 5, status: "complete", label: "Complet" },
   ];
 
   return (
-    <section ref={ref} className="py-16 md:py-24 bg-warning relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
+    <section ref={ref} className="py-20 md:py-28 bg-warning relative overflow-hidden">
+      {/* Subtle pattern */}
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+          backgroundImage: `radial-gradient(circle at 1px 1px, black 1px, transparent 0)`,
+          backgroundSize: "32px 32px"
         }} />
       </div>
 
@@ -32,42 +33,42 @@ const Urgency = () => {
           className="text-center"
         >
           {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-deep-black text-white text-sm font-bold mb-6">
-            <Clock className="w-4 h-4" />
-            OFFRE LIMITÉE
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground text-background text-xs font-medium mb-6">
+            <Clock className="w-3 h-3" />
+            Offre limitée
           </span>
 
           {/* Title */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-deep-black mb-4">
-            4 Créneaux Disponibles Ce Mois-Ci
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-light text-foreground mb-4">
+            4 créneaux disponibles ce mois-ci
           </h2>
 
           {/* Description */}
-          <p className="text-lg text-deep-black/80 max-w-2xl mx-auto mb-10">
-            Pour garantir la qualité et le respect des délais, je ne prends que 4-5 projets par mois maximum.
+          <p className="text-lg text-foreground/70 max-w-2xl mx-auto mb-10 font-light">
+            Pour garantir la qualité et le respect des délais, je ne prends que 4-5 projets par mois.
             <br />
-            Les créneaux de ce mois se remplissent vite. Réservez le vôtre avant qu'il ne soit trop tard.
+            Les créneaux se remplissent vite. Réservez le vôtre.
           </p>
 
           {/* Slots */}
-          <div className="flex flex-wrap justify-center gap-4 mb-10">
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
             {slots.map((slot) => (
               <div
                 key={slot.id}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium text-sm transition-all ${
                   slot.status === "available"
-                    ? "bg-success-green text-white"
+                    ? "bg-success text-background"
                     : slot.status === "reserved"
-                    ? "bg-amber-400 text-deep-black"
-                    : "bg-deep-black/20 text-deep-black/60"
+                    ? "bg-foreground/20 text-foreground"
+                    : "bg-foreground/10 text-foreground/50"
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${
                   slot.status === "available"
-                    ? "bg-white"
+                    ? "bg-background"
                     : slot.status === "reserved"
-                    ? "bg-deep-black"
-                    : "bg-deep-black/40"
+                    ? "bg-foreground"
+                    : "bg-foreground/30"
                 }`} />
                 Créneau {slot.id} : {slot.label}
               </div>
@@ -77,10 +78,10 @@ const Urgency = () => {
           {/* CTA */}
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-lg bg-deep-black text-white hover:bg-deep-black/90 transition-all group shadow-xl"
+            className="btn-primary group"
           >
-            Réserver mon créneau maintenant
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Réserver mon créneau
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
       </div>

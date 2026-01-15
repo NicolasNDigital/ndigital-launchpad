@@ -18,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ["Bebas Neue", "system-ui", "sans-serif"],
+        heading: ["Cormorant Garamond", "Georgia", "serif"],
         body: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
@@ -73,11 +73,13 @@ export default {
         "pure-white": "hsl(var(--pure-white))",
       },
       borderRadius: {
-        lg: "0px",
-        md: "0px",
-        sm: "0px",
-        xl: "0px",
-        "2xl": "0px",
+        lg: "1rem",
+        md: "0.75rem",
+        sm: "0.5rem",
+        xl: "1.5rem",
+        "2xl": "2rem",
+        "3xl": "2.5rem",
+        "4xl": "3rem",
       },
       keyframes: {
         "accordion-down": {
@@ -96,17 +98,12 @@ export default {
           "0%": { opacity: "0", transform: "translateX(-20px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
         },
-        "line-grow": {
-          "0%": { width: "0" },
-          "100%": { width: "100%" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-up": "fade-up 0.6s ease-out forwards",
         "slide-in": "slide-in 0.4s ease-out forwards",
-        "line-grow": "line-grow 0.8s ease-out forwards",
       },
     },
   },

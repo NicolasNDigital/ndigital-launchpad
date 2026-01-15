@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,69 +6,65 @@
 
 @layer base {
   :root {
-    /* Monochrome Palette - Damier Inspired */
+    /* Dulcedo-inspired Elegant Palette */
     --pure-black: 0 0% 0%;
-    --deep-black: 0 0% 5%;
+    --deep-black: 0 0% 8%;
     --charcoal: 0 0% 15%;
-    --dark-gray: 0 0% 25%;
-    --medium-gray: 0 0% 50%;
-    --light-gray: 0 0% 92%;
-    --off-white: 0 0% 97%;
+    --dark-gray: 0 0% 30%;
+    --medium-gray: 0 0% 55%;
+    --light-gray: 0 0% 94%;
+    --off-white: 0 0% 98%;
     --pure-white: 0 0% 100%;
-    
-    /* Accent - subtle warmth */
-    --accent-gold: 45 100% 50%;
-    --accent-red: 0 72% 50%;
     
     /* Semantic tokens */
     --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --foreground: 0 0% 8%;
     
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 8%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 0 0% 8%;
     
-    --primary: 0 0% 0%;
+    --primary: 0 0% 8%;
     --primary-foreground: 0 0% 100%;
     
-    --secondary: 0 0% 92%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 8%;
     
-    --muted: 0 0% 97%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
     
-    --accent: 0 0% 92%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 8%;
     
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --success: 145 63% 42%;
+    --success: 160 60% 45%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 45 100% 50%;
+    --warning: 45 90% 55%;
     --warning-foreground: 0 0% 0%;
     
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 0 0% 0%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 8%;
     
-    --radius: 0px;
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
     
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
     
-    --muted: 0 0% 15%;
+    --muted: 0 0% 18%;
     --muted-foreground: 0 0% 65%;
     
     --border: 0 0% 20%;
@@ -90,165 +86,107 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-normal tracking-wider uppercase;
+    @apply font-heading font-light tracking-wide;
   }
 }
 
 @layer components {
-  /* Checkerboard pattern background */
-  .checkerboard {
-    background-image: 
-      linear-gradient(45deg, hsl(var(--pure-black)) 25%, transparent 25%),
-      linear-gradient(-45deg, hsl(var(--pure-black)) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, hsl(var(--pure-black)) 75%),
-      linear-gradient(-45deg, transparent 75%, hsl(var(--pure-black)) 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-  }
-  
-  .checkerboard-subtle {
-    background-image: 
-      linear-gradient(45deg, hsl(var(--light-gray)) 25%, transparent 25%),
-      linear-gradient(-45deg, hsl(var(--light-gray)) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, hsl(var(--light-gray)) 75%),
-      linear-gradient(-45deg, transparent 75%, hsl(var(--light-gray)) 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
-  }
-  
-  .checkerboard-large {
-    background-image: 
-      linear-gradient(45deg, hsl(var(--pure-black)) 25%, transparent 25%),
-      linear-gradient(-45deg, hsl(var(--pure-black)) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, hsl(var(--pure-black)) 75%),
-      linear-gradient(-45deg, transparent 75%, hsl(var(--pure-black)) 75%);
-    background-size: 60px 60px;
-    background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
-  }
-  
-  /* Diamond border pattern */
-  .diamond-border {
-    background: 
-      linear-gradient(135deg, hsl(var(--pure-black)) 25%, transparent 25%) -10px 0,
-      linear-gradient(225deg, hsl(var(--pure-black)) 25%, transparent 25%) -10px 0,
-      linear-gradient(315deg, hsl(var(--pure-black)) 25%, transparent 25%),
-      linear-gradient(45deg, hsl(var(--pure-black)) 25%, transparent 25%);
-    background-size: 20px 20px;
-    background-color: white;
-  }
-  
-  /* Gradient text - now uses black underline effect */
-  .gradient-text {
-    @apply relative inline-block;
-  }
-  
-  .gradient-text::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-full h-1 bg-foreground;
-  }
-  
-  /* Editorial underline */
-  .editorial-underline {
-    @apply relative inline-block;
-  }
-  
-  .editorial-underline::after {
-    content: '';
-    @apply absolute -bottom-2 left-0 w-full h-[3px] bg-foreground;
-  }
-  
-  /* Buttons - Sharp, Bold */
+  /* Elegant rounded buttons - Dulcedo style */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-heading text-lg tracking-widest uppercase bg-foreground text-background transition-all duration-200 border-2 border-foreground;
-  }
-  
-  .btn-primary:hover {
-    @apply bg-background text-foreground;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-80;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-heading text-lg tracking-widest uppercase bg-background text-foreground transition-all duration-200 border-2 border-foreground;
-  }
-  
-  .btn-secondary:hover {
-    @apply bg-foreground text-background;
-  }
-  
-  .btn-orange {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-heading text-lg tracking-widest uppercase bg-foreground text-background transition-all duration-200 border-2 border-foreground;
-  }
-  
-  .btn-orange:hover {
-    @apply bg-background text-foreground;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-background text-foreground rounded-full border border-foreground/20 transition-all duration-300 hover:border-foreground;
   }
   
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-heading text-lg tracking-widest uppercase bg-transparent text-foreground transition-all duration-200 border-2 border-foreground;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-transparent text-foreground rounded-full border border-foreground/30 transition-all duration-300 hover:bg-foreground hover:text-background;
   }
   
-  .btn-outline:hover {
-    @apply bg-foreground text-background;
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-body font-medium text-sm tracking-wider bg-transparent text-foreground transition-all duration-300 hover:opacity-60;
   }
   
-  /* Glass effect - now more subtle */
+  /* Glass effect - Editorial style */
   .glass {
-    @apply bg-background/95 backdrop-blur-md;
+    @apply bg-background/80 backdrop-blur-xl;
   }
   
   .glass-dark {
-    @apply bg-foreground/95 backdrop-blur-md;
+    @apply bg-foreground/90 backdrop-blur-xl;
   }
   
-  .glass-light {
-    @apply bg-background/80 backdrop-blur-sm;
+  /* Editorial Cards - Rounded, Soft shadows */
+  .card-elegant {
+    @apply bg-background rounded-3xl p-8 shadow-[0_4px_40px_rgba(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_8px_60px_rgba(0,0,0,0.1)];
   }
   
-  /* Cards - Sharp edges */
-  .card-editorial {
-    @apply border-2 border-foreground bg-background p-8 transition-all duration-200;
+  .card-outline {
+    @apply bg-background rounded-3xl p-8 border border-foreground/10 transition-all duration-300 hover:border-foreground/30;
   }
   
-  .card-editorial:hover {
-    @apply bg-foreground text-background;
+  .card-dark {
+    @apply bg-foreground text-background rounded-3xl p-8;
   }
   
-  /* No gradients - solid backgrounds */
-  .bg-gradient-primary {
-    @apply bg-foreground;
+  /* Badge - Pill style */
+  .badge-pill {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 text-foreground text-xs font-medium tracking-wider;
   }
   
-  .bg-gradient-hero {
-    @apply bg-foreground;
+  .badge-dark {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground text-background text-xs font-medium tracking-wider;
   }
   
-  /* Badge */
-  .badge-pulse {
-    @apply inline-flex items-center gap-2 px-4 py-2 border-2 border-foreground text-sm font-heading tracking-wider uppercase;
-  }
-  
-  /* Section titles - Editorial style */
+  /* Section titles - Editorial elegance */
   .section-title {
-    @apply text-4xl md:text-5xl lg:text-7xl font-heading tracking-wider uppercase mb-8;
+    @apply text-4xl md:text-5xl lg:text-6xl font-heading font-light tracking-wide;
   }
   
   .section-subtitle {
-    @apply text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-body;
+    @apply text-lg text-muted-foreground max-w-2xl mx-auto font-body font-light leading-relaxed;
   }
   
-  /* Decorative line */
+  /* Form inputs - Rounded, minimal */
+  .input-elegant {
+    @apply w-full px-6 py-4 bg-muted/50 text-foreground rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-foreground/10 transition-all placeholder:text-muted-foreground/50 font-body;
+  }
+  
+  .input-dark {
+    @apply w-full px-6 py-4 bg-background/10 text-background rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-background/20 transition-all placeholder:text-background/40 font-body;
+  }
+  
+  /* Decorative elements */
   .deco-line {
-    @apply w-20 h-[3px] bg-foreground;
+    @apply w-16 h-px bg-foreground/20;
   }
   
-  /* Striped background */
-  .striped-bg {
-    background: repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 2px,
-      hsl(var(--light-gray)) 2px,
-      hsl(var(--light-gray)) 4px
-    );
+  .deco-circle {
+    @apply w-3 h-3 rounded-full bg-foreground/20;
+  }
+  
+  /* Link with underline animation */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-px bg-foreground transition-all duration-300;
+  }
+  
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+  
+  /* Image containers - Editorial rounded */
+  .img-editorial {
+    @apply rounded-3xl overflow-hidden;
+  }
+  
+  .img-blob {
+    @apply rounded-[40%_60%_70%_30%/40%_50%_60%_50%];
   }
 }
 
@@ -258,7 +196,7 @@
   }
 }
 
-/* Animations - More subtle and refined */
+/* Smooth animations */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -270,22 +208,65 @@
   }
 }
 
-@keyframes line-grow {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes slide-in {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateX(-20px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
   }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
 }
