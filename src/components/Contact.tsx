@@ -38,10 +38,10 @@ const Contact = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-            Prêt à Propulser Votre Business ?
+            Lancez Votre Projet Dès Aujourd'hui
           </h2>
           <p className="text-lg text-white/80">
-            Discutons de votre projet. Devis gratuit sous 24h.
+            Un site pro qui génère des clients ? Parlons-en. Devis gratuit sous 24h.
           </p>
         </motion.div>
 
