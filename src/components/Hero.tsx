@@ -65,6 +65,7 @@ const Hero = () => {
           duration: 0.6,
           delay: 0.2
         }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">Artisans, commerçants, indépendants : obtenez un site moderne qui améliore votre visibilité, votre image et qui génère des clients.
+
 Mis en ligne en 14 jours maximum garanti.<br />
             <strong className="text-white">Mis en ligne en 14 jours maximum garanti.</strong>
           </motion.p>
