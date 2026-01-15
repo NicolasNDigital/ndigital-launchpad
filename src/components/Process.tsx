@@ -13,7 +13,7 @@ const Process = () => {
       day: "Jour 0",
       title: "Premier Contact",
       emoji: "📞",
-      description: "Appel ou visio de 30 min pour comprendre votre activité, vos besoins et vos objectifs. Devis gratuit immédiat.",
+      description: "Échange téléphonique ou visio de 30 minutes : je découvre votre activité, vos attentes et vos objectifs. Vous repartez avec un devis détaillé gratuit sous 24h.",
     },
     {
       icon: Palette,
