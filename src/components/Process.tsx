@@ -41,7 +41,7 @@ const Process = () => {
       day: "Jour 14",
       title: "Mise en Ligne",
       emoji: "🚀",
-      description: "Votre site est publié et indexé sur Google. Je vous forme à sa prise en main et reste disponible pendant 30 jours pour toute question ou ajustement.",
+      description: "Votre site est publié et indexé sur Google. Vous êtes désormais visible par vos futurs clients !",
     },
   ];
 
