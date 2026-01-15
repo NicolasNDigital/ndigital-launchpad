@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Dulcedo-inspired Elegant Palette */
+    /* Elegant Palette with Warm Gold Accent */
     --pure-black: 0 0% 0%;
     --deep-black: 0 0% 8%;
     --charcoal: 0 0% 15%;
@@ -15,6 +15,10 @@
     --light-gray: 0 0% 94%;
     --off-white: 0 0% 98%;
     --pure-white: 0 0% 100%;
+    
+    /* Warm Gold Tertiary - #D4AA7D */
+    --tertiary: 30 50% 66%;
+    --tertiary-foreground: 0 0% 100%;
     
     /* Semantic tokens */
     --background: 0 0% 100%;
@@ -32,11 +36,11 @@
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 8%;
     
-    --muted: 0 0% 96%;
+    --muted: 30 20% 96%;
     --muted-foreground: 0 0% 45%;
     
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 8%;
+    --accent: 30 50% 66%;
+    --accent-foreground: 0 0% 100%;
     
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
@@ -47,9 +51,9 @@
     --warning: 45 90% 55%;
     --warning-foreground: 0 0% 0%;
     
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 8%;
+    --border: 30 15% 90%;
+    --input: 30 15% 90%;
+    --ring: 30 50% 66%;
     
     --radius: 1rem;
   }
@@ -91,55 +95,89 @@
 }
 
 @layer components {
-  /* Elegant rounded buttons - Dulcedo style */
+  /* Primary button - Dark with gold hover */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-80;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-foreground text-background rounded-full transition-all duration-300;
+  }
+  
+  .btn-primary:hover {
+    background-color: hsl(var(--tertiary));
+    color: hsl(var(--foreground));
+  }
+  
+  /* Tertiary button - Gold accent */
+  .btn-tertiary {
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider rounded-full transition-all duration-300;
+    background-color: hsl(var(--tertiary));
+    color: hsl(var(--foreground));
+  }
+  
+  .btn-tertiary:hover {
+    opacity: 0.9;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-background text-foreground rounded-full border border-foreground/20 transition-all duration-300 hover:border-foreground;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-background text-foreground rounded-full border border-foreground/20 transition-all duration-300;
+  }
+  
+  .btn-secondary:hover {
+    border-color: hsl(var(--tertiary));
+    color: hsl(var(--tertiary));
   }
   
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-transparent text-foreground rounded-full border border-foreground/30 transition-all duration-300 hover:bg-foreground hover:text-background;
+    @apply inline-flex items-center justify-center gap-3 px-8 py-4 font-body font-medium text-sm tracking-wider bg-transparent text-foreground rounded-full border border-foreground/30 transition-all duration-300;
+  }
+  
+  .btn-outline:hover {
+    border-color: hsl(var(--tertiary));
+    color: hsl(var(--tertiary));
   }
   
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-body font-medium text-sm tracking-wider bg-transparent text-foreground transition-all duration-300 hover:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-body font-medium text-sm tracking-wider bg-transparent text-foreground transition-all duration-300 hover:text-tertiary;
   }
   
-  /* Glass effect - Editorial style */
+  /* Glass effect */
   .glass {
-    @apply bg-background/80 backdrop-blur-xl;
+    @apply bg-background/80 backdrop-blur-xl border-b border-border;
   }
   
   .glass-dark {
     @apply bg-foreground/90 backdrop-blur-xl;
   }
   
-  /* Editorial Cards - Rounded, Soft shadows */
+  /* Cards with subtle warmth */
   .card-elegant {
-    @apply bg-background rounded-3xl p-8 shadow-[0_4px_40px_rgba(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_8px_60px_rgba(0,0,0,0.1)];
+    @apply bg-background rounded-3xl p-8 shadow-[0_4px_40px_rgba(212,170,125,0.08)] transition-all duration-500 hover:shadow-[0_8px_60px_rgba(212,170,125,0.15)] border border-border;
   }
   
   .card-outline {
-    @apply bg-background rounded-3xl p-8 border border-foreground/10 transition-all duration-300 hover:border-foreground/30;
+    @apply bg-background rounded-3xl p-8 border border-border transition-all duration-300 hover:border-tertiary/50;
   }
   
   .card-dark {
     @apply bg-foreground text-background rounded-3xl p-8;
   }
   
-  /* Badge - Pill style */
+  .card-tertiary {
+    @apply bg-tertiary/10 rounded-3xl p-8 border border-tertiary/20;
+  }
+  
+  /* Badge styles */
   .badge-pill {
-    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 text-foreground text-xs font-medium tracking-wider;
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary/10 text-foreground text-xs font-medium tracking-wider border border-tertiary/20;
   }
   
   .badge-dark {
     @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground text-background text-xs font-medium tracking-wider;
   }
   
-  /* Section titles - Editorial elegance */
+  .badge-tertiary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary text-foreground text-xs font-medium tracking-wider;
+  }
+  
+  /* Section titles */
   .section-title {
     @apply text-4xl md:text-5xl lg:text-6xl font-heading font-light tracking-wide;
   }
@@ -148,45 +186,78 @@
     @apply text-lg text-muted-foreground max-w-2xl mx-auto font-body font-light leading-relaxed;
   }
   
-  /* Form inputs - Rounded, minimal */
+  /* Form inputs */
   .input-elegant {
-    @apply w-full px-6 py-4 bg-muted/50 text-foreground rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-foreground/10 transition-all placeholder:text-muted-foreground/50 font-body;
+    @apply w-full px-6 py-4 bg-muted/50 text-foreground rounded-2xl border border-border focus:outline-none focus:ring-2 focus:ring-tertiary/30 focus:border-tertiary/50 transition-all placeholder:text-muted-foreground/50 font-body;
   }
   
   .input-dark {
-    @apply w-full px-6 py-4 bg-background/10 text-background rounded-2xl border-0 focus:outline-none focus:ring-2 focus:ring-background/20 transition-all placeholder:text-background/40 font-body;
+    @apply w-full px-6 py-4 bg-background/10 text-background rounded-2xl border border-background/20 focus:outline-none focus:ring-2 focus:ring-tertiary/30 transition-all placeholder:text-background/40 font-body;
   }
   
   /* Decorative elements */
   .deco-line {
-    @apply w-16 h-px bg-foreground/20;
+    @apply w-16 h-px bg-tertiary/50;
+  }
+  
+  .deco-line-full {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-tertiary/30 to-transparent;
   }
   
   .deco-circle {
-    @apply w-3 h-3 rounded-full bg-foreground/20;
+    @apply w-3 h-3 rounded-full bg-tertiary;
   }
   
-  /* Link with underline animation */
+  .deco-dot {
+    @apply w-2 h-2 rounded-full bg-tertiary/60;
+  }
+  
+  /* Link with gold underline animation */
   .link-underline {
     @apply relative inline-block;
   }
   
   .link-underline::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-0 h-px bg-foreground transition-all duration-300;
+    @apply absolute bottom-0 left-0 w-0 h-px bg-tertiary transition-all duration-300;
   }
   
   .link-underline:hover::after {
     @apply w-full;
   }
   
-  /* Image containers - Editorial rounded */
+  /* Image containers */
   .img-editorial {
     @apply rounded-3xl overflow-hidden;
   }
   
   .img-blob {
     @apply rounded-[40%_60%_70%_30%/40%_50%_60%_50%];
+  }
+  
+  /* Text with gold accent */
+  .text-accent-highlight {
+    @apply text-tertiary;
+  }
+  
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-foreground via-tertiary to-foreground bg-clip-text text-transparent;
+  }
+  
+  /* Decorative border */
+  .border-accent {
+    @apply border-tertiary/30;
+  }
+  
+  /* Featured highlight */
+  .highlight-gold {
+    @apply relative;
+  }
+  
+  .highlight-gold::before {
+    content: '';
+    @apply absolute -inset-1 bg-tertiary/20 rounded-3xl -z-10;
   }
 }
 
@@ -237,6 +308,15 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.8s ease-out forwards;
 }
@@ -253,6 +333,12 @@
   animation: float 6s ease-in-out infinite;
 }
 
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(var(--tertiary) / 0.3), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -263,10 +349,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: hsl(var(--tertiary) / 0.4);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--tertiary) / 0.6);
+}
+
+/* Selection color */
+::selection {
+  background: hsl(var(--tertiary) / 0.3);
 }
