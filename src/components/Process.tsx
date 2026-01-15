@@ -20,28 +20,28 @@ const Process = () => {
       day: "Jours 1-3",
       title: "Direction Artistique",
       emoji: "🎨",
-      description: "Je définis votre identité visuelle, palette couleurs, style. Vous validez la maquette avant développement.",
+      description: "Je crée une identité visuelle unique pour votre entreprise : palette de couleurs, typographies et style graphique. Vous validez la maquette avant de passer au développement.",
     },
     {
       icon: Code,
       day: "Jours 4-10",
       title: "Développement",
       emoji: "💻",
-      description: "Création du site avec technologies no-code/IA de pointe. Optimisation SEO locale intégrée dès le départ.",
+      description: "Construction de votre site avec les dernières technologies. Chaque page est optimisée pour le SEO local afin que vos clients vous trouvent facilement sur Google.",
     },
     {
       icon: CheckCircle,
       day: "Jours 11-13",
       title: "Validation & Ajustements",
       emoji: "✅",
-      description: "Vous testez le site, je corrige les détails. 2 aller-retours de modifications inclus.",
+      description: "Vous testez votre site en conditions réelles. Je réalise jusqu'à 2 séries de modifications pour que le résultat corresponde parfaitement à vos attentes.",
     },
     {
       icon: Rocket,
       day: "Jour 14",
       title: "Mise en Ligne",
       emoji: "🚀",
-      description: "Votre site est en ligne, visible sur Google. Formation prise en main + support 30 jours.",
+      description: "Votre site est publié et indexé sur Google. Je vous forme à sa prise en main et reste disponible pendant 30 jours pour toute question ou ajustement.",
     },
   ];
 
