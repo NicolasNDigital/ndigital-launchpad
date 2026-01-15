@@ -15,13 +15,11 @@ const Hero = () => {
     desc: "Sites optimisés SEO + Ads qui convertissent"
   }];
   return <section className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-32 bg-deep-black">
-      {/* Background with gradient fade to white at bottom */}
+      {/* Background with mesh gradient */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-electric-blue/15 via-transparent to-transparent" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electric-blue/20 rounded-full blur-[150px]" />
         <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-vibrant-violet/15 rounded-full blur-[120px]" />
-        {/* Gradient fade to white at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
