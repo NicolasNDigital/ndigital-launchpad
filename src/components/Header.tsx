@@ -23,25 +23,25 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass shadow-lg" : "bg-transparent"
+        isScrolled ? "bg-background border-b-2 border-foreground" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <span className="text-2xl font-heading font-bold gradient-text">
+            <span className="text-3xl font-heading tracking-[0.2em]">
               NDIGITAL
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-12">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-foreground/80 hover:text-primary font-medium transition-colors"
+                className="font-heading text-sm tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
               >
                 {link.label}
               </a>
@@ -49,11 +49,11 @@ const Header = () => {
           </nav>
 
           {/* CTA & Badge */}
-          <div className="hidden md:flex items-center gap-4">
-            <div className="badge-pulse bg-warning/10 text-warning text-xs">
-              ⚡ Mise en ligne en 2 semaines
+          <div className="hidden md:flex items-center gap-6">
+            <div className="badge-pulse text-xs">
+              14 JOURS MAX
             </div>
-            <a href="#contact" className="btn-primary text-sm">
+            <a href="#contact" className="btn-primary text-sm py-3 px-6">
               <Phone className="w-4 h-4" />
               Devis Gratuit
             </a>
@@ -62,7 +62,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -76,15 +76,15 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-border"
+            className="md:hidden bg-background border-t-2 border-foreground"
           >
-            <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
+            <nav className="container mx-auto px-4 py-8 flex flex-col gap-6">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                  className="font-heading text-2xl tracking-[0.2em] uppercase"
                 >
                   {link.label}
                 </a>
@@ -103,8 +103,8 @@ const Header = () => {
       </AnimatePresence>
 
       {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-50">
-        <a href="tel:0689129955" className="btn-orange w-full justify-center text-lg py-4 rounded-2xl shadow-xl">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-background border-t-2 border-foreground">
+        <a href="tel:0689129955" className="btn-primary w-full justify-center py-4">
           <Phone className="w-5 h-5" />
           Appeler maintenant
         </a>

@@ -26,49 +26,58 @@ const ProblemSolution = () => {
   ];
 
   return (
-    <section ref={ref} className="py-20 md:py-32 bg-background">
+    <section ref={ref} className="py-24 md:py-32 bg-background relative">
+      {/* Decorative top border */}
+      <div className="absolute top-0 left-0 right-0 h-8 checkerboard opacity-5" />
+      
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-16 h-[2px] bg-foreground" />
+            <span className="font-heading text-sm tracking-[0.3em] uppercase">Le constat</span>
+            <div className="w-16 h-[2px] bg-foreground" />
+          </div>
           <h2 className="section-title">
-            Votre Entreprise Mérite Mieux{" "}
-            <span className="gradient-text">Qu'un Site Amateur</span>
+            VOTRE ENTREPRISE MÉRITE
+            <br />
+            <span className="text-muted-foreground">MIEUX QU'UN SITE AMATEUR</span>
           </h2>
         </motion.div>
 
         {/* Two columns */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-0 max-w-5xl mx-auto border-2 border-foreground">
           {/* Problem Column */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-destructive/5 border border-destructive/20 rounded-2xl p-8"
+            className="p-8 md:p-12 bg-foreground text-background"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-destructive/20 flex items-center justify-center">
-                <X className="w-6 h-6 text-destructive" />
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 border-2 border-background flex items-center justify-center">
+                <X className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-heading font-bold text-destructive">
-                Le problème
+              <h3 className="text-3xl font-heading tracking-wider">
+                LE PROBLÈME
               </h3>
             </div>
-            <ul className="space-y-4">
+            <ul className="space-y-5">
               {problems.map((problem, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className="flex items-start gap-3"
+                  className="flex items-start gap-4"
                 >
-                  <X className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground">{problem}</span>
+                  <X className="w-5 h-5 mt-0.5 flex-shrink-0 opacity-60" />
+                  <span className="text-background/80">{problem}</span>
                 </motion.li>
               ))}
             </ul>
@@ -79,32 +88,30 @@ const ProblemSolution = () => {
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-gradient-primary p-[2px] rounded-2xl"
+            className="p-8 md:p-12 bg-background border-t-2 md:border-t-0 md:border-l-2 border-foreground"
           >
-            <div className="bg-background rounded-2xl p-8 h-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
-                  <Check className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl font-heading font-bold gradient-text">
-                  La solution
-                </h3>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-foreground text-background flex items-center justify-center">
+                <Check className="w-6 h-6" />
               </div>
-              <ul className="space-y-4">
-                {solutions.map((solution, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                    className="flex items-start gap-3"
-                  >
-                    <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
-                    <span className="font-medium">{solution}</span>
-                  </motion.li>
-                ))}
-              </ul>
+              <h3 className="text-3xl font-heading tracking-wider">
+                LA SOLUTION
+              </h3>
             </div>
+            <ul className="space-y-5">
+              {solutions.map((solution, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  className="flex items-start gap-4"
+                >
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <span className="font-medium">{solution}</span>
+                </motion.li>
+              ))}
+            </ul>
           </motion.div>
         </div>
 
@@ -113,9 +120,9 @@ const ProblemSolution = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-12"
+          className="text-center mt-16"
         >
-          <a href="#contact" className="btn-primary text-lg group">
+          <a href="#contact" className="btn-primary group">
             Je veux ma solution
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
