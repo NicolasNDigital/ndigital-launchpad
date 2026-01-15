@@ -4,18 +4,19 @@ import { useRef } from "react";
 import { 
   Globe, 
   TrendingUp, 
-  Palette, 
+  Layers, 
   Check,
-  Flame,
-  Star,
-  ArrowRight
+  ArrowRight,
+  ShoppingCart,
+  FileText,
+  FormInput
 } from "lucide-react";
 
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const services = [
+  const mainServices = [
     {
       icon: Globe,
       title: "Site Vitrine Complet",
@@ -57,22 +58,34 @@ const Services = () => {
       featured: true,
     },
     {
-      icon: Palette,
-      title: "Services Additionnels",
+      icon: Layers,
+      title: "Site Multi-Pages ou E-commerce",
       price: "Sur devis",
-      badge: null,
+      badge: "🛒 Avancé",
+      badgeColor: "bg-neon-cyan/20 text-neon-cyan",
       features: [
-        "🎨 Identité visuelle & branding",
-        "📝 Rédaction contenu SEO",
-        "📊 Audit site existant",
-        "🔧 Refonte/migration site",
-        "📱 Application mobile no-code",
-        "🤖 Automatisations IA",
-        "📞 Consulting stratégie digitale",
+        "Site multi-pages illimité",
+        "Boutique en ligne complète",
+        "Tunnels de vente optimisés",
+        "Formulaires interactifs avancés",
+        "Intégration paiement (Stripe, PayPal)",
+        "Gestion catalogue produits",
+        "Espace client / membre",
+        "Automatisations sur-mesure",
       ],
       cta: "Discutons de votre projet",
-      ctaStyle: "btn-outline border-foreground text-foreground hover:bg-foreground hover:text-background",
+      ctaStyle: "btn-primary",
     },
+  ];
+
+  const additionalServices = [
+    { icon: "🎨", name: "Identité visuelle & branding" },
+    { icon: "📝", name: "Rédaction contenu SEO" },
+    { icon: "📊", name: "Audit site existant" },
+    { icon: "🔧", name: "Refonte/migration site" },
+    { icon: "📱", name: "Application mobile no-code" },
+    { icon: "🤖", name: "Automatisations IA" },
+    { icon: "📞", name: "Consulting stratégie digitale" },
   ];
 
   return (
@@ -93,9 +106,9 @@ const Services = () => {
           </p>
         </motion.div>
 
-        {/* Services Grid */}
+        {/* Main Services Grid */}
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {services.map((service, index) => (
+          {mainServices.map((service, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 40 }}
@@ -140,19 +153,8 @@ const Services = () => {
                 <ul className="space-y-3 mb-8">
                   {service.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-2 text-sm">
-                      {feature.startsWith("✅") || feature.startsWith("+") ? (
-                        <>
-                          <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
-                          <span>{feature.replace(/^[✅+]\s*/, "")}</span>
-                        </>
-                      ) : feature.match(/^[🎨📝📊🔧📱🤖📞]/) ? (
-                        <span>{feature}</span>
-                      ) : (
-                        <>
-                          <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
-                          <span>{feature}</span>
-                        </>
-                      )}
+                      <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                      <span>{feature.replace(/^[+]\s*/, "")}</span>
                     </li>
                   ))}
                 </ul>
@@ -166,6 +168,34 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Additional Services */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-16 max-w-4xl mx-auto"
+        >
+          <h3 className="text-xl font-heading font-bold text-center mb-8">
+            Services Additionnels
+          </h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            {additionalServices.map((service, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border hover:border-primary/30 transition-colors"
+              >
+                <span>{service.icon}</span>
+                <span className="text-sm font-medium">{service.name}</span>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="#contact" className="text-primary hover:underline font-medium">
+              Discutons de vos besoins spécifiques →
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

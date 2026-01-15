@@ -16,7 +16,6 @@ const Header = () => {
 
   const navLinks = [
     { href: "#services", label: "Services" },
-    { href: "#realisations", label: "Réalisations" },
     { href: "#tarifs", label: "Tarifs" },
     { href: "#contact", label: "Contact" },
   ];
@@ -52,7 +51,7 @@ const Header = () => {
           {/* CTA & Badge */}
           <div className="hidden md:flex items-center gap-4">
             <div className="badge-pulse bg-warning/10 text-warning text-xs">
-              ⚡ Livraison 2 semaines
+              ⚡ Mise en ligne en 2 semaines
             </div>
             <a href="#contact" className="btn-primary text-sm">
               <Phone className="w-4 h-4" />

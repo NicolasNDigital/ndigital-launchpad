@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check, X, ArrowRight } from "lucide-react";
+import { Check, X, ArrowRight, Palette, Camera, FileText, Video, Calendar } from "lucide-react";
 
 const Pricing = () => {
   const ref = useRef(null);
@@ -25,11 +25,11 @@ const Pricing = () => {
   ];
 
   const addons = [
-    { name: "Logo professionnel", price: "+200€" },
-    { name: "Shooting photo", price: "+400€" },
-    { name: "Rédaction contenu avancé", price: "+150€" },
-    { name: "Vidéo présentation", price: "+600€" },
-    { name: "Intégration réservation avancée", price: "+100€" },
+    { icon: Palette, name: "Logo professionnel", price: "+200€", color: "text-vibrant-violet" },
+    { icon: Camera, name: "Shooting photo", price: "+400€", color: "text-electric-blue" },
+    { icon: FileText, name: "Rédaction contenu avancé", price: "+150€", color: "text-neon-cyan" },
+    { icon: Video, name: "Vidéo présentation", price: "+600€", color: "text-warning" },
+    { icon: Calendar, name: "Intégration réservation", price: "+100€", color: "text-success" },
   ];
 
   return (
@@ -104,25 +104,31 @@ const Pricing = () => {
           </div>
         </motion.div>
 
-        {/* Add-ons */}
+        {/* Add-ons - Redesigned */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-4xl mx-auto mt-12"
+          className="max-w-4xl mx-auto mt-16"
         >
-          <h3 className="text-xl font-heading font-bold mb-6 text-center">
-            Options supplémentaires
+          <h3 className="text-xl font-heading font-bold mb-8 text-center">
+            Personnalisez votre projet
           </h3>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {addons.map((addon, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-card rounded-xl p-4 text-center shadow-sm border border-border"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                className="group bg-card rounded-2xl p-5 border border-border hover:border-primary/30 transition-all hover:shadow-lg hover:-translate-y-1"
               >
-                <p className="font-medium text-sm">{addon.name}</p>
-                <p className="text-primary font-bold mt-1">{addon.price}</p>
-              </div>
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-background to-muted flex items-center justify-center mb-3 ${addon.color}`}>
+                  <addon.icon className="w-5 h-5" />
+                </div>
+                <p className="font-medium text-sm mb-2">{addon.name}</p>
+                <p className="text-lg font-bold gradient-text">{addon.price}</p>
+              </motion.div>
             ))}
           </div>
         </motion.div>

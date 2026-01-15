@@ -8,7 +8,7 @@ const ProblemSolution = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const problems = [
-    "Pas de site web = invisible en ligne en 2025",
+    "Pas de site web = invisible en ligne en 2026",
     "Site vieillot qui fait fuir les clients",
     "Projet web qui traîne depuis des mois",
     "Agences qui facturent 5000€+ pour un site basique",
@@ -21,7 +21,7 @@ const ProblemSolution = () => {
     "Design professionnel qui inspire confiance",
     "Livraison express garantie ou remboursé -20%",
     "Tarif fixe 900€, transparent, sans surprise",
-    "SEO local optimisé pour Strasbourg",
+    "SEO local (référencement Google) optimisé pour Strasbourg ou votre ville",
     "Campagnes Google Ads qui génèrent des appels",
   ];
 

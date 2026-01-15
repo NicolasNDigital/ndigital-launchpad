@@ -1,13 +1,7 @@
 import { motion } from "framer-motion";
-import { Zap, Wallet, TrendingUp, ArrowRight, Eye } from "lucide-react";
+import { Zap, Wallet, TrendingUp, ArrowRight, Clock, MapPin, Euro } from "lucide-react";
 
 const Hero = () => {
-  const stats = [
-    { value: "14", label: "jours", sublabel: "Délai moyen livraison" },
-    { value: "900€", label: "", sublabel: "Site vitrine complet" },
-    { value: "Strasbourg", label: "", sublabel: "Expert local" },
-  ];
-
   const usps = [
     {
       icon: Zap,
@@ -27,11 +21,12 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center animated-gradient mesh-gradient overflow-hidden pt-20">
-      {/* Background decorations */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-neon-cyan/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-vibrant-violet/20 rounded-full blur-3xl" />
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-20 bg-deep-black">
+      {/* Subtle background with mesh gradient */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-deep-black via-deep-black to-vibrant-violet/20" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-electric-blue/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-vibrant-violet/10 rounded-full blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -42,8 +37,8 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neon-cyan/20 text-neon-cyan text-sm font-semibold backdrop-blur-sm border border-neon-cyan/30">
-              🚀 Expert sites web & Google Ads à Strasbourg
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-electric-blue/10 text-electric-blue text-sm font-semibold border border-electric-blue/20">
+              🚀 Création de sites vitrines pour artisans & business locaux
             </span>
           </motion.div>
 
@@ -54,8 +49,8 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight"
           >
-            Propulsez Votre Business Local{" "}
-            <span className="text-neon-cyan">En 2 Semaines Chrono</span>
+            Votre Site Vitrine Pro{" "}
+            <span className="gradient-text">En 2 Semaines</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -63,11 +58,11 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg md:text-xl text-white/80 max-w-2xl mx-auto"
+            className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto"
           >
-            Sites vitrines modernes + Campagnes Google Ads qui génèrent des clients.
+            Artisans, commerçants, indépendants : obtenez un site moderne qui génère des clients.
             <br />
-            De l'idée à la mise en ligne : <strong className="text-white">14 jours maximum garanti.</strong>
+            <strong className="text-white">Mis en ligne en 14 jours maximum garanti.</strong>
           </motion.p>
 
           {/* USPs */}
@@ -80,7 +75,7 @@ const Hero = () => {
             {usps.map((usp, index) => (
               <div
                 key={index}
-                className="glass-light rounded-2xl p-4 border border-white/10 hover:border-white/20 transition-all"
+                className="rounded-2xl p-4 bg-white/5 border border-white/10 hover:border-electric-blue/30 transition-all hover:bg-white/[0.08]"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
@@ -88,59 +83,57 @@ const Hero = () => {
                   </div>
                   <div className="text-left">
                     <p className="text-white font-semibold text-sm">{usp.title}</p>
-                    <p className="text-white/60 text-xs">{usp.desc}</p>
+                    <p className="text-white/50 text-xs">{usp.desc}</p>
                   </div>
                 </div>
               </div>
             ))}
           </motion.div>
 
-          {/* CTAs */}
+          {/* CTA - Single button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
+            className="mt-10 flex justify-center"
           >
             <a href="#contact" className="btn-orange text-lg px-8 py-4 group">
               Demander mon devis gratuit
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#realisations" className="btn-outline text-lg px-8 py-4">
-              <Eye className="w-5 h-5" />
-              Voir mes réalisations
-            </a>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats - Redesigned as elegant cards */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-16 grid grid-cols-3 gap-6"
+            className="mt-16 flex flex-wrap justify-center gap-6"
           >
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <p className="text-3xl md:text-4xl font-heading font-bold text-white">
-                  {stat.value}
-                  {stat.label && <span className="text-lg ml-1">{stat.label}</span>}
-                </p>
-                <p className="text-white/60 text-sm mt-1">{stat.sublabel}</p>
-              </div>
-            ))}
+            <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-electric-blue/20 to-vibrant-violet/20 border border-white/10">
+              <Clock className="w-5 h-5 text-electric-blue" />
+              <span className="text-white font-medium">14 jours max</span>
+            </div>
+            <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-electric-blue/20 to-vibrant-violet/20 border border-white/10">
+              <Euro className="w-5 h-5 text-neon-cyan" />
+              <span className="text-white font-medium">Dès 900€</span>
+            </div>
+            <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-electric-blue/20 to-vibrant-violet/20 border border-white/10">
+              <MapPin className="w-5 h-5 text-vibrant-violet" />
+              <span className="text-white font-medium">Expert Strasbourg</span>
+            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block">
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center pt-2"
-        >
-          <div className="w-1 h-2 rounded-full bg-white/50" />
-        </motion.div>
+      {/* Elegant wave separator */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path 
+            d="M0 120L48 110C96 100 192 80 288 70C384 60 480 60 576 65C672 70 768 80 864 85C960 90 1056 90 1152 85C1248 80 1344 70 1392 65L1440 60V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0Z" 
+            fill="hsl(var(--background))"
+          />
+        </svg>
       </div>
     </section>
   );
