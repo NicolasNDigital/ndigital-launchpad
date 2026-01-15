@@ -7,7 +7,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "1.5rem",
+      padding: "1rem",
       screens: {
         sm: "640px",
         md: "768px",
@@ -18,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ["Cormorant Garamond", "Georgia", "serif"],
+        heading: ["Space Grotesk", "system-ui", "sans-serif"],
         body: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
@@ -34,10 +34,6 @@ export default {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
-        },
-        tertiary: {
-          DEFAULT: "hsl(var(--tertiary))",
-          foreground: "hsl(var(--tertiary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -67,23 +63,21 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
-        "pure-black": "hsl(var(--pure-black))",
+        "electric-blue": "hsl(var(--electric-blue))",
+        "vibrant-violet": "hsl(var(--vibrant-violet))",
         "deep-black": "hsl(var(--deep-black))",
-        charcoal: "hsl(var(--charcoal))",
-        "dark-gray": "hsl(var(--dark-gray))",
-        "medium-gray": "hsl(var(--medium-gray))",
+        "neon-cyan": "hsl(var(--neon-cyan))",
+        "dynamic-orange": "hsl(var(--dynamic-orange))",
+        "success-green": "hsl(var(--success-green))",
         "light-gray": "hsl(var(--light-gray))",
-        "off-white": "hsl(var(--off-white))",
-        "pure-white": "hsl(var(--pure-white))",
+        "medium-gray": "hsl(var(--medium-gray))",
       },
       borderRadius: {
-        lg: "1rem",
-        md: "0.75rem",
-        sm: "0.5rem",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
         xl: "1.5rem",
         "2xl": "2rem",
-        "3xl": "2.5rem",
-        "4xl": "3rem",
       },
       keyframes: {
         "accordion-down": {
@@ -94,20 +88,54 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(30px)" },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        "slide-in": {
-          "0%": { opacity: "0", transform: "translateX(-20px)" },
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(40px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(255, 107, 53, 0.4)" },
+          "50%": { boxShadow: "0 0 30px rgba(255, 107, 53, 0.6)" },
+        },
+        "counter-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.6s ease-out forwards",
-        "slide-in": "slide-in 0.4s ease-out forwards",
+        "fade-in": "fade-in 0.6s ease-out forwards",
+        "fade-in-up": "fade-in-up 0.8s ease-out forwards",
+        "slide-in-right": "slide-in-right 0.6s ease-out forwards",
+        "scale-in": "scale-in 0.5s ease-out forwards",
+        float: "float 6s ease-in-out infinite",
+        shimmer: "shimmer 2s linear infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "counter-up": "counter-up 0.6s ease-out forwards",
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },

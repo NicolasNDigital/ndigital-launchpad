@@ -30,12 +30,12 @@ const FAQ = () => {
       answer: "Non. Je rédige les textes optimisés SEO. Pour les photos, si vous n'en avez pas, j'utilise des banques d'images premium ou IA. Idéalement : quelques photos authentiques de vous/votre activité font toujours la différence.",
     },
     {
-      question: "Mon secteur est très concurrentiel, puis-je vraiment me positionner ?",
+      question: "Mon secteur est très concurrentiel sur Strasbourg, puis-je vraiment me positionner ?",
       answer: "Oui, avec la bonne stratégie. SEO local + Google Ads = combinaison gagnante. Je vous positionne sur des mots-clés de longue traîne moins concurrentiels mais qualifiés (\"plombier urgence Neudorf\" plutôt que juste \"plombier Strasbourg\").",
     },
     {
       question: "Faites-vous aussi des sites e-commerce ?",
-      answer: "Oui ! Je propose des sites multi-pages et e-commerce complets avec tunnels de vente, paiements intégrés et automatisations. Demandez un devis personnalisé.",
+      answer: "Je me concentre sur les sites vitrines pour l'instant (c'est mon expertise). Pour l'e-commerce, je peux vous orienter vers des partenaires de confiance.",
     },
     {
       question: "Proposez-vous un support après les 30 jours inclus ?",
@@ -50,13 +50,13 @@ const FAQ = () => {
       answer: "Oui : 50% à la commande, 50% à la livraison. Pour le Pack Ads (1500€) : 3x 500€ possible.",
     },
     {
-      question: "Que se passe-t-il si je ne suis pas satisfait ?",
+      question: "Que se passe-t-il si je ne suis pas satisfait du résultat ?",
       answer: "2 aller-retours de modifications inclus pendant la phase de validation. Si vraiment aucun terrain d'entente, je rembourse 50% (ça ne m'est jamais arrivé, mes clients sont toujours ravis).",
     },
   ];
 
   return (
-    <section ref={ref} id="faq" className="py-24 md:py-32 bg-background">
+    <section ref={ref} className="py-20 md:py-32 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <motion.div
@@ -65,9 +65,8 @@ const FAQ = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="badge-pill mb-6">FAQ</span>
           <h2 className="section-title">
-            Questions <span className="italic">fréquentes</span>
+            Questions <span className="gradient-text">Fréquentes</span>
           </h2>
         </motion.div>
 
@@ -83,12 +82,12 @@ const FAQ = () => {
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="bg-muted/30 rounded-2xl px-6 border-0 data-[state=open]:bg-muted/50 transition-colors"
+                className="bg-card rounded-2xl border border-border px-6 shadow-sm data-[state=open]:shadow-md transition-shadow"
               >
-                <AccordionTrigger className="text-left font-heading text-lg hover:no-underline py-5">
+                <AccordionTrigger className="text-left font-heading font-semibold hover:no-underline py-5">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground font-light pb-5 leading-relaxed">
+                <AccordionContent className="text-muted-foreground pb-5">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

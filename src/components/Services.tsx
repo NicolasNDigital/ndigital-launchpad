@@ -1,7 +1,16 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check, ArrowRight, Star, Zap, Layers } from "lucide-react";
+import { 
+  Globe, 
+  TrendingUp, 
+  Layers, 
+  Check,
+  ArrowRight,
+  ShoppingCart,
+  FileText,
+  FormInput
+} from "lucide-react";
 
 const Services = () => {
   const ref = useRef(null);
@@ -9,10 +18,11 @@ const Services = () => {
 
   const mainServices = [
     {
-      icon: Zap,
+      icon: Globe,
       title: "Site Vitrine Complet",
       price: "900€",
-      badge: "Populaire",
+      badge: "🔥 Populaire",
+      badgeColor: "bg-warning text-warning-foreground",
       features: [
         "Design moderne responsive",
         "Optimisation SEO local Strasbourg",
@@ -24,32 +34,35 @@ const Services = () => {
         "Support 30 jours inclus",
       ],
       cta: "Choisir cette offre",
-      featured: false,
+      ctaStyle: "btn-primary",
     },
     {
-      icon: Star,
+      icon: TrendingUp,
       title: "Pack Site + Google Ads",
       price: "1 500€",
       originalPrice: "1 600€",
-      badge: "Meilleure valeur",
+      badge: "⭐ Meilleure valeur",
+      badgeColor: "bg-secondary text-secondary-foreground",
       features: [
         "Tout du Site Vitrine Pro",
-        "Campagne Google Ads configurée",
-        "Ciblage géographique Strasbourg",
-        "Mots-clés optimisés métier",
-        "Tracking conversions installé",
-        "2 mois de gestion Ads incluse",
-        "Rapports de performance",
-        "Optimisations continues",
+        "+ Campagne Google Ads configurée",
+        "+ Ciblage géographique Strasbourg",
+        "+ Mots-clés optimisés métier",
+        "+ Tracking conversions installé",
+        "+ 2 mois de gestion Ads incluse",
+        "+ Rapports de performance",
+        "+ Optimisations continues",
       ],
       cta: "Booster mon business",
+      ctaStyle: "btn-orange",
       featured: true,
     },
     {
       icon: Layers,
       title: "Site Multi-Pages ou E-commerce",
       price: "Sur devis",
-      badge: "Avancé",
+      badge: "🛒 Avancé",
+      badgeColor: "bg-neon-cyan/20 text-neon-cyan",
       features: [
         "Site multi-pages illimité",
         "Boutique en ligne complète",
@@ -61,22 +74,22 @@ const Services = () => {
         "Automatisations sur-mesure",
       ],
       cta: "Discutons de votre projet",
-      featured: false,
+      ctaStyle: "btn-primary",
     },
   ];
 
   const additionalServices = [
-    "Identité visuelle & branding",
-    "Rédaction contenu SEO",
-    "Audit site existant",
-    "Refonte/migration site",
-    "Application mobile no-code",
-    "Automatisations IA",
-    "Consulting stratégie digitale",
+    { icon: "🎨", name: "Identité visuelle & branding" },
+    { icon: "📝", name: "Rédaction contenu SEO" },
+    { icon: "📊", name: "Audit site existant" },
+    { icon: "🔧", name: "Refonte/migration site" },
+    { icon: "📱", name: "Application mobile no-code" },
+    { icon: "🤖", name: "Automatisations IA" },
+    { icon: "📞", name: "Consulting stratégie digitale" },
   ];
 
   return (
-    <section ref={ref} id="services" className="py-24 md:py-32 bg-muted/30">
+    <section ref={ref} id="services" className="py-20 md:py-32 bg-muted">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <motion.div
@@ -85,86 +98,73 @@ const Services = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="badge-pill mb-6">Offres</span>
           <h2 className="section-title">
-            Mes <span className="italic">services</span>
+            Mes Services — <span className="gradient-text">Votre Succès Digital</span>
           </h2>
-          <p className="section-subtitle mt-6">
+          <p className="section-subtitle">
             Des solutions claires et transparentes pour propulser votre business local
           </p>
         </motion.div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+        {/* Main Services Grid */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {mainServices.map((service, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              className={`relative rounded-3xl p-8 transition-all duration-300 ${
-                service.featured 
-                  ? "bg-foreground text-background shadow-2xl scale-[1.02]" 
-                  : "bg-background shadow-lg hover:shadow-xl"
+              className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
+                service.featured
+                  ? "bg-gradient-primary p-[3px]"
+                  : "bg-card shadow-lg hover:shadow-xl"
               }`}
             >
-              {/* Badge */}
-              {service.badge && (
-                <div className={`absolute -top-3 left-8 px-4 py-1.5 text-xs font-medium rounded-full ${
-                  service.featured 
-                    ? "bg-background text-foreground" 
-                    : "bg-foreground text-background"
-                }`}>
-                  {service.badge}
-                </div>
-              )}
-
-              {/* Icon */}
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${
-                service.featured ? "bg-background/10" : "bg-muted"
-              }`}>
-                <service.icon className="w-6 h-6" />
-              </div>
-
-              {/* Title & Price */}
-              <h3 className="text-xl font-heading mb-2">{service.title}</h3>
-              <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-heading">{service.price}</span>
-                {service.originalPrice && (
-                  <span className={`text-sm line-through ${service.featured ? "text-background/50" : "text-muted-foreground"}`}>
-                    {service.originalPrice}
-                  </span>
+              {/* Featured wrapper */}
+              <div className={service.featured ? "bg-card rounded-[21px] p-8 h-full" : ""}>
+                {/* Badge */}
+                {service.badge && (
+                  <div className={`absolute -top-3 left-6 px-4 py-1.5 rounded-full text-sm font-semibold ${service.badgeColor}`}>
+                    {service.badge}
+                  </div>
                 )}
-              </div>
 
-              {/* Features */}
-              <ul className="space-y-3 mb-8">
-                {service.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                      service.featured ? "text-background/70" : "text-success"
-                    }`} />
-                    <span className={`text-sm font-light ${
-                      service.featured ? "text-background/80" : "text-muted-foreground"
-                    }`}>
-                      {feature}
+                {/* Icon */}
+                <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6">
+                  <service.icon className="w-8 h-8 text-white" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-heading font-bold mb-2">{service.title}</h3>
+
+                {/* Price */}
+                <div className="mb-6">
+                  <span className="text-4xl font-heading font-bold gradient-text">
+                    {service.price}
+                  </span>
+                  {service.originalPrice && (
+                    <span className="ml-2 text-muted-foreground line-through">
+                      {service.originalPrice}
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  )}
+                </div>
 
-              {/* CTA */}
-              <a
-                href="#contact"
-                className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
-                  service.featured
-                    ? "bg-background text-foreground hover:opacity-90"
-                    : "bg-foreground text-background hover:opacity-90"
-                }`}
-              >
-                {service.cta}
-                <ArrowRight className="w-4 h-4" />
-              </a>
+                {/* Features */}
+                <ul className="space-y-3 mb-8">
+                  {service.features.map((feature, fIndex) => (
+                    <li key={fIndex} className="flex items-start gap-2 text-sm">
+                      <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                      <span>{feature.replace(/^[+]\s*/, "")}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <a href="#contact" className={`${service.ctaStyle} w-full justify-center group`}>
+                  {service.cta}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -174,18 +174,26 @@ const Services = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="max-w-4xl mx-auto text-center"
+          className="mt-16 max-w-4xl mx-auto"
         >
-          <h3 className="font-heading text-2xl mb-6">Services additionnels</h3>
+          <h3 className="text-xl font-heading font-bold text-center mb-8">
+            Services Additionnels
+          </h3>
           <div className="flex flex-wrap justify-center gap-3">
             {additionalServices.map((service, index) => (
-              <span
+              <div
                 key={index}
-                className="px-5 py-2.5 rounded-full bg-background border border-foreground/10 text-sm font-light hover:border-foreground/30 transition-colors cursor-default"
+                className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border hover:border-primary/30 transition-colors"
               >
-                {service}
-              </span>
+                <span>{service.icon}</span>
+                <span className="text-sm font-medium">{service.name}</span>
+              </div>
             ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="#contact" className="text-primary hover:underline font-medium">
+              Discutons de vos besoins spécifiques →
+            </a>
           </div>
         </motion.div>
       </div>
