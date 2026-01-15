@@ -19,65 +19,56 @@ const ProblemSolution = () => {
   const solutions = [
     "Site vitrine moderne en 14 jours maximum",
     "Design professionnel qui inspire confiance",
-    "Livraison express garantie ou remboursé -20%",
+    "Livraison express garantie ou -20% de réduction",
     "Tarif fixe 900€, transparent, sans surprise",
-    "SEO local (référencement Google) optimisé pour Strasbourg ou votre ville",
+    "SEO local (référencement Google) pour Strasbourg ou votre ville",
     "Campagnes Google Ads qui génèrent des appels",
   ];
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-background relative">
-      {/* Decorative top border */}
-      <div className="absolute top-0 left-0 right-0 h-8 checkerboard opacity-5" />
-      
+    <section ref={ref} className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-16 h-[2px] bg-foreground" />
-            <span className="font-heading text-sm tracking-[0.3em] uppercase">Le constat</span>
-            <div className="w-16 h-[2px] bg-foreground" />
-          </div>
+          <span className="badge-pill mb-6">Le constat</span>
           <h2 className="section-title">
-            VOTRE ENTREPRISE MÉRITE
+            Votre entreprise mérite
             <br />
-            <span className="text-muted-foreground">MIEUX QU'UN SITE AMATEUR</span>
+            <span className="italic text-muted-foreground">mieux qu'un site amateur</span>
           </h2>
         </motion.div>
 
         {/* Two columns */}
-        <div className="grid md:grid-cols-2 gap-0 max-w-5xl mx-auto border-2 border-foreground">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Problem Column */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="p-8 md:p-12 bg-foreground text-background"
+            className="card-dark"
           >
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 border-2 border-background flex items-center justify-center">
-                <X className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-full bg-background/10 flex items-center justify-center">
+                <X className="w-5 h-5" />
               </div>
-              <h3 className="text-3xl font-heading tracking-wider">
-                LE PROBLÈME
-              </h3>
+              <h3 className="text-2xl font-heading">Le problème</h3>
             </div>
-            <ul className="space-y-5">
+            <ul className="space-y-4">
               {problems.map((problem, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className="flex items-start gap-4"
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.05 }}
+                  className="flex items-start gap-3 text-background/70"
                 >
-                  <X className="w-5 h-5 mt-0.5 flex-shrink-0 opacity-60" />
-                  <span className="text-background/80">{problem}</span>
+                  <X className="w-4 h-4 mt-1 flex-shrink-0 opacity-50" />
+                  <span className="font-light">{problem}</span>
                 </motion.li>
               ))}
             </ul>
@@ -88,27 +79,25 @@ const ProblemSolution = () => {
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="p-8 md:p-12 bg-background border-t-2 md:border-t-0 md:border-l-2 border-foreground"
+            className="card-outline"
           >
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-foreground text-background flex items-center justify-center">
-                <Check className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center">
+                <Check className="w-5 h-5" />
               </div>
-              <h3 className="text-3xl font-heading tracking-wider">
-                LA SOLUTION
-              </h3>
+              <h3 className="text-2xl font-heading">La solution</h3>
             </div>
-            <ul className="space-y-5">
+            <ul className="space-y-4">
               {solutions.map((solution, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: 20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className="flex items-start gap-4"
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.05 }}
+                  className="flex items-start gap-3"
                 >
-                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <span className="font-medium">{solution}</span>
+                  <Check className="w-4 h-4 mt-1 flex-shrink-0 text-success" />
+                  <span className="font-light">{solution}</span>
                 </motion.li>
               ))}
             </ul>
@@ -120,11 +109,11 @@ const ProblemSolution = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-16"
+          className="text-center mt-12"
         >
           <a href="#contact" className="btn-primary group">
             Je veux ma solution
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
       </div>

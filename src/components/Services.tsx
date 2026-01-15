@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Star, Zap, Layers } from "lucide-react";
 
 const Services = () => {
   const ref = useRef(null);
@@ -9,10 +9,10 @@ const Services = () => {
 
   const mainServices = [
     {
-      number: "01",
+      icon: Zap,
       title: "Site Vitrine Complet",
       price: "900€",
-      badge: "POPULAIRE",
+      badge: "Populaire",
       features: [
         "Design moderne responsive",
         "Optimisation SEO local Strasbourg",
@@ -27,11 +27,11 @@ const Services = () => {
       featured: false,
     },
     {
-      number: "02",
+      icon: Star,
       title: "Pack Site + Google Ads",
       price: "1 500€",
       originalPrice: "1 600€",
-      badge: "MEILLEURE VALEUR",
+      badge: "Meilleure valeur",
       features: [
         "Tout du Site Vitrine Pro",
         "Campagne Google Ads configurée",
@@ -46,10 +46,10 @@ const Services = () => {
       featured: true,
     },
     {
-      number: "03",
+      icon: Layers,
       title: "Site Multi-Pages ou E-commerce",
       price: "Sur devis",
-      badge: "AVANCÉ",
+      badge: "Avancé",
       features: [
         "Site multi-pages illimité",
         "Boutique en ligne complète",
@@ -76,25 +76,18 @@ const Services = () => {
   ];
 
   return (
-    <section ref={ref} id="services" className="py-24 md:py-32 bg-muted relative">
-      {/* Decorative pattern */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-foreground" />
-      
+    <section ref={ref} id="services" className="py-24 md:py-32 bg-muted/30">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-16 h-[2px] bg-foreground" />
-            <span className="font-heading text-sm tracking-[0.3em] uppercase">Offres</span>
-            <div className="w-16 h-[2px] bg-foreground" />
-          </div>
+          <span className="badge-pill mb-6">Offres</span>
           <h2 className="section-title">
-            MES SERVICES
+            Mes <span className="italic">services</span>
           </h2>
           <p className="section-subtitle mt-6">
             Des solutions claires et transparentes pour propulser votre business local
@@ -102,41 +95,43 @@ const Services = () => {
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-3 gap-0 max-w-6xl mx-auto border-2 border-foreground">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
           {mainServices.map((service, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              className={`p-8 relative ${
-                index !== 2 ? "border-b-2 md:border-b-0 md:border-r-2 border-foreground" : ""
-              } ${service.featured ? "bg-foreground text-background" : "bg-background"}`}
+              className={`relative rounded-3xl p-8 transition-all duration-300 ${
+                service.featured 
+                  ? "bg-foreground text-background shadow-2xl scale-[1.02]" 
+                  : "bg-background shadow-lg hover:shadow-xl"
+              }`}
             >
               {/* Badge */}
               {service.badge && (
-                <div className={`absolute top-4 right-4 px-3 py-1 text-xs font-heading tracking-wider ${
-                  service.featured ? "bg-background text-foreground" : "bg-foreground text-background"
+                <div className={`absolute -top-3 left-8 px-4 py-1.5 text-xs font-medium rounded-full ${
+                  service.featured 
+                    ? "bg-background text-foreground" 
+                    : "bg-foreground text-background"
                 }`}>
                   {service.badge}
                 </div>
               )}
 
-              {/* Number */}
-              <p className={`font-heading text-6xl mb-6 ${service.featured ? "text-background/20" : "text-foreground/10"}`}>
-                {service.number}
-              </p>
+              {/* Icon */}
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${
+                service.featured ? "bg-background/10" : "bg-muted"
+              }`}>
+                <service.icon className="w-6 h-6" />
+              </div>
 
-              {/* Title */}
-              <h3 className="text-2xl font-heading tracking-wider mb-4">{service.title}</h3>
-
-              {/* Price */}
-              <div className="mb-8">
-                <span className="text-4xl font-heading tracking-wide">
-                  {service.price}
-                </span>
+              {/* Title & Price */}
+              <h3 className="text-xl font-heading mb-2">{service.title}</h3>
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-heading">{service.price}</span>
                 {service.originalPrice && (
-                  <span className={`ml-3 line-through ${service.featured ? "text-background/50" : "text-muted-foreground"}`}>
+                  <span className={`text-sm line-through ${service.featured ? "text-background/50" : "text-muted-foreground"}`}>
                     {service.originalPrice}
                   </span>
                 )}
@@ -144,21 +139,31 @@ const Services = () => {
 
               {/* Features */}
               <ul className="space-y-3 mb-8">
-                {service.features.map((feature, fIndex) => (
-                  <li key={fIndex} className="flex items-start gap-3 text-sm">
-                    <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${service.featured ? "text-background" : ""}`} />
-                    <span className={service.featured ? "text-background/80" : ""}>{feature}</span>
+                {service.features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                      service.featured ? "text-background/70" : "text-success"
+                    }`} />
+                    <span className={`text-sm font-light ${
+                      service.featured ? "text-background/80" : "text-muted-foreground"
+                    }`}>
+                      {feature}
+                    </span>
                   </li>
                 ))}
               </ul>
 
               {/* CTA */}
-              <a 
-                href="#contact" 
-                className={`w-full justify-center group ${service.featured ? "btn-secondary" : "btn-primary"}`}
+              <a
+                href="#contact"
+                className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                  service.featured
+                    ? "bg-background text-foreground hover:opacity-90"
+                    : "bg-foreground text-background hover:opacity-90"
+                }`}
               >
                 {service.cta}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4" />
               </a>
             </motion.div>
           ))}
@@ -169,24 +174,19 @@ const Services = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-20 max-w-4xl mx-auto text-center"
+          className="max-w-4xl mx-auto text-center"
         >
-          <h3 className="font-heading text-2xl tracking-wider mb-8">
-            SERVICES ADDITIONNELS
-          </h3>
-          <div className="flex flex-wrap justify-center gap-4">
+          <h3 className="font-heading text-2xl mb-6">Services additionnels</h3>
+          <div className="flex flex-wrap justify-center gap-3">
             {additionalServices.map((service, index) => (
               <span
                 key={index}
-                className="px-6 py-3 border-2 border-foreground font-heading text-sm tracking-wider hover:bg-foreground hover:text-background transition-colors cursor-default"
+                className="px-5 py-2.5 rounded-full bg-background border border-foreground/10 text-sm font-light hover:border-foreground/30 transition-colors cursor-default"
               >
                 {service}
               </span>
             ))}
           </div>
-          <a href="#contact" className="inline-block mt-8 font-heading text-sm tracking-wider underline underline-offset-4 hover:no-underline">
-            DISCUTONS DE VOS BESOINS →
-          </a>
         </motion.div>
       </div>
     </section>
