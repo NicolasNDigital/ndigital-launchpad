@@ -50,8 +50,8 @@ const Hero = () => {
           duration: 0.6,
           delay: 0.1
         }} className="mt-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight">
-            Artisans & Commerces de Strasbourg :{" "}
-            <span className="gradient-text">Votre Site Pro Clé en Main</span>
+            Artisans, commerçants et indépendants de Strasbourg,{" "}
+            <span className="gradient-text">votre site Pro designé et paramétré en 14 jours à prix tout petit</span>
           </motion.h1>
 
           {/* Subtitle */}
