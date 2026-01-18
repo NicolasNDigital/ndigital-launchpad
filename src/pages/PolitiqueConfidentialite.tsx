@@ -31,8 +31,9 @@ const PolitiqueConfidentialite = () => {
               Le responsable du traitement des données personnelles est :
             </p>
             <ul className="text-white/70 list-none space-y-2 mt-4">
-              <li><strong className="text-white">NDIGITAL</strong></li>
-              <li>Strasbourg, France</li>
+              <li><strong className="text-white">NDIGITAL - Nicolas SCHUBLIN</strong></li>
+              <li>2 Quai Fustel-De-Coulanges, 67000 Strasbourg</li>
+              <li>SIRET : 830 915 344 00022</li>
               <li>Email : contact@ndigital.fr</li>
               <li>Téléphone : 06 89 12 99 55</li>
             </ul>

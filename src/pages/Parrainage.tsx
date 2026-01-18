@@ -87,7 +87,7 @@ const Parrainage = () => {
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-electric-violet mt-0.5 flex-shrink-0" />
-                    <span>Commander une prestation d'un montant minimum de 500€ HT</span>
+                    <span>Commander une prestation d'un montant minimum de 900€ HT</span>
                   </li>
                 </ul>
               </div>

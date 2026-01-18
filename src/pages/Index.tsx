@@ -10,6 +10,7 @@ import Pricing from "@/components/Pricing";
 import Urgency from "@/components/Urgency";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import Referral from "@/components/Referral";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <Guarantee />
         <Process />
         <WhyMe />
+        <Referral />
         <FAQ />
         <Pricing />
         <Urgency />
