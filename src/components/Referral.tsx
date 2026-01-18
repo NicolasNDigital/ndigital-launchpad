@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import giftIcon from "@/assets/gift-icon.png";
+import giftBoxIcon from "@/assets/gift-box.png";
 import promoIcon from "@/assets/promo-code.png";
 import infiniteIcon from "@/assets/infinite.png";
 
@@ -73,7 +74,7 @@ const Referral = () => {
               <div className="relative z-10">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric-violet/30 to-purple-600/20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-electric-violet/30">
                   {benefit.icon === "gift" ? (
-                    <img src={giftIcon} alt="" className="w-10 h-10" />
+                    <img src={giftBoxIcon} alt="" className="w-10 h-10" />
                   ) : benefit.icon === "promo" ? (
                     <img src={promoIcon} alt="" className="w-10 h-10" />
                   ) : (
