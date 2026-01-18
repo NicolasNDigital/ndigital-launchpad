@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { PenLine, Camera, FileStack, MapPin } from "lucide-react";
+import { PenLine, Camera, FileStack, MapPin, ArrowRight } from "lucide-react";
 import nicolasPhoto from "@/assets/nicolas-photo.png";
 
 const WhyMe = () => {
@@ -11,100 +11,126 @@ const WhyMe = () => {
   const arguments_ = [
     {
       icon: PenLine,
-      problem: "Votre site web ne convertit pas ?",
-      title: "5 ans de Copywriting",
-      description: "Le copywriting, c'est l'art d'écrire pour vendre. Chaque mot de votre site est pensé pour convaincre, rassurer et transformer vos visiteurs en clients.",
-      align: "left" as const,
+      number: "01",
+      problem: "Votre site ne convertit pas ?",
+      title: "Copywriting Expert",
+      subtitle: "5 ans d'expérience",
+      description: "Le copywriting, c'est l'art d'écrire pour vendre. Chaque mot est pensé pour convaincre et transformer vos visiteurs en clients.",
     },
     {
       icon: Camera,
-      problem: "Marre des photos vues 1000 fois ?",
-      title: "Visuels sur-mesure",
-      description: "Fini les images Shutterstock que tout le monde utilise. Je crée des photos et visuels uniques qui reflètent vraiment votre activité et vous démarquent.",
-      align: "right" as const,
+      number: "02",
+      problem: "Photos vues 1000 fois ?",
+      title: "Visuels Uniques",
+      subtitle: "Création sur-mesure",
+      description: "Fini les images Shutterstock. Je crée des visuels uniques qui reflètent vraiment votre activité et vous démarquent.",
     },
     {
       icon: FileStack,
-      problem: "Un simple site vitrine ne suffit plus ?",
-      title: "Sites multi-pages stratégiques",
-      description: "Au-delà de la vitrine classique, je crée des pages qui démontrent votre expertise. Vos futurs clients comprendront exactement pourquoi vous êtes LE bon choix.",
-      align: "left" as const,
+      number: "03",
+      problem: "Une simple vitrine ne suffit plus ?",
+      title: "Sites Stratégiques",
+      subtitle: "Multi-pages expertes",
+      description: "Au-delà de la vitrine, je crée des pages qui démontrent votre expertise et touchent vos clients en plein cœur.",
     },
     {
       icon: MapPin,
-      problem: "Invisible sur Google à Strasbourg ?",
-      title: "Expert SEO Local",
-      description: "Basé à Strasbourg, je connais le marché alsacien sur le bout des doigts. Votre site sera optimisé pour apparaître quand vos clients locaux vous cherchent.",
-      align: "right" as const,
+      number: "04",
+      problem: "Invisible sur Google ?",
+      title: "SEO Local",
+      subtitle: "Expert Strasbourg",
+      description: "Basé à Strasbourg, je connais le marché alsacien. Votre site apparaîtra quand vos clients locaux vous cherchent.",
     },
   ];
 
   return (
-    <section ref={ref} className="py-20 md:py-32 bg-deep-black relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-0 w-px h-1/2 bg-gradient-to-b from-transparent via-neon-cyan/20 to-transparent" />
-        <div className="absolute top-1/4 right-0 w-px h-1/2 bg-gradient-to-b from-transparent via-electric-violet/20 to-transparent" />
+    <section ref={ref} className="py-24 md:py-36 bg-deep-black relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-electric-violet/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Title with Photo */}
+        {/* Header with Photo */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-20"
         >
-          <div className="flex flex-col items-center gap-6 mb-6">
-            <div className="relative">
-              <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-neon-cyan/30 shadow-2xl">
-                <img 
-                  src={nicolasPhoto} 
-                  alt="Nicolas - Créateur de sites vitrines à Strasbourg" 
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-neon-cyan rounded-full flex items-center justify-center border-2 border-deep-black">
-                <span className="text-sm">👋</span>
-              </div>
+          {/* Photo */}
+          <div className="relative flex-shrink-0">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-neon-cyan/30 shadow-[0_0_40px_rgba(0,212,255,0.15)]">
+              <img 
+                src={nicolasPhoto} 
+                alt="Nicolas - Créateur de sites vitrines à Strasbourg" 
+                className="w-full h-full object-cover object-top"
+              />
             </div>
-            <div>
-              <p className="text-white/50 text-sm uppercase tracking-widest mb-3">Ce que j'apporte à votre projet</p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white">
-                Bien plus qu'un <span className="gradient-text">simple site web</span>
-              </h2>
+            <div className="absolute -bottom-3 -right-3 px-3 py-1.5 bg-gradient-to-r from-neon-cyan to-electric-violet rounded-lg text-xs font-bold text-deep-black">
+              NDIGITAL
             </div>
+          </div>
+
+          {/* Title */}
+          <div className="text-center md:text-left">
+            <p className="text-neon-cyan text-sm uppercase tracking-[0.2em] mb-3 font-medium">Pourquoi me faire confiance</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight">
+              Ce que j'apporte à<br />
+              <span className="gradient-text">votre projet</span>
+            </h2>
           </div>
         </motion.div>
 
-        {/* Staggered Grid */}
-        <div className="max-w-5xl mx-auto space-y-8 md:space-y-0">
+        {/* Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {arguments_.map((arg, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: arg.align === "left" ? -50 : 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.15 }}
-              className={`flex ${arg.align === "right" ? "md:justify-end" : "md:justify-start"} ${index > 0 ? "md:-mt-12" : ""}`}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.15 * index }}
+              className="group relative"
             >
-              <div className={`w-full md:w-[65%] p-6 md:p-8 rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm hover:border-neon-cyan/30 transition-all duration-300 group`}>
-                {/* Problem Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-electric-violet/10 border border-electric-violet/20 mb-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-electric-violet animate-pulse" />
-                  <span className="text-electric-violet text-sm font-medium">{arg.problem}</span>
+              {/* Card */}
+              <div className="relative h-full p-8 rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-neon-cyan/40 transition-all duration-500 overflow-hidden">
+                {/* Number Background */}
+                <div className="absolute top-4 right-4 text-7xl font-heading font-bold text-white/[0.03] select-none">
+                  {arg.number}
                 </div>
 
-                <div className="flex items-start gap-5">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-neon-cyan/20 to-electric-violet/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <arg.icon className="w-6 h-6 text-neon-cyan" />
+                {/* Hover Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-electric-violet/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="relative z-10">
+                  {/* Problem Tag */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-electric-violet/10 border border-electric-violet/30 mb-5">
+                    <span className="w-2 h-2 rounded-full bg-electric-violet" />
+                    <span className="text-electric-violet text-sm font-medium">{arg.problem}</span>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-heading font-bold text-white mb-2">
-                      {arg.title}
-                    </h3>
-                    <p className="text-white/70 leading-relaxed">
-                      {arg.description}
-                    </p>
+
+                  {/* Icon + Title Row */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-neon-cyan/20 to-neon-cyan/5 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] transition-all duration-500">
+                      <arg.icon className="w-7 h-7 text-neon-cyan" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-heading font-bold text-white mb-1">
+                        {arg.title}
+                      </h3>
+                      <p className="text-neon-cyan/80 text-sm font-medium">{arg.subtitle}</p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-white/60 leading-relaxed pl-[72px]">
+                    {arg.description}
+                  </p>
+
+                  {/* Arrow indicator */}
+                  <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                    <ArrowRight className="w-5 h-5 text-neon-cyan" />
                   </div>
                 </div>
               </div>
@@ -112,18 +138,19 @@ const WhyMe = () => {
           ))}
         </div>
 
-        {/* Commitment */}
+        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-20 max-w-3xl mx-auto"
+          className="text-center mt-16"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-neon-cyan/5 to-electric-violet/5 border border-white/10">
-            <span className="text-2xl">🎯</span>
-            <p className="text-base md:text-lg text-white/90">
-              Je prends <strong className="text-white">4-5 projets par mois max</strong> pour garantir qualité et disponibilité.
-            </p>
+          <div className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl bg-gradient-to-r from-neon-cyan/10 via-electric-violet/10 to-neon-cyan/10 border border-white/10">
+            <span className="text-3xl">🎯</span>
+            <div className="text-left">
+              <p className="text-white font-semibold text-lg">4-5 projets par mois maximum</p>
+              <p className="text-white/50 text-sm">Pour garantir qualité et disponibilité</p>
+            </div>
           </div>
         </motion.div>
       </div>
