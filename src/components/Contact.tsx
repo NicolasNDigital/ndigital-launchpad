@@ -9,8 +9,7 @@ const Contact = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Remplacez par votre Access Key Web3Forms (https://web3forms.com)
-  const WEB3FORMS_ACCESS_KEY = "VOTRE_CLE_WEB3FORMS";
+  const WEB3FORMS_ACCESS_KEY = "cb6a48ec-fcf8-4e60-812f-b001d893a6db";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
