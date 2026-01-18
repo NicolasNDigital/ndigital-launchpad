@@ -49,7 +49,7 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.1
-        }} className="mt-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight">
+        }} className="mt-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight">
             Artisans, commerçants et indépendants de Strasbourg,{" "}
             <span className="gradient-text">votre site Pro designé et paramétré en 14 jours à prix tout petit</span>
           </motion.h1>
@@ -64,10 +64,8 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.2
-        }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">Artisans, commerçants, indépendants : obtenez un site moderne qui améliore votre visibilité, votre image et qui génère des clients.
-
-Mis en ligne en 14 jours maximum garanti.<br />
-            <strong className="text-white">Mis en ligne en 14 jours maximum garanti.</strong>
+        }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
+            Fini les devis à rallonge et les délais interminables. <strong className="text-white">Obtenez un site moderne qui attire des clients</strong>, avec un prix clair dès le départ et une mise en ligne garantie sous 14 jours.
           </motion.p>
 
           {/* USPs */}
