@@ -9,16 +9,35 @@ const Contact = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Remplacez par votre Access Key Web3Forms (https://web3forms.com)
+  const WEB3FORMS_ACCESS_KEY = "VOTRE_CLE_WEB3FORMS";
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", WEB3FORMS_ACCESS_KEY);
     
-    toast.success("Demande envoyée ! Je vous réponds sous 24h.");
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Demande envoyée ! Je vous réponds sous 24h.");
+        (e.target as HTMLFormElement).reset();
+      } else {
+        toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+      }
+    } catch (error) {
+      toast.error("Erreur de connexion. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,12 +72,19 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <form onSubmit={handleSubmit} className="glass-light rounded-3xl p-8 border border-white/10">
+              {/* Champs cachés Web3Forms */}
+              <input type="hidden" name="subject" value="Nouvelle demande de devis - NDigital" />
+              <input type="hidden" name="from_name" value="NDigital - Formulaire Contact" />
+              <input type="checkbox" name="botcheck" className="hidden" />
+              
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-white/80 text-sm mb-2">👤 Nom Prénom *</label>
                   <input
                     type="text"
+                    name="name"
                     required
+                    maxLength={100}
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="Jean Dupont"
                   />
@@ -67,7 +93,9 @@ const Contact = () => {
                   <label className="block text-white/80 text-sm mb-2">📧 Email *</label>
                   <input
                     type="email"
+                    name="email"
                     required
+                    maxLength={255}
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="jean@example.com"
                   />
@@ -79,7 +107,9 @@ const Contact = () => {
                   <label className="block text-white/80 text-sm mb-2">📞 Téléphone *</label>
                   <input
                     type="tel"
+                    name="phone"
                     required
+                    maxLength={20}
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="06 12 34 56 78"
                   />
@@ -88,7 +118,9 @@ const Contact = () => {
                   <label className="block text-white/80 text-sm mb-2">🏢 Entreprise / Activité *</label>
                   <input
                     type="text"
+                    name="company"
                     required
+                    maxLength={100}
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="Plomberie Martin"
                   />
@@ -99,20 +131,23 @@ const Contact = () => {
                 <div>
                   <label className="block text-white/80 text-sm mb-2">🎯 Projet</label>
                   <select
+                    name="project_type"
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/40 transition-colors"
                   >
                     <option value="" className="text-deep-black">Choisir...</option>
-                    <option value="site" className="text-deep-black">Site vitrine simple</option>
-                    <option value="pack" className="text-deep-black">Pack Site + Google Ads</option>
-                    <option value="refonte" className="text-deep-black">Refonte site existant</option>
-                    <option value="autre" className="text-deep-black">Autre besoin digital</option>
+                    <option value="Site vitrine simple" className="text-deep-black">Site vitrine simple</option>
+                    <option value="Pack Site + Google Ads" className="text-deep-black">Pack Site + Google Ads</option>
+                    <option value="Refonte site existant" className="text-deep-black">Refonte site existant</option>
+                    <option value="Autre besoin digital" className="text-deep-black">Autre besoin digital</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-white/80 text-sm mb-2">📍 Ville *</label>
                   <input
                     type="text"
+                    name="city"
                     required
+                    maxLength={100}
                     className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="Strasbourg"
                   />
@@ -122,8 +157,10 @@ const Contact = () => {
               <div className="mb-4">
                 <label className="block text-white/80 text-sm mb-2">💬 Parlez-moi de votre projet *</label>
                 <textarea
+                  name="message"
                   required
                   rows={4}
+                  maxLength={2000}
                   className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors resize-none"
                   placeholder="Décrivez votre activité et vos objectifs..."
                 />
@@ -132,13 +169,14 @@ const Contact = () => {
               <div className="mb-6">
                 <label className="block text-white/80 text-sm mb-2">📅 Quand souhaitez-vous démarrer ?</label>
                 <select
+                  name="timeline"
                   className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/40 transition-colors"
                 >
                   <option value="" className="text-deep-black">Choisir...</option>
-                  <option value="urgent" className="text-deep-black">Urgent (&lt; 1 semaine)</option>
-                  <option value="month" className="text-deep-black">Ce mois-ci</option>
-                  <option value="later" className="text-deep-black">Dans 1-2 mois</option>
-                  <option value="estimate" className="text-deep-black">Simple estimation</option>
+                  <option value="Urgent (< 1 semaine)" className="text-deep-black">Urgent (&lt; 1 semaine)</option>
+                  <option value="Ce mois-ci" className="text-deep-black">Ce mois-ci</option>
+                  <option value="Dans 1-2 mois" className="text-deep-black">Dans 1-2 mois</option>
+                  <option value="Simple estimation" className="text-deep-black">Simple estimation</option>
                 </select>
               </div>
 
