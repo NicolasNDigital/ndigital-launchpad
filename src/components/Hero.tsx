@@ -50,8 +50,8 @@ const Hero = () => {
           duration: 0.6,
           delay: 0.1
         }} className="mt-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight">
-            Votre Site Vitrine Pro{" "}
-            <span className="gradient-text">En 2 Semaines</span>
+            Artisans & Commerces de Strasbourg :{" "}
+            <span className="gradient-text">Votre Site Pro Clé en Main</span>
           </motion.h1>
 
           {/* Subtitle */}
