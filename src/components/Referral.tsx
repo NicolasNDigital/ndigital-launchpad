@@ -1,8 +1,8 @@
-import { Infinity } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import giftIcon from "@/assets/gift-icon.png";
 import promoIcon from "@/assets/promo-code.png";
+import infiniteIcon from "@/assets/infinite.png";
 
 const Referral = () => {
   const benefits = [
@@ -17,7 +17,7 @@ const Referral = () => {
       description: "Votre filleul bénéficie d'une réduction de 10% sur sa première commande"
     },
     {
-      icon: Infinity,
+      icon: "infinite",
       title: "Sans limite",
       description: "Parrainez autant de personnes que vous le souhaitez, cumulez vos récompenses"
     }
@@ -77,7 +77,7 @@ const Referral = () => {
                   ) : benefit.icon === "promo" ? (
                     <img src={promoIcon} alt="" className="w-10 h-10" />
                   ) : (
-                    <benefit.icon className="w-8 h-8 text-electric-violet" strokeWidth={1.5} />
+                    <img src={infiniteIcon} alt="" className="w-10 h-10" />
                   )}
                 </div>
                 <h3 className="text-xl font-heading font-bold text-white mb-2">{benefit.title}</h3>
