@@ -26,17 +26,17 @@ const MentionsLegales = () => {
             <ul className="text-white/70 list-none space-y-2 mt-4">
               <li><strong className="text-white">Nom :</strong> NDIGITAL</li>
               <li><strong className="text-white">Statut :</strong> Micro-entreprise</li>
-              <li><strong className="text-white">Adresse :</strong> Strasbourg, France</li>
+              <li><strong className="text-white">Adresse :</strong> 2 Quai Fustel-De-Coulanges, 67000 Strasbourg</li>
               <li><strong className="text-white">Téléphone :</strong> 06 89 12 99 55</li>
               <li><strong className="text-white">Email :</strong> contact@ndigital.fr</li>
-              <li><strong className="text-white">SIRET :</strong> [À compléter]</li>
+              <li><strong className="text-white">SIRET :</strong> 830 915 344 00022</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-2xl font-heading font-bold text-white mb-4">2. Directeur de la publication</h2>
             <p className="text-white/70">
-              Le directeur de la publication est Nicolas, en qualité de gérant de NDIGITAL.
+              Le directeur de la publication est <strong className="text-white">Nicolas SCHUBLIN</strong>, en qualité de gérant de NDIGITAL.
             </p>
           </section>
 
@@ -46,9 +46,10 @@ const MentionsLegales = () => {
               Ce site est hébergé par :
             </p>
             <ul className="text-white/70 list-none space-y-2 mt-4">
-              <li><strong className="text-white">Hébergeur :</strong> [Nom de l'hébergeur]</li>
-              <li><strong className="text-white">Adresse :</strong> [Adresse de l'hébergeur]</li>
-              <li><strong className="text-white">Téléphone :</strong> [Téléphone de l'hébergeur]</li>
+              <li><strong className="text-white">Hébergeur :</strong> OVH SAS</li>
+              <li><strong className="text-white">Adresse :</strong> 2 rue Kellermann, 59100 Roubaix, France</li>
+              <li><strong className="text-white">Téléphone :</strong> 1007</li>
+              <li><strong className="text-white">Site web :</strong> <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer" className="text-electric-violet hover:underline">www.ovhcloud.com</a></li>
             </ul>
           </section>
 
