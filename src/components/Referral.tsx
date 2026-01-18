@@ -1,7 +1,8 @@
-import { Users, Euro, Infinity } from "lucide-react";
+import { Infinity } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import giftIcon from "@/assets/gift-icon.png";
+import promoIcon from "@/assets/promo-code.png";
 
 const Referral = () => {
   const benefits = [
@@ -11,7 +12,7 @@ const Referral = () => {
       description: "Pour vous, pour chaque nouveau client signé grâce à votre recommandation"
     },
     {
-      icon: Users,
+      icon: "promo",
       title: "-10% pour votre filleul",
       description: "Votre filleul bénéficie d'une réduction de 10% sur sa première commande"
     },
@@ -73,6 +74,8 @@ const Referral = () => {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric-violet/30 to-purple-600/20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 border border-electric-violet/30">
                   {benefit.icon === "gift" ? (
                     <img src={giftIcon} alt="" className="w-10 h-10" />
+                  ) : benefit.icon === "promo" ? (
+                    <img src={promoIcon} alt="" className="w-10 h-10" />
                   ) : (
                     <benefit.icon className="w-8 h-8 text-electric-violet" strokeWidth={1.5} />
                   )}
