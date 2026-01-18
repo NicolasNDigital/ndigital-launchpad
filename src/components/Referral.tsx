@@ -34,11 +34,14 @@ const Referral = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
+          <div className="w-16 h-16 rounded-full bg-electric-violet/20 flex items-center justify-center mx-auto mb-4">
+            <Gift className="w-8 h-8 text-electric-violet" />
+          </div>
           <span className="inline-block px-4 py-2 rounded-full bg-electric-violet/20 text-electric-violet text-sm font-medium mb-4">
             Programme de parrainage
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-            Recommandez-nous et <span className="gradient-text">gagnez ensemble</span>
+            Recommandez <span className="gradient-text">NDIGITAL</span> et gagnons ensemble
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto">
             Vous êtes satisfait de nos services ? Partagez-les avec vos contacts et profitez d'avantages exclusifs.
@@ -82,7 +85,7 @@ const Referral = () => {
             to="/parrainage"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-electric-violet hover:bg-electric-violet/90 text-white font-semibold transition-all duration-300 hover:scale-105"
           >
-            Découvrir le programme
+            ✨ Découvrir le programme
           </Link>
         </motion.div>
       </div>
