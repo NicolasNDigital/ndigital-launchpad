@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -73,13 +74,16 @@ const Footer = () => {
           <p className="text-white/40 text-sm">
             © {currentYear} NDIGITAL. Tous droits réservés.
           </p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="text-white/40 hover:text-white transition-colors">
+          <div className="flex flex-wrap gap-4 md:gap-6 text-sm">
+            <Link to="/mentions-legales" className="text-white/40 hover:text-white transition-colors">
               Mentions légales
-            </a>
-            <a href="#" className="text-white/40 hover:text-white transition-colors">
+            </Link>
+            <Link to="/politique-confidentialite" className="text-white/40 hover:text-white transition-colors">
               Politique de confidentialité
-            </a>
+            </Link>
+            <Link to="/parrainage" className="text-white/40 hover:text-white transition-colors">
+              Parrainage
+            </Link>
           </div>
         </div>
       </div>
