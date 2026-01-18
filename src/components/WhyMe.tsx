@@ -105,9 +105,9 @@ const WhyMe = () => {
 
                 <div className="relative z-10">
                   {/* Problem Tag */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-electric-violet/10 border border-electric-violet/30 mb-5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-electric-violet/20 border border-electric-violet/40 mb-5">
                     <span className="w-2 h-2 rounded-full bg-electric-violet" />
-                    <span className="text-electric-violet text-sm font-medium">{arg.problem}</span>
+                    <span className="text-white/90 text-sm font-medium">{arg.problem}</span>
                   </div>
 
                   {/* Icon + Title Row */}
