@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Rocket, MapPin, Lightbulb, BarChart3 } from "lucide-react";
+import nicolasPhoto from "@/assets/nicolas-photo.png";
 
 const WhyMe = () => {
   const ref = useRef(null);
@@ -39,16 +40,33 @@ const WhyMe = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Title */}
+        {/* Section Title with Photo */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-            Pourquoi NDIGITAL ?
-          </h2>
+          <div className="flex flex-col items-center gap-6 mb-6">
+            <div className="relative">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
+                <img 
+                  src={nicolasPhoto} 
+                  alt="Nicolas - Créateur de sites vitrines à Strasbourg" 
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-neon-cyan rounded-full flex items-center justify-center border-4 border-deep-black">
+                <span className="text-lg">👋</span>
+              </div>
+            </div>
+            <div>
+              <p className="text-white/70 text-sm uppercase tracking-wider mb-2">Votre interlocuteur unique</p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white">
+                Pourquoi NDIGITAL ?
+              </h2>
+            </div>
+          </div>
         </motion.div>
 
         {/* Grid */}
