@@ -34,6 +34,8 @@ jobs:
           # We remove it so npm can resolve from package.json and generate a fresh lockfile during CI.
           rm -f package-lock.json
           npm install --no-audit --no-fund
+
+      - name: Build
         run: npm run build
 
       - name: Setup Pages
