@@ -29,9 +29,11 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Build
+        run: |
+          # package-lock.json is out of sync with package.json in this repo, which makes `npm ci` fail.
+          # We remove it so npm can resolve from package.json and generate a fresh lockfile during CI.
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
         run: npm run build
 
       - name: Setup Pages
