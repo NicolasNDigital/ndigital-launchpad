@@ -56,14 +56,14 @@ const Pricing = () => {
           <div className="bg-card rounded-3xl shadow-xl overflow-hidden">
             {/* Header */}
             <div className="grid grid-cols-3 bg-gradient-primary text-white">
-              <div className="p-6 font-heading font-bold">Ce qui est inclus</div>
-              <div className="p-6 text-center border-l border-white/20">
-                <p className="font-heading font-bold text-lg">Site Vitrine</p>
-                <p className="text-3xl font-bold mt-1">900€</p>
+              <div className="p-3 md:p-6 font-heading font-bold text-xs md:text-base">Ce qui est inclus</div>
+              <div className="p-3 md:p-6 text-center border-l border-white/20">
+                <p className="font-heading font-bold text-xs md:text-lg">Site Vitrine</p>
+                <p className="text-xl md:text-3xl font-bold mt-1">900€</p>
               </div>
-              <div className="p-6 text-center border-l border-white/20 bg-white/10">
-                <p className="font-heading font-bold text-lg">Pack Acquisition</p>
-                <p className="text-3xl font-bold mt-1">1 500€</p>
+              <div className="p-3 md:p-6 text-center border-l border-white/20 bg-white/10">
+                <p className="font-heading font-bold text-xs md:text-lg">Pack Acquisition</p>
+                <p className="text-xl md:text-3xl font-bold mt-1">1 500€</p>
               </div>
             </div>
 
@@ -113,14 +113,14 @@ const Pricing = () => {
           <h3 className="text-xl font-heading font-bold mb-8 text-center">
             Personnalisez votre projet
           </h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {addons.map((addon, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="group bg-card rounded-2xl p-5 border border-border hover:border-primary/30 transition-all hover:shadow-lg hover:-translate-y-1"
+                className="group bg-card rounded-2xl p-5 border border-border hover:border-primary/30 transition-all hover:shadow-lg hover:-translate-y-1 flex flex-col items-center text-center md:items-start md:text-left"
               >
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-background to-muted flex items-center justify-center mb-3 ${addon.color}`}>
                   <addon.icon className="w-5 h-5" />

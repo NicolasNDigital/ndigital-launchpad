@@ -49,7 +49,7 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.1
-        }} className="mt-8 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight">
+        }} className="mt-8 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight">
             Artisans, commerçants et indépendants de Strasbourg,{" "}
             <span className="gradient-text">votre site Pro designé et paramétré en 14 jours à prix tout petit</span>
           </motion.h1>
@@ -84,11 +84,11 @@ const Hero = () => {
           delay: 0.3
         }} className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
             {usps.map((usp, index) => <div key={index} className="rounded-2xl p-4 bg-white/5 border border-white/10 hover:border-electric-blue/30 transition-all hover:bg-white/[0.08]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
+                <div className="flex flex-col md:flex-row items-center gap-3 text-center md:text-left">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center flex-shrink-0">
                     <usp.icon className="w-5 h-5 text-white" />
                   </div>
-                  <div className="text-left">
+                  <div>
                     <p className="text-white font-semibold text-sm">{usp.title}</p>
                     <p className="text-white/50 text-xs">{usp.desc}</p>
                   </div>
