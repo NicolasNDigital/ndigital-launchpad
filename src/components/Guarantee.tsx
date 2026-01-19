@@ -67,12 +67,15 @@ const Guarantee = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Mobile: Vertical timeline */}
-          <div className="flex flex-col gap-6 md:hidden">
+          {/* Mobile: Vertical timeline centered with connecting line */}
+          <div className="flex flex-col items-center md:hidden relative">
+            {/* Vertical connecting line */}
+            <div className="absolute top-5 bottom-5 left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-electric-blue to-vibrant-violet" />
+            
             {timeline.map((step, index) => (
-              <div key={index} className="flex items-center gap-4">
+              <div key={index} className="flex flex-col items-center relative z-10 mb-8 last:mb-0">
                 {/* Circle */}
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                   step.status === "current" 
                     ? "bg-warning text-deep-black" 
                     : "bg-gradient-primary text-white"
@@ -81,7 +84,7 @@ const Guarantee = () => {
                 </div>
                 
                 {/* Label */}
-                <div>
+                <div className="mt-3 text-center">
                   <p className={`font-bold ${step.status === "current" ? "text-warning" : "text-white"}`}>
                     {step.day}
                   </p>
