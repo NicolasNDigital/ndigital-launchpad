@@ -49,7 +49,7 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.1
-        }} className="mt-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight">
+        }} className="mt-8 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight">
             Artisans, commerçants et indépendants de Strasbourg,{" "}
             <span className="gradient-text">votre site Pro designé et paramétré en 14 jours à prix tout petit</span>
           </motion.h1>
@@ -64,7 +64,7 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.2
-        }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+        }} className="mt-6 text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
             Aujourd'hui, quand quelqu'un cherche à résoudre un problème, il commence par internet.
             <br className="hidden sm:block" />
             <strong className="text-white">Un site clair et professionnel vous permet d'être trouvé, compris et choisi.</strong>
