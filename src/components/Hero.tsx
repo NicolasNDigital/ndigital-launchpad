@@ -65,7 +65,7 @@ const Hero = () => {
           duration: 0.6,
           delay: 0.2
         }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-            Fini les devis à rallonge et les délais interminables. <strong className="text-white">Obtenez un site moderne qui attire des clients</strong>, avec un prix clair dès le départ et une mise en ligne garantie sous 14 jours.
+            Vous êtes expert dans votre métier, pas en création web — et c'est normal. <strong className="text-white">Obtenez un site professionnel qui attire des clients</strong>, avec un prix clair dès le départ et une mise en ligne garantie sous 14 jours.
           </motion.p>
 
           {/* USPs */}
