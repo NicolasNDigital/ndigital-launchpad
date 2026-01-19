@@ -67,12 +67,37 @@ const Guarantee = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="max-w-4xl mx-auto"
         >
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
+          {/* Mobile: Vertical timeline */}
+          <div className="flex flex-col gap-6 md:hidden">
+            {timeline.map((step, index) => (
+              <div key={index} className="flex items-center gap-4">
+                {/* Circle */}
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  step.status === "current" 
+                    ? "bg-warning text-deep-black" 
+                    : "bg-gradient-primary text-white"
+                }`}>
+                  {step.status === "current" ? "🚀" : <Clock className="w-5 h-5" />}
+                </div>
+                
+                {/* Label */}
+                <div>
+                  <p className={`font-bold ${step.status === "current" ? "text-warning" : "text-white"}`}>
+                    {step.day}
+                  </p>
+                  <p className="text-white/60 text-sm">{step.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: Horizontal timeline */}
+          <div className="hidden md:flex justify-between items-center">
             {timeline.map((step, index) => (
               <div key={index} className="flex flex-col items-center relative flex-1">
                 {/* Line connector */}
                 {index < timeline.length - 1 && (
-                  <div className="hidden md:block absolute top-5 left-1/2 w-full h-1 bg-gradient-primary" />
+                  <div className="absolute top-5 left-1/2 w-full h-1 bg-gradient-primary" />
                 )}
                 
                 {/* Circle */}
