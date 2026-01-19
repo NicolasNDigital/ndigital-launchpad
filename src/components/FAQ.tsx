@@ -14,43 +14,39 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: "Que se passe-t-il si vous dépassez les 2 semaines ?",
+      question: "1. Que se passe-t-il si vous dépassez les 2 semaines ?",
       answer: "-20% de réduction automatique sur votre facture. Aucune négociation, c'est ma garantie. Ça ne m'est arrivé qu'une seule fois en 18 mois (imprévu technique majeur).",
     },
     {
-      question: "Qu'est-ce qui est inclus exactement dans les 900€ ?",
-      answer: "Design complet, développement, hébergement 1 an, nom de domaine, SSL, SEO on-page, Google My Business, formulaires de contact, intégrations (Planity, réseaux sociaux...), formation, support 30 jours.",
+      question: "2. Qu'est-ce qui est inclus exactement dans les 900€ ?",
+      answer: "Design complet, développement, hébergement 1 an, nom de domaine, SSL, SEO on-page, Google My Business, formulaires de contact, intégrations (Planity, réseaux sociaux...), formation.",
     },
     {
-      question: "Les campagnes Google Ads, c'est quoi exactement ?",
+      question: "3. Les campagnes Google Ads, c'est quoi exactement ?",
       answer: "Je configure votre campagne publicitaire sur Google (mots-clés, ciblage géographique, annonces, tracking). Vous apparaissez en haut des résultats Google quand quelqu'un cherche votre service à Strasbourg. Budget pub : à définir (min 300€/mois recommandé).",
     },
     {
-      question: "Dois-je avoir du contenu prêt (textes, photos) ?",
-      answer: "Non. Je rédige les textes optimisés SEO. Pour les photos, si vous n'en avez pas, j'utilise des banques d'images premium ou IA. Idéalement : quelques photos authentiques de vous/votre activité font toujours la différence.",
+      question: "4. Dois-je avoir du contenu prêt (textes, photos) ?",
+      answer: "Non. Je rédige les textes optimisés SEO. Pour les photos, si vous n'en avez pas, j'utilise des banques d'images premium. Idéalement : quelques photos authentiques de vous/votre activité font toujours la différence.",
     },
     {
-      question: "Mon secteur est très concurrentiel sur Strasbourg, puis-je vraiment me positionner ?",
+      question: "5. Mon secteur est très concurrentiel sur Strasbourg, puis-je vraiment me positionner ?",
       answer: "Oui, avec la bonne stratégie. SEO local + Google Ads = combinaison gagnante. Je vous positionne sur des mots-clés de longue traîne moins concurrentiels mais qualifiés (\"plombier urgence Neudorf\" plutôt que juste \"plombier Strasbourg\").",
     },
     {
-      question: "Faites-vous aussi des sites e-commerce ?",
-      answer: "Je me concentre sur les sites vitrines pour l'instant (c'est mon expertise). Pour l'e-commerce, je peux vous orienter vers des partenaires de confiance.",
+      question: "6. Faites-vous aussi des sites e-commerce ?",
+      answer: "Oui, je fais également du e-commerce. Le prix est différent et adapté à chaque projet, sur devis.",
     },
     {
-      question: "Proposez-vous un support après les 30 jours inclus ?",
-      answer: "Oui, le support est inclus pendant 1 an. Vous pouvez me contacter pour toute question ou modification mineure de votre site.",
-    },
-    {
-      question: "Travaillez-vous uniquement sur Strasbourg ?",
+      question: "7. Travaillez-vous uniquement sur Strasbourg ?",
       answer: "Je suis basé à Strasbourg et expert en SEO local alsacien, mais je travaille partout en France. Pour le SEO local hors Strasbourg, je m'adapte à votre zone géographique.",
     },
     {
-      question: "Puis-je payer en plusieurs fois ?",
+      question: "8. Puis-je payer en plusieurs fois ?",
       answer: "Oui : 50% à la commande, 50% à la livraison. Pour le Pack Ads (1500€) : 3x 500€ possible.",
     },
     {
-      question: "Que se passe-t-il si je ne suis pas satisfait du résultat ?",
+      question: "9. Que se passe-t-il si je ne suis pas satisfait du résultat ?",
       answer: "2 aller-retours de modifications inclus pendant la phase de validation. Si vraiment aucun terrain d'entente, je rembourse 50% (ça ne m'est jamais arrivé, mes clients sont toujours ravis).",
     },
   ];

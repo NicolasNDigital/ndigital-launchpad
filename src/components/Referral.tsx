@@ -51,7 +51,7 @@ const Referral = () => {
             Programme de parrainage
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-            Recommandez <span className="gradient-text">NDIGITAL</span> et gagnons ensemble
+            Recommandez <span className="gradient-text">NDIGITAL</span> à un ami, collègue, connaissance et gagnez ensemble
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto">
             Vous êtes satisfait de nos services ? Partagez-les avec vos contacts et profitez d'avantages exclusifs.

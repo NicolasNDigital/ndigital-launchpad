@@ -106,13 +106,6 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-50">
-        <a href="tel:0689129955" className="btn-orange w-full justify-center text-lg py-4 rounded-2xl shadow-xl">
-          <Phone className="w-5 h-5" />
-          Appeler maintenant
-        </a>
-      </div>
     </header>
   );
 };
