@@ -64,8 +64,12 @@ const Hero = () => {
         }} transition={{
           duration: 0.6,
           delay: 0.2
-        }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-            Vous êtes expert dans votre métier, pas en création web — et c'est normal. <strong className="text-white">Obtenez un site professionnel qui attire des clients</strong>, avec un prix clair dès le départ et une mise en ligne garantie sous 14 jours.
+        }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+            Aujourd'hui, quand quelqu'un cherche à résoudre un problème, il commence par internet.
+            <br className="hidden sm:block" />
+            <strong className="text-white">Un site clair et professionnel vous permet d'être trouvé, compris et choisi.</strong>
+            <br className="hidden sm:block" />
+            Vous êtes expert dans votre domaine — alors montrez-le.
           </motion.p>
 
           {/* USPs */}
