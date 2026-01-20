@@ -227,17 +227,17 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col justify-center"
           >
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Phone */}
               <a
                 href="tel:0689129955"
-                className="flex items-start gap-4 p-6 rounded-2xl bg-white/10 border border-white/10 hover:border-white/20 transition-all group"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-electric-blue/20 hover:border-electric-blue/40 hover:bg-white/[0.08] transition-all group"
               >
-                <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-warning group-hover:text-deep-black transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-gradient-primary flex items-center justify-center text-white group-hover:shadow-glow transition-all">
                   <Phone className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm">TÉLÉPHONE</p>
+                  <p className="text-electric-blue text-sm font-medium">TÉLÉPHONE</p>
                   <p className="text-white text-2xl font-bold">06 89 12 99 55</p>
                   <p className="text-white/60 text-sm mt-1">Disponible Lun-Ven 9h-19h</p>
                 </div>
@@ -246,25 +246,25 @@ const Contact = () => {
               {/* Email */}
               <a
                 href="mailto:contact@ndigital.fr"
-                className="flex items-start gap-4 p-6 rounded-2xl bg-white/10 border border-white/10 hover:border-white/20 transition-all group"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-electric-blue/20 hover:border-electric-blue/40 hover:bg-white/[0.08] transition-all group"
               >
-                <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-warning group-hover:text-deep-black transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-gradient-primary flex items-center justify-center text-white group-hover:shadow-glow transition-all">
                   <Mail className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm">EMAIL</p>
+                  <p className="text-electric-blue text-sm font-medium">EMAIL</p>
                   <p className="text-white text-xl font-bold">contact@ndigital.fr</p>
                   <p className="text-white/60 text-sm mt-1">Réponse sous 24h</p>
                 </div>
               </a>
 
               {/* Address */}
-              <div className="flex items-start gap-4 p-6 rounded-2xl bg-white/10 border border-white/10">
-                <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
+              <div className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-vibrant-violet/20">
+                <div className="w-14 h-14 rounded-xl bg-gradient-primary flex items-center justify-center text-white">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm">BUREAU</p>
+                  <p className="text-vibrant-violet text-sm font-medium">BUREAU</p>
                   <p className="text-white text-lg font-bold">2 Quai Fustel-de-Coulanges</p>
                   <p className="text-white/80">67000 Strasbourg</p>
                   <p className="text-white/60 text-sm mt-1">(Sur rendez-vous)</p>
@@ -276,13 +276,13 @@ const Contact = () => {
                 href="https://wa.me/33689129955"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-start gap-4 p-6 rounded-2xl bg-success-green/20 border border-success-green/30 hover:border-success-green/50 transition-all group"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-success-green/10 border border-success-green/30 hover:border-success-green/50 hover:bg-success-green/15 transition-all group"
               >
-                <div className="w-14 h-14 rounded-xl bg-success-green/20 flex items-center justify-center text-success-green group-hover:bg-success-green group-hover:text-white transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-success-green flex items-center justify-center text-white group-hover:shadow-[0_0_30px_rgba(0,200,117,0.4)] transition-all">
                   <MessageCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm">WHATSAPP</p>
+                  <p className="text-success-green text-sm font-medium">WHATSAPP</p>
                   <p className="text-white text-lg font-bold">Message rapide</p>
                   <p className="text-white/60 text-sm mt-1">Réponse encore plus rapide !</p>
                 </div>
