@@ -11,7 +11,7 @@ const ProblemSolution = () => {
     "Pas de site web = invisible en ligne en 2026",
     "Site vieillot qui fait fuir les clients",
     "Projet web qui traîne depuis des mois",
-    "Agences qui facturent 5000€+ pour un site basique",
+    "Agences qui facturent 2000€+ pour un site basique",
     "Pas de visibilité sur Google Maps",
     "Téléphone qui ne sonne plus",
   ];
