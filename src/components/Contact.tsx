@@ -70,8 +70,11 @@ const Contact = () => {
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative group"
           >
-            <form onSubmit={handleSubmit} className="glass-light rounded-3xl p-8 border border-white/10">
+            {/* Gradient border effect */}
+            <div className="absolute -inset-[1px] bg-gradient-to-r from-electric-blue via-vibrant-violet to-electric-blue rounded-3xl opacity-50 group-hover:opacity-100 blur-sm transition-opacity" />
+            <form onSubmit={handleSubmit} className="relative bg-deep-black/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
               {/* Champs cachés Web3Forms */}
               <input type="hidden" name="subject" value="Nouvelle demande de devis - NDigital" />
               <input type="hidden" name="from_name" value="NDigital - Formulaire Contact" />
@@ -79,24 +82,24 @@ const Contact = () => {
               
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">👤 Nom Prénom *</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">👤 Nom Prénom *</label>
                   <input
                     type="text"
                     name="name"
                     required
                     maxLength={100}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                     placeholder="Jean Dupont"
                   />
                 </div>
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">📧 Email *</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">📧 Email *</label>
                   <input
                     type="email"
                     name="email"
                     required
                     maxLength={255}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                     placeholder="jean@example.com"
                   />
                 </div>
@@ -104,24 +107,24 @@ const Contact = () => {
 
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">📞 Téléphone *</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">📞 Téléphone *</label>
                   <input
                     type="tel"
                     name="phone"
                     required
                     maxLength={20}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                     placeholder="06 12 34 56 78"
                   />
                 </div>
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">🏢 Entreprise / Activité *</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">🏢 Entreprise / Activité *</label>
                   <input
                     type="text"
                     name="company"
                     required
                     maxLength={100}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                     placeholder="Plomberie Martin"
                   />
                 </div>
@@ -129,10 +132,10 @@ const Contact = () => {
 
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">🎯 Projet</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">🎯 Projet</label>
                   <select
                     name="project_type"
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                   >
                     <option value="" className="text-deep-black">Choisir...</option>
                     <option value="Site vitrine simple" className="text-deep-black">Site vitrine simple</option>
@@ -142,35 +145,35 @@ const Contact = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">📍 Ville *</label>
+                  <label className="block text-white/80 text-sm mb-2 font-medium">📍 Ville *</label>
                   <input
                     type="text"
                     name="city"
                     required
                     maxLength={100}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                     placeholder="Strasbourg"
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block text-white/80 text-sm mb-2">💬 Parlez-moi de votre projet *</label>
+                <label className="block text-white/80 text-sm mb-2 font-medium">💬 Parlez-moi de votre projet *</label>
                 <textarea
                   name="message"
                   required
                   rows={4}
                   maxLength={2000}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all resize-none"
                   placeholder="Décrivez votre activité et vos objectifs..."
                 />
               </div>
 
               <div className="mb-6">
-                <label className="block text-white/80 text-sm mb-2">📅 Quand souhaitez-vous démarrer ?</label>
+                <label className="block text-white/80 text-sm mb-2 font-medium">📅 Quand souhaitez-vous démarrer ?</label>
                 <select
                   name="timeline"
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/40 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                 >
                   <option value="" className="text-deep-black">Choisir...</option>
                   <option value="Urgent (< 1 semaine)" className="text-deep-black">Urgent (&lt; 1 semaine)</option>
