@@ -40,11 +40,12 @@ const Contact = () => {
   };
 
   return (
-    <section ref={ref} id="contact" className="py-20 md:py-32 bg-gradient-primary relative overflow-hidden">
-      {/* Background decoration */}
+    <section ref={ref} id="contact" className="py-20 md:py-32 bg-deep-black relative overflow-hidden">
+      {/* Background with mesh gradient - same as Hero */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-electric-blue/15 via-transparent to-transparent" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electric-blue/20 rounded-full blur-[150px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-vibrant-violet/15 rounded-full blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
