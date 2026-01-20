@@ -20,7 +20,7 @@ const ProblemSolution = () => {
     "Site vitrine moderne en 14 jours maximum",
     "Design professionnel qui inspire confiance",
     "Livraison express garantie ou remboursé -20%",
-    "Tarif fixe 900€, transparent, sans surprise",
+    "Tarif fixe 600€, transparent, sans surprise",
     "SEO local (référencement Google) optimisé pour Strasbourg ou votre ville",
     "Campagnes Google Ads qui génèrent des appels",
   ];
@@ -36,8 +36,7 @@ const ProblemSolution = () => {
           className="text-center mb-16"
         >
           <h2 className="section-title">
-            Votre Entreprise Mérite Mieux{" "}
-            <span className="gradient-text">Qu'un Site Amateur</span>
+            Votre Entreprise Mérite Mieux <span className="gradient-text">Qu'un Site Amateur</span>
           </h2>
         </motion.div>
 
@@ -54,9 +53,7 @@ const ProblemSolution = () => {
               <div className="w-12 h-12 rounded-full bg-destructive/20 flex items-center justify-center">
                 <X className="w-6 h-6 text-destructive" />
               </div>
-              <h3 className="text-2xl font-heading font-bold text-destructive">
-                Le problème
-              </h3>
+              <h3 className="text-2xl font-heading font-bold text-destructive">Le problème</h3>
             </div>
             <ul className="space-y-4">
               {problems.map((problem, index) => (
@@ -86,9 +83,7 @@ const ProblemSolution = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
                   <Check className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-heading font-bold gradient-text">
-                  La solution
-                </h3>
+                <h3 className="text-2xl font-heading font-bold gradient-text">La solution</h3>
               </div>
               <ul className="space-y-4">
                 {solutions.map((solution, index) => (
