@@ -47,7 +47,7 @@ const Referral = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
           />
-          <span className="inline-block px-4 py-2 rounded-full bg-electric-violet/20 text-electric-violet text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-2 rounded-full bg-gradient-primary text-white text-sm font-semibold mb-4 shadow-glow">
             Programme de parrainage
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
