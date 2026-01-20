@@ -1,16 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { 
-  Globe, 
-  TrendingUp, 
-  Layers, 
-  Check,
-  ArrowRight,
-  ShoppingCart,
-  FileText,
-  FormInput
-} from "lucide-react";
+import { Globe, TrendingUp, Layers, Check, ArrowRight, ShoppingCart, FileText, FormInput } from "lucide-react";
 
 const Services = () => {
   const ref = useRef(null);
@@ -20,7 +11,7 @@ const Services = () => {
     {
       icon: Globe,
       title: "Site Vitrine Complet",
-      price: "900€",
+      price: "600€",
       badge: "🔥 Populaire",
       badgeColor: "bg-warning text-warning-foreground",
       features: [
@@ -39,8 +30,8 @@ const Services = () => {
     {
       icon: TrendingUp,
       title: "Pack Site + Google Ads",
-      price: "1 500€",
-      originalPrice: "1 600€",
+      price: "1 200€",
+      originalPrice: "1 400€",
       badge: "⭐ Meilleure valeur",
       badgeColor: "bg-secondary text-secondary-foreground",
       features: [
@@ -101,9 +92,7 @@ const Services = () => {
           <h2 className="section-title">
             Mes Services — <span className="gradient-text">Votre Succès Digital</span>
           </h2>
-          <p className="section-subtitle">
-            Des solutions claires et transparentes pour propulser votre business local
-          </p>
+          <p className="section-subtitle">Des solutions claires et transparentes pour propulser votre business local</p>
         </motion.div>
 
         {/* Main Services Grid */}
@@ -115,16 +104,16 @@ const Services = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
               className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
-                service.featured
-                  ? "bg-gradient-primary p-[3px]"
-                  : "bg-card shadow-lg hover:shadow-xl"
+                service.featured ? "bg-gradient-primary p-[3px]" : "bg-card shadow-lg hover:shadow-xl"
               }`}
             >
               {/* Featured wrapper */}
               <div className={service.featured ? "bg-card rounded-[21px] p-8 h-full" : ""}>
                 {/* Badge */}
                 {service.badge && (
-                  <div className={`absolute -top-3 left-6 px-4 py-1.5 rounded-full text-sm font-semibold ${service.badgeColor}`}>
+                  <div
+                    className={`absolute -top-3 left-6 px-4 py-1.5 rounded-full text-sm font-semibold ${service.badgeColor}`}
+                  >
                     {service.badge}
                   </div>
                 )}
@@ -139,13 +128,9 @@ const Services = () => {
 
                 {/* Price */}
                 <div className="mb-6">
-                  <span className="text-4xl font-heading font-bold gradient-text">
-                    {service.price}
-                  </span>
+                  <span className="text-4xl font-heading font-bold gradient-text">{service.price}</span>
                   {service.originalPrice && (
-                    <span className="ml-2 text-muted-foreground line-through">
-                      {service.originalPrice}
-                    </span>
+                    <span className="ml-2 text-muted-foreground line-through">{service.originalPrice}</span>
                   )}
                 </div>
 
@@ -176,9 +161,7 @@ const Services = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-16 max-w-4xl mx-auto"
         >
-          <h3 className="text-xl font-heading font-bold text-center mb-8">
-            Services Additionnels
-          </h3>
+          <h3 className="text-xl font-heading font-bold text-center mb-8">Services Additionnels</h3>
           <div className="flex flex-wrap justify-center gap-3">
             {additionalServices.map((service, index) => (
               <div
