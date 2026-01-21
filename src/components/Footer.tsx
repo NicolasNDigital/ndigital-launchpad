@@ -10,9 +10,11 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <span className="text-2xl font-heading font-bold gradient-text">
-              NDIGITAL
-            </span>
+            <img 
+              src="/assets/logo.png" 
+              alt="NDIGITAL Logo" 
+              className="h-10 w-auto"
+            />
             <p className="text-white/60 mt-4 max-w-xs">
               Expert en création de sites vitrines et campagnes Google Ads pour les business locaux à Strasbourg.
             </p>
