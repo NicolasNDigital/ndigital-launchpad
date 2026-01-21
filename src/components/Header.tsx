@@ -29,11 +29,11 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center gap-2">
-            <span className={`text-2xl font-heading font-bold transition-colors ${
-              isScrolled ? "gradient-text" : "text-white"
-            }`}>
-              NDIGITAL
-            </span>
+            <img 
+              src="/assets/logo.png" 
+              alt="NDIGITAL Logo" 
+              className="h-10 w-auto"
+            />
           </a>
 
           <nav className="hidden md:flex items-center gap-8">
