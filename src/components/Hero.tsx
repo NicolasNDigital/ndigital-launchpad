@@ -1,20 +1,25 @@
 import { motion } from "framer-motion";
 import { Zap, Wallet, TrendingUp, ArrowRight, Clock, MapPin, Euro } from "lucide-react";
 const Hero = () => {
-  const usps = [{
-    icon: Zap,
-    title: "Livraison express",
-    desc: "2 semaines ou -20% de réduction"
-  }, {
-    icon: Wallet,
-    title: "Tarifs transparents",
-    desc: "Dès 900€, sans surprises"
-  }, {
-    icon: TrendingUp,
-    title: "Résultats mesurables",
-    desc: "Sites optimisés SEO + Ads qui convertissent"
-  }];
-  return <section className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-32 bg-deep-black">
+  const usps = [
+    {
+      icon: Zap,
+      title: "Livraison express",
+      desc: "2 semaines ou -20% de réduction",
+    },
+    {
+      icon: Wallet,
+      title: "Tarifs transparents",
+      desc: "Dès 600€, sans surprises",
+    },
+    {
+      icon: TrendingUp,
+      title: "Résultats mesurables",
+      desc: "Sites optimisés SEO + Ads qui convertissent",
+    },
+  ];
+  return (
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-32 bg-deep-black">
       {/* Background with mesh gradient */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-electric-blue/15 via-transparent to-transparent" />
@@ -25,65 +30,91 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.5
-        }} className="mt-8">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.5,
+            }}
+            className="mt-8"
+          >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-electric-blue/10 text-electric-blue text-sm font-semibold border border-electric-blue/20">
               🚀 Création de sites vitrines pour artisans & business locaux
             </span>
           </motion.div>
 
           {/* Main heading */}
-          <motion.h1 initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.1
-        }} className="mt-8 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight">
+          <motion.h1
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.1,
+            }}
+            className="mt-8 text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-tight"
+          >
             Artisans, commerçants et indépendants de Strasbourg,{" "}
             <span className="gradient-text">votre site Pro designé et paramétré en 14 jours à prix tout petit</span>
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.2
-        }} className="mt-6 text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.2,
+            }}
+            className="mt-6 text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed"
+          >
             Aujourd'hui, quand quelqu'un cherche à résoudre un problème, il commence par internet.
             <br className="hidden sm:block" />
-            <strong className="text-white">Un site clair et professionnel vous permet d'être trouvé, compris et choisi.</strong>
+            <strong className="text-white">
+              Un site clair et professionnel vous permet d'être trouvé, compris et choisi.
+            </strong>
             <br className="hidden sm:block" />
             Vous êtes expert dans votre domaine — alors montrez-le.
           </motion.p>
 
           {/* USPs */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.3
-        }} className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {usps.map((usp, index) => <div key={index} className="rounded-2xl p-4 bg-white/5 border border-white/10 hover:border-electric-blue/30 transition-all hover:bg-white/[0.08]">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.3,
+            }}
+            className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4"
+          >
+            {usps.map((usp, index) => (
+              <div
+                key={index}
+                className="rounded-2xl p-4 bg-white/5 border border-white/10 hover:border-electric-blue/30 transition-all hover:bg-white/[0.08]"
+              >
                 <div className="flex flex-col md:flex-row items-center gap-3 text-center md:text-left">
                   <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center flex-shrink-0">
                     <usp.icon className="w-5 h-5 text-white" />
@@ -93,20 +124,26 @@ const Hero = () => {
                     <p className="text-white/50 text-xs">{usp.desc}</p>
                   </div>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </motion.div>
 
           {/* CTA - Single button */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.4
-        }} className="mt-10 flex justify-center">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.4,
+            }}
+            className="mt-10 flex justify-center"
+          >
             <a href="#contact" className="btn-orange text-lg px-8 py-4 group">
               Demander mon devis gratuit
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -114,16 +151,21 @@ const Hero = () => {
           </motion.div>
 
           {/* Stats - Redesigned as elegant inline badges */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 40
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.5
-        }} className="mt-12 inline-flex flex-wrap justify-center gap-3">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 40,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.5,
+            }}
+            className="mt-12 inline-flex flex-wrap justify-center gap-3"
+          >
             <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all">
               <Clock className="w-4 h-4 text-electric-blue" />
               <span className="text-white/90 font-medium text-sm">14 jours max</span>
@@ -139,6 +181,7 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 export default Hero;
