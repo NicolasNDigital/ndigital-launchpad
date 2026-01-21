@@ -58,12 +58,15 @@
     
     --radius: 1rem;
     
-    /* Gradients - Dark Pink to Amber (more sophisticated) */
-    --gradient-primary: linear-gradient(90deg, #e63b8a 0%, #f5a623 100%);
-    --gradient-cyan: linear-gradient(90deg, #e63b8a 0%, #f5a623 100%);
-    --gradient-violet: linear-gradient(90deg, #f5a623 0%, #e63b8a 100%);
+    /* Gradients - Dark Pink to Amber (backgrounds, mesh, decorative) */
+    --gradient-dark: linear-gradient(90deg, #e63b8a 0%, #f5a623 100%);
     --gradient-hero: linear-gradient(90deg, #e63b8a 0%, #f07a9e 50%, #f5a623 100%);
     
+    /* Light gradient for text, icons, buttons (original pink/yellow) */
+    --gradient-primary: linear-gradient(90deg, #ff66c4 0%, #ffde59 100%);
+    --gradient-cyan: linear-gradient(90deg, #ff66c4 0%, #ffde59 100%);
+    --gradient-violet: linear-gradient(90deg, #ffde59 0%, #ff66c4 100%);
+
     /* Glassmorphism */
     --glass-white: rgba(255, 255, 255, 0.8);
     --glass-white-light: rgba(255, 255, 255, 0.2);
