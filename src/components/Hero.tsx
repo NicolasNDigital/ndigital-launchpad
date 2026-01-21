@@ -33,7 +33,7 @@ const Hero = () => {
           y: 0
         }} transition={{
           duration: 0.5
-        }}>
+        }} className="mt-8">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-electric-blue/10 text-electric-blue text-sm font-semibold border border-electric-blue/20">
               🚀 Création de sites vitrines pour artisans & business locaux
             </span>
