@@ -1,11 +1,21 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { X, Check, ArrowRight } from "lucide-react";
 
 const ProblemSolution = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const rotatingWords = ["coiffeur", "garagiste", "avocat", "plombier", "électricien", "agent immo"];
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const problems = [
     "Pas de site web = invisible en ligne en 2026",
@@ -35,8 +45,26 @@ const ProblemSolution = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="section-title">
-            Votre Entreprise Mérite Mieux <span className="gradient-text">Qu'un Site Amateur</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold leading-tight max-w-4xl mx-auto">
+            Quand les clients cherchent un{" "}
+            <span className="gradient-text inline-block min-w-[140px]">
+              <motion.span
+                key={currentWordIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="inline-block"
+              >
+                {rotatingWords[currentWordIndex]}
+              </motion.span>
+            </span>
+            , vous avez besoin qu'ils vous trouvent.
+            <br className="hidden md:block" />
+            <span className="text-muted-foreground font-normal text-xl md:text-2xl block mt-4">
+              Donc on vous crée un site clair et élégant, optimisé pour Google et qui travaille pour vous 24h/24 avec{" "}
+              <span className="gradient-text font-semibold">30 jours de modifications offertes</span>.
+            </span>
           </h2>
         </motion.div>
 
