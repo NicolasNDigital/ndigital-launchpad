@@ -20,9 +20,9 @@ const Services = () => {
         "Formulaire de contact + intégrations",
         "Hébergement & nom de domaine",
         "Google My Business optimisé",
-        "Livraison sous 14 jours max",
-        "Formation prise en main",
-        "Support 30 jours inclus",
+        "Livraison sous 14 jours ou -20%",
+        "30 jours de modifications offertes",
+        "Forfait 150€/an illimité ensuite",
       ],
       cta: "Choisir cette offre",
       ctaStyle: "btn-primary",
@@ -31,11 +31,10 @@ const Services = () => {
       icon: TrendingUp,
       title: "Pack Site + Google Ads",
       price: "1 200€",
-      originalPrice: "1 400€",
       badge: "⭐ Meilleure valeur",
       badgeColor: "bg-secondary text-secondary-foreground",
       features: [
-        "Tout du Site Vitrine Pro",
+        "Tout du Site Vitrine Complet",
         "+ Campagne Google Ads configurée",
         "+ Ciblage géographique Strasbourg",
         "+ Mots-clés optimisés métier",
@@ -104,11 +103,11 @@ const Services = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
               className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
-                service.featured ? "bg-gradient-primary p-[3px]" : "bg-card shadow-lg hover:shadow-xl"
+                service.featured ? "bg-gradient-primary p-[2px]" : "bg-card shadow-lg hover:shadow-xl border border-border"
               }`}
             >
               {/* Featured wrapper */}
-              <div className={service.featured ? "bg-card rounded-[21px] p-8 h-full" : ""}>
+              <div className={service.featured ? "bg-card rounded-[22px] p-8 h-full" : ""}>
                 {/* Badge */}
                 {service.badge && (
                   <div
@@ -118,9 +117,11 @@ const Services = () => {
                   </div>
                 )}
 
-                {/* Icon */}
-                <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6">
-                  <service.icon className="w-8 h-8 text-white" />
+                {/* Icon - Circle with gradient border */}
+                <div className="w-16 h-16 rounded-full bg-gradient-primary p-[2px] mb-6">
+                  <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
+                    <service.icon className="w-7 h-7 text-primary" />
+                  </div>
                 </div>
 
                 {/* Title */}
@@ -129,9 +130,6 @@ const Services = () => {
                 {/* Price */}
                 <div className="mb-6">
                   <span className="text-4xl font-heading font-bold gradient-text">{service.price}</span>
-                  {service.originalPrice && (
-                    <span className="ml-2 text-muted-foreground line-through">{service.originalPrice}</span>
-                  )}
                 </div>
 
                 {/* Features */}

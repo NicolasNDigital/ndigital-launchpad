@@ -75,12 +75,14 @@ const Process = () => {
             >
               {/* Timeline line */}
               {index < steps.length - 1 && (
-                <div className="absolute left-7 top-16 w-0.5 h-full bg-gradient-primary opacity-30" />
+                <div className="absolute left-7 top-16 w-0.5 h-full bg-border" />
               )}
               
-              {/* Step number */}
-              <div className="w-14 h-14 rounded-2xl bg-gradient-primary flex items-center justify-center flex-shrink-0 shadow-lg">
-                <span className="text-2xl">{step.emoji}</span>
+              {/* Step number - Circle with gradient border */}
+              <div className="w-14 h-14 rounded-full bg-gradient-primary p-[2px] flex-shrink-0">
+                <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
+                  <span className="text-2xl">{step.emoji}</span>
+                </div>
               </div>
               
               {/* Content */}

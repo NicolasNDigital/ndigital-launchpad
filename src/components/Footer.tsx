@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <img 
-              src="/assets/logo.png" 
+              src="/assets/logo.svg" 
               alt="NDIGITAL Logo" 
               className="h-10 w-auto"
             />
