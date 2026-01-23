@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,7 +31,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center gap-2">
             <img 
-              src="/src/assets/logo.png" 
+              src={logo}
               alt="NDIGITAL Logo" 
               className="h-10 w-auto"
             />
