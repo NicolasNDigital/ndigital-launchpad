@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle, AlertTriangle } from "lucide-react";
+import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle, AlertTriangle, CheckCircle, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -524,29 +524,135 @@ const AuditVisibiliteIA = () => {
                       </motion.div>
                     )}
 
-                    {/* Email submitted - Thank you */}
+                    {/* Email submitted - Success screen */}
                     {emailSubmitted && (
                       <motion.div
                         key="thanks"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="py-8 text-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="py-6 text-center"
                       >
-                        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-success/20 flex items-center justify-center">
-                          <CheckCircle2 className="w-10 h-10 text-success" />
-                        </div>
-                        <h3 className="text-2xl font-heading font-bold text-white mb-3">
-                          Merci !
-                        </h3>
-                        <p className="text-white/70 mb-8">
-                          Votre rapport de visibilité IA sera envoyé à <span className="text-primary">{email}</span> dans les prochaines minutes.
-                        </p>
-                        <button
-                          onClick={resetScan}
-                          className="text-primary hover:text-primary/80 text-sm underline underline-offset-4 transition-colors"
+                        {/* Animated checkmark */}
+                        <motion.div
+                          initial={{ scale: 0, rotate: -180 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ 
+                            type: "spring", 
+                            stiffness: 200, 
+                            damping: 15,
+                            delay: 0.1 
+                          }}
+                          className="w-20 h-20 mx-auto mb-6 rounded-full bg-success/20 border-2 border-success/40 flex items-center justify-center relative"
                         >
-                          Analyser un autre site
-                        </button>
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.4, duration: 0.3 }}
+                            className="absolute inset-0 rounded-full bg-success/10 animate-ping"
+                            style={{ animationDuration: "2s" }}
+                          />
+                          <CheckCircle className="w-10 h-10 text-success" />
+                        </motion.div>
+
+                        {/* Personalized success message */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          <h3 className="text-xl md:text-2xl font-heading font-bold text-white mb-4">
+                            Analyse de <span className="text-primary break-all">{url}</span> transmise avec succès !
+                          </h3>
+                          <p className="text-white/70 text-sm md:text-base mb-6 leading-relaxed">
+                            Nos experts préparent votre rapport stratégique GEO complet.<br />
+                            Vous le recevrez sous <span className="text-white font-semibold">24h</span> à l'adresse{" "}
+                            <span className="text-primary">{email}</span>.
+                          </p>
+                        </motion.div>
+
+                        {/* CTA Block - Calendly booking */}
+                        {score !== null && score < 50 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="mt-8 p-6 bg-gradient-to-br from-destructive/10 via-warning/5 to-transparent border border-destructive/20 rounded-2xl text-left"
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-destructive/20 flex items-center justify-center">
+                                <AlertTriangle className="w-5 h-5 text-destructive" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-white font-semibold mb-2">
+                                  Votre score est inférieur à 50/100 ?
+                                </h4>
+                                <p className="text-white/60 text-sm mb-4 leading-relaxed">
+                                  Ne laissez pas vos concurrents prendre l'avantage sur <span className="text-primary">ChatGPT</span> et{" "}
+                                  <span className="text-secondary">Gemini</span>. Bloquez dès maintenant 15 minutes pour un débriefing gratuit de vos résultats.
+                                </p>
+                                <a
+                                  href="https://calendly.com/ndigital-rdv/decouverte"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-3 px-5 rounded-xl transition-all group text-sm"
+                                >
+                                  <Calendar className="w-4 h-4" />
+                                  Réserver mon créneau stratégique
+                                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </a>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {/* CTA for good scores */}
+                        {score !== null && score >= 50 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="mt-8 p-6 bg-gradient-to-br from-success/10 via-primary/5 to-transparent border border-success/20 rounded-2xl text-left"
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center">
+                                <Sparkles className="w-5 h-5 text-success" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-white font-semibold mb-2">
+                                  Bon score, mais vous pouvez viser plus haut !
+                                </h4>
+                                <p className="text-white/60 text-sm mb-4 leading-relaxed">
+                                  Découvrez comment passer de "visible" à "recommandé en priorité" par les IA conversationnelles.
+                                </p>
+                                <a
+                                  href="https://calendly.com/ndigital-rdv/decouverte"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-3 px-5 rounded-xl transition-all group text-sm"
+                                >
+                                  <Calendar className="w-4 h-4" />
+                                  Réserver un échange stratégique
+                                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </a>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {/* Secondary action */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.9 }}
+                          className="mt-6"
+                        >
+                          <button
+                            onClick={resetScan}
+                            className="text-white/50 hover:text-white/80 text-sm underline underline-offset-4 transition-colors"
+                          >
+                            Analyser un autre site
+                          </button>
+                        </motion.div>
                       </motion.div>
                     )}
                   </AnimatePresence>
