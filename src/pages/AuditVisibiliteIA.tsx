@@ -27,10 +27,23 @@ interface CriteriaItem {
   score?: number;
 }
 
+// API can return points with different property names
+interface ApiPoint {
+  label?: string;
+  name?: string;
+  status?: string;
+  score?: number;
+  explanation?: string;
+  analysis?: string;
+  action?: string;
+  plan_action?: string;
+}
+
 interface ApiResponse {
   score: number;
   analysis: string;
   criteria?: CriteriaItem[];
+  points?: ApiPoint[];
   conclusion_strategique?: string;
   error?: string;
 }
@@ -143,8 +156,29 @@ const AuditVisibiliteIA = () => {
       setScore(apiResultRef.current.score);
       setAnalysis(apiResultRef.current.analysis);
       setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
-      const criteriaData = apiResultRef.current.criteria || 
-        generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
+      
+      // Map API response to CriteriaItem - handle both 'criteria' and 'points' arrays
+      // Also handle different property names (action vs plan_action, label vs name, etc.)
+      const rawPoints = apiResultRef.current.criteria || apiResultRef.current.points || [];
+      
+      let criteriaData: CriteriaItem[];
+      
+      if (rawPoints.length > 0) {
+        criteriaData = rawPoints.map((point: ApiPoint): CriteriaItem => ({
+          name: point.label || point.name || "Point d'analyse",
+          status: (point.status === "danger" || (point.score !== undefined && point.score < 40)) ? "danger" as const : "warning" as const,
+          explanation: point.explanation || point.analysis || "",
+          action: point.action || point.plan_action || undefined,
+          score: point.score
+        }));
+      } else {
+        criteriaData = generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
+      }
+      
+      // Debug log to verify data
+      console.log("API Response:", apiResultRef.current);
+      console.log("Mapped Criteria:", criteriaData);
+      
       setCriteria(criteriaData);
       setScanComplete(true);
       
