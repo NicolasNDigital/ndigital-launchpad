@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Clock, ArrowRight, Check } from "lucide-react";
+import { Clock, ArrowRight, Check, Calendar } from "lucide-react";
 
 const Urgency = () => {
   const ref = useRef(null);
@@ -10,6 +10,15 @@ const Urgency = () => {
   const availableSlots = 3;
   const totalSlots = 5;
   const takenSlots = totalSlots - availableSlots;
+
+  // Get current month and year in French
+  const currentDate = new Date();
+  const monthNames = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  ];
+  const currentMonth = monthNames[currentDate.getMonth()];
+  const currentYear = currentDate.getFullYear();
 
   return (
     <section ref={ref} className="py-16 md:py-24 bg-gradient-to-br from-deep-black via-deep-black to-deep-black/95 relative overflow-hidden">
@@ -23,15 +32,26 @@ const Urgency = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          {/* Badge */}
+          {/* Badge with date */}
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-bold mb-6 border border-white/20">
             <Clock className="w-4 h-4" />
             PLACES LIMITÉES
           </span>
 
+          {/* Current month indicator */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-primary text-white text-sm font-bold mb-8 shadow-lg shadow-pink-500/30"
+          >
+            <Calendar className="w-4 h-4" />
+            {currentMonth} {currentYear}
+          </motion.div>
+
           {/* Title */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-            Plus que <span className="gradient-text">{availableSlots} places</span> ce mois-ci
+            Plus que <span className="gradient-text">{availableSlots} places</span> en {currentMonth.toLowerCase()}
           </h2>
 
           {/* Description */}
