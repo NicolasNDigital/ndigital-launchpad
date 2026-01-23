@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
@@ -18,6 +19,7 @@ const Header = () => {
   const navLinks = [
     { href: "#services", label: "Services" },
     { href: "#tarifs", label: "Tarifs" },
+    { href: "/audit-visibilite-ia", label: "Audit IA Gratuit", isRoute: true },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -39,15 +41,27 @@ const Header = () => {
 
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`font-medium transition-colors ${
-                  isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-                }`}
-              >
-                {link.label}
-              </a>
+              link.isRoute ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`font-medium transition-colors ${
+                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`font-medium transition-colors ${
+                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              )
             ))}
           </nav>
 
@@ -85,14 +99,25 @@ const Header = () => {
           >
             <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
-                >
-                  {link.label}
-                </a>
+                link.isRoute ? (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
               <a
                 href="#contact"

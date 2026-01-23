@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Bot, MessageSquare, Search, Sparkles, ArrowRight, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Bot, MessageSquare, Search, Sparkles, ArrowRight, MapPin, Scan } from "lucide-react";
 
 const ExpertiseGEO = () => {
   const ref = useRef<HTMLElement | null>(null);
@@ -107,7 +108,7 @@ const ExpertiseGEO = () => {
             </div>
           </motion.div>
 
-          {/* Offer card */}
+          {/* Audit card */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -116,26 +117,27 @@ const ExpertiseGEO = () => {
           >
             <div className="bg-gradient-primary p-[2px] rounded-3xl shadow-xl">
               <div className="bg-card rounded-[22px] p-8">
-                <div className="badge-pulse bg-warning/20 text-warning text-xs w-fit mb-5">
-                  ⚡ Offre de lancement
+                <div className="badge-pulse bg-neon-cyan/20 text-neon-cyan text-xs w-fit mb-5">
+                  🔍 Diagnostic gratuit
                 </div>
 
                 <h3 className="text-2xl font-heading font-bold text-foreground">
-                  Votre site pro complet + <span className="gradient-text">Optimisation SEO & GEO</span>
+                  Vous avez déjà un site ?{" "}
+                  <span className="gradient-text">Testez sa visibilité IA</span>
                 </h3>
 
                 <p className="text-foreground/80 mt-3">
-                  Offre de lancement : votre site pro complet + optimisation SEO & GEO pour seulement
-                  <span className="font-bold text-foreground"> 600€</span>.
+                  Découvrez si ChatGPT, Gemini et Perplexity recommandent votre entreprise à vos clients potentiels.
                 </p>
 
                 <div className="mt-6">
-                  <a href="#contact" className="btn-primary w-full justify-center group text-base">
-                    ✨ Tester l'éligibilité de mon site
+                  <Link to="/audit-visibilite-ia" className="btn-primary w-full justify-center group text-base">
+                    <Scan className="w-5 h-5" />
+                    Analyser la visibilité IA de mon site
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                   <p className="text-xs text-foreground/60 mt-3">
-                    Réponse rapide : on vous dit quoi améliorer pour devenir « recommandable » par les IA.
+                    Test 100% gratuit • Résultats détaillés en quelques minutes
                   </p>
                 </div>
               </div>
