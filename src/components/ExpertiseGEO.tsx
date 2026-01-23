@@ -65,11 +65,11 @@ const ExpertiseGEO = () => {
                 </div>
               </div>
 
-              <div className="p-6 md:p-8 space-y-5">
+              <div className="p-6 md:p-8 space-y-5 bg-background/80">
                 {/* User question */}
                 <div className="flex justify-end">
-                  <div className="max-w-[90%] md:max-w-[80%] rounded-2xl px-4 py-3 bg-secondary/10 border border-secondary/20">
-                    <p className="text-xs text-secondary font-medium mb-1">Question de l'internaute</p>
+                  <div className="max-w-[90%] md:max-w-[80%] rounded-2xl px-4 py-3 bg-muted border border-border shadow-sm">
+                    <p className="text-xs font-semibold text-foreground mb-1">💬 Question de l'internaute</p>
                     <p className="text-sm font-medium text-foreground">
                       Quel est le meilleur coiffeur de Strasbourg pour un balayage ?
                     </p>
@@ -85,17 +85,17 @@ const ExpertiseGEO = () => {
                   </div>
 
                   <div className="flex-1">
-                    <div className="rounded-2xl px-4 py-3 bg-primary/5 border border-primary/20">
-                      <p className="text-xs text-primary font-medium mb-1">Réponse de l'IA</p>
-                      <p className="text-sm">
-                        Selon les avis et l'expertise locale, le salon <span className="font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">[Votre nom]</span> est
+                    <div className="rounded-2xl px-4 py-3 bg-card border border-border shadow-sm">
+                      <p className="text-xs font-semibold text-foreground mb-1">🤖 Réponse de l'IA</p>
+                      <p className="text-sm text-foreground">
+                        Selon les avis et l'expertise locale, le salon <span className="font-bold text-primary">[Votre nom]</span> est
                         la référence à Strasbourg pour les techniques de balayage...
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-border/60">
-                      <p className="text-sm font-semibold">
-                        Grâce au GEO, nous faisons de vous la recommandation numéro 1 des IA.
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <p className="text-sm font-semibold text-foreground">
+                        ✅ Grâce au GEO, nous faisons de vous la recommandation numéro 1 des IA.
                       </p>
                       <p className="text-xs text-muted-foreground mt-2 flex items-center gap-2">
                         <MapPin className="w-3.5 h-3.5" /> Local, crédible, cité naturellement.
@@ -114,19 +114,19 @@ const ExpertiseGEO = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-5"
           >
-            <div className="bg-gradient-primary p-[2px] rounded-3xl">
-              <div className="bg-card rounded-[22px] p-8 shadow-lg">
-                <div className="badge-pulse bg-warning/10 text-warning text-xs w-fit mb-5">
+            <div className="bg-gradient-primary p-[2px] rounded-3xl shadow-xl">
+              <div className="bg-card rounded-[22px] p-8">
+                <div className="badge-pulse bg-warning/20 text-warning text-xs w-fit mb-5">
                   ⚡ Offre de lancement
                 </div>
 
-                <h3 className="text-2xl font-heading font-bold">
+                <h3 className="text-2xl font-heading font-bold text-foreground">
                   Votre site pro complet + <span className="gradient-text">Optimisation SEO & GEO</span>
                 </h3>
 
-                <p className="text-muted-foreground mt-3">
+                <p className="text-foreground/80 mt-3">
                   Offre de lancement : votre site pro complet + optimisation SEO & GEO pour seulement
-                  <span className="font-semibold"> 600€</span>.
+                  <span className="font-bold text-foreground"> 600€</span>.
                 </p>
 
                 <div className="mt-6">
@@ -134,7 +134,7 @@ const ExpertiseGEO = () => {
                     ✨ Tester l'éligibilité de mon site
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
-                  <p className="text-xs text-muted-foreground mt-3">
+                  <p className="text-xs text-foreground/60 mt-3">
                     Réponse rapide : on vous dit quoi améliorer pour devenir « recommandable » par les IA.
                   </p>
                 </div>
