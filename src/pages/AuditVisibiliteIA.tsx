@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2 } from "lucide-react";
+import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const scanMessages = [
@@ -16,6 +17,14 @@ const scanMessages = [
   "Compilation des résultats...",
 ];
 
+const MIN_SCAN_DURATION = 5000; // 5 seconds minimum
+
+interface ApiResponse {
+  score: number;
+  analysis: string;
+  error?: string;
+}
+
 const AuditVisibiliteIA = () => {
   const [url, setUrl] = useState("");
   const [isScanning, setIsScanning] = useState(false);
@@ -23,34 +32,109 @@ const AuditVisibiliteIA = () => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [score, setScore] = useState<number | null>(null);
+  const [analysis, setAnalysis] = useState<string | null>(null);
+  
+  const apiResultRef = useRef<ApiResponse | null>(null);
+  const scanStartTimeRef = useRef<number>(0);
 
   useEffect(() => {
     if (isScanning && currentMessageIndex < scanMessages.length) {
       const timer = setTimeout(() => {
         setCurrentMessageIndex((prev) => prev + 1);
-      }, 800);
+      }, 600);
       return () => clearTimeout(timer);
-    } else if (isScanning && currentMessageIndex >= scanMessages.length) {
-      setTimeout(() => {
-        setIsScanning(false);
-        setScanComplete(true);
-      }, 500);
     }
   }, [isScanning, currentMessageIndex]);
 
-  const handleScan = (e: React.FormEvent) => {
+  const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
+    
     setIsScanning(true);
     setCurrentMessageIndex(0);
     setScanComplete(false);
     setEmailSubmitted(false);
+    setApiError(null);
+    setScore(null);
+    setAnalysis(null);
+    apiResultRef.current = null;
+    scanStartTimeRef.current = Date.now();
+
+    // Start API call
+    try {
+      const response = await fetch("https://ndigital-api.vercel.app/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || data.error) {
+        apiResultRef.current = { score: 0, analysis: "", error: data.error || "Erreur d'analyse" };
+      } else {
+        apiResultRef.current = data;
+      }
+    } catch (error) {
+      apiResultRef.current = { score: 0, analysis: "", error: "Erreur d'analyse. Veuillez vérifier l'URL et réessayer." };
+    }
+
+    // Ensure minimum scan duration
+    const elapsed = Date.now() - scanStartTimeRef.current;
+    const remaining = MIN_SCAN_DURATION - elapsed;
+    
+    if (remaining > 0) {
+      await new Promise(resolve => setTimeout(resolve, remaining));
+    }
+
+    // Complete scan
+    setIsScanning(false);
+    
+    if (apiResultRef.current?.error) {
+      setApiError(apiResultRef.current.error);
+    } else if (apiResultRef.current) {
+      setScore(apiResultRef.current.score);
+      setAnalysis(apiResultRef.current.analysis);
+      setScanComplete(true);
+    }
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    setEmailSubmitted(true);
+    if (!email.trim() || isSubmittingEmail) return;
+    
+    setIsSubmittingEmail(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append("access_key", "cb6a48ec-fcf8-4e60-812f-b001d893a6db");
+      formData.append("subject", `Nouveau lead Audit IA - Score ${score}/100`);
+      formData.append("email", email.trim());
+      formData.append("url_testee", url);
+      formData.append("score_geo", String(score));
+      formData.append("from_name", "NDIGITAL Audit IA");
+      
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (response.ok) {
+        setEmailSubmitted(true);
+        toast.success("Votre rapport sera envoyé dans les prochaines minutes !");
+      } else {
+        toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+      }
+    } catch (error) {
+      toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+    } finally {
+      setIsSubmittingEmail(false);
+    }
   };
 
   const resetScan = () => {
@@ -60,6 +144,9 @@ const AuditVisibiliteIA = () => {
     setCurrentMessageIndex(0);
     setEmail("");
     setEmailSubmitted(false);
+    setApiError(null);
+    setScore(null);
+    setAnalysis(null);
   };
 
   return (
@@ -115,7 +202,7 @@ const AuditVisibiliteIA = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
                 Votre entreprise est-elle prête pour{" "}
                 <span className="bg-gradient-to-r from-primary via-secondary to-neon-cyan bg-clip-text text-transparent">
-                  l'ère de l'IA
+                  l'ère de la recherche IA
                 </span>{" "}
                 ?
               </h1>
@@ -159,7 +246,7 @@ const AuditVisibiliteIA = () => {
                   
                   <AnimatePresence mode="wait">
                     {/* Initial state - URL input */}
-                    {!isScanning && !scanComplete && (
+                    {!isScanning && !scanComplete && !apiError && (
                       <motion.form
                         key="form"
                         initial={{ opacity: 0 }}
@@ -188,6 +275,31 @@ const AuditVisibiliteIA = () => {
                           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </motion.form>
+                    )}
+
+                    {/* Error state */}
+                    {apiError && !isScanning && (
+                      <motion.div
+                        key="error"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="py-8 text-center"
+                      >
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                          <AlertCircle className="w-8 h-8 text-destructive" />
+                          <span className="text-destructive font-semibold text-lg">Erreur d'analyse</span>
+                        </div>
+                        <p className="text-white/70 mb-8">
+                          {apiError}
+                        </p>
+                        <button
+                          onClick={resetScan}
+                          className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-3 px-6 rounded-xl transition-all"
+                        >
+                          Réessayer
+                        </button>
+                      </motion.div>
                     )}
 
                     {/* Scanning state */}
@@ -257,13 +369,32 @@ const AuditVisibiliteIA = () => {
                         exit={{ opacity: 0 }}
                         className="py-4"
                       >
-                        <div className="flex items-center justify-center gap-2 mb-6">
+                        <div className="flex items-center justify-center gap-2 mb-4">
                           <CheckCircle2 className="w-8 h-8 text-success" />
                           <span className="text-success font-semibold text-xl">Analyse terminée</span>
                         </div>
 
-                        <p className="text-white/80 mb-8 text-lg">
-                          Pour recevoir votre <span className="text-primary font-semibold">score de visibilité IA détaillé</span> et nos conseils d'optimisation, entrez votre adresse email.
+                        {/* Score display */}
+                        {score !== null && (
+                          <div className="mb-6">
+                            <div className="text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-neon-cyan bg-clip-text text-transparent mb-2">
+                              {score}/100
+                            </div>
+                            <p className="text-white/60 text-sm">Score de visibilité IA</p>
+                          </div>
+                        )}
+
+                        {/* Analysis excerpt */}
+                        {analysis && (
+                          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6 text-left">
+                            <p className="text-white/70 text-sm line-clamp-3">
+                              {analysis.slice(0, 200)}{analysis.length > 200 ? "..." : ""}
+                            </p>
+                          </div>
+                        )}
+
+                        <p className="text-white/80 mb-6">
+                          Pour recevoir votre <span className="text-primary font-semibold">rapport complet</span> et nos conseils d'optimisation, entrez votre email.
                         </p>
 
                         <form onSubmit={handleEmailSubmit} className="space-y-4">
@@ -280,11 +411,18 @@ const AuditVisibiliteIA = () => {
                           </div>
                           <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all group text-lg"
+                            disabled={isSubmittingEmail}
+                            className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all group text-lg disabled:opacity-50"
                           >
-                            <Mail className="w-5 h-5" />
-                            Recevoir mon rapport gratuit
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            {isSubmittingEmail ? (
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                              <>
+                                <Mail className="w-5 h-5" />
+                                Recevoir mon rapport gratuit
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                              </>
+                            )}
                           </button>
                         </form>
                       </motion.div>
