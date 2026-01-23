@@ -222,6 +222,10 @@
   }
   
   /* Mesh gradient overlay */
+  .mesh-gradient {
+    position: relative;
+  }
+
   .mesh-gradient::before {
     content: '';
     position: absolute;
@@ -231,6 +235,12 @@
       radial-gradient(ellipse at 80% 70%, rgba(245, 166, 35, 0.3) 0%, transparent 50%),
       radial-gradient(ellipse at 50% 50%, rgba(240, 122, 158, 0.2) 0%, transparent 70%);
     pointer-events: none;
+    z-index: 0;
+  }
+
+  .mesh-gradient > * {
+    position: relative;
+    z-index: 1;
   }
   
   /* Badge */
