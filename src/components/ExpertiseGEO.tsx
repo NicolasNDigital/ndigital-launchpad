@@ -38,7 +38,7 @@ const ExpertiseGEO = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-xl">
+            <div className="bg-white border border-border rounded-3xl overflow-hidden shadow-xl">
               <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-gradient-to-r from-primary/5 to-secondary/5">
                 <div className="flex items-center gap-2">
                   <div className="w-9 h-9 rounded-full bg-gradient-primary p-[2px]">
@@ -116,7 +116,7 @@ const ExpertiseGEO = () => {
             className="lg:col-span-5"
           >
             <div className="bg-gradient-primary p-[2px] rounded-3xl shadow-xl">
-              <div className="bg-card rounded-[22px] p-8">
+              <div className="bg-white rounded-[22px] p-8">
                 <div className="badge-pulse bg-neon-cyan/20 text-neon-cyan text-xs w-fit mb-5">
                   🔍 Diagnostic gratuit
                 </div>
