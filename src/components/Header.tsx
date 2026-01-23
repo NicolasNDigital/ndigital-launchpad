@@ -30,7 +30,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center gap-2">
             <img 
-              src="/assets/logo.png" 
+              src="/src/assets/logo.png" 
               alt="NDIGITAL Logo" 
               className="h-10 w-auto"
             />

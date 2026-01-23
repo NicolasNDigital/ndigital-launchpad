@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Check, ArrowRight } from "lucide-react";
@@ -7,13 +7,20 @@ const ProblemSolution = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   
-  const rotatingWords = ["coiffeur", "garagiste", "avocat", "plombier", "électricien", "agent immo"];
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const rotatingData = [
+    { metier: "Plombier", action: "trouver" },
+    { metier: "Coiffeur", action: "choisir" },
+    { metier: "Avocat", action: "contacter" },
+    { metier: "Électricien", action: "appeler" },
+    { metier: "Agent immo", action: "faire confiance" },
+    { metier: "Garagiste", action: "engager" },
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
-    }, 2000);
+      setCurrentIndex((prev) => (prev + 1) % rotatingData.length);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
@@ -46,23 +53,42 @@ const ProblemSolution = () => {
           className="text-center mb-16"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold leading-tight max-w-4xl mx-auto">
-            Quand les clients cherchent un{" "}
-            <span className="gradient-text inline-block min-w-[140px]">
-              <motion.span
-                key={currentWordIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="inline-block"
-              >
-                {rotatingWords[currentWordIndex]}
-              </motion.span>
+            Quand les internautes cherchent un{" "}
+            <span className="gradient-text inline-block min-w-[130px] sm:min-w-[150px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`metier-${currentIndex}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="inline-block font-bold"
+                >
+                  {rotatingData[currentIndex].metier}
+                </motion.span>
+              </AnimatePresence>
             </span>
-            , vous avez besoin qu'ils vous trouvent.
+            ,
+            <br className="block" />
+            ils doivent vous{" "}
+            <span className="gradient-text inline-block min-w-[100px] sm:min-w-[140px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`action-${currentIndex}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+                  className="inline-block font-bold"
+                >
+                  {rotatingData[currentIndex].action}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+            .
             <br className="hidden md:block" />
-            <span className="text-muted-foreground font-normal text-xl md:text-2xl block mt-4">
-              Donc on vous crée un site clair et élégant, optimisé pour Google et qui travaille pour vous 24h/24 avec{" "}
+            <span className="text-muted-foreground font-normal text-xl md:text-2xl block mt-6">
+              On vous crée un site clair et élégant, optimisé pour Google et qui travaille pour vous 24h/24 avec{" "}
               <span className="gradient-text font-semibold">30 jours de modifications offertes</span>.
             </span>
           </h2>

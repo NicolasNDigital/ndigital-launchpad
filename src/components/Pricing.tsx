@@ -117,15 +117,17 @@ const Pricing = () => {
       }} className="max-w-4xl mx-auto">
           <div className="bg-card rounded-3xl shadow-xl overflow-hidden">
             {/* Header */}
-            <div className="grid grid-cols-3 bg-gradient-primary text-white">
-              <div className="p-3 md:p-6 font-heading font-bold text-xs md:text-base">Ce qui est inclus</div>
-              <div className="p-3 md:p-6 text-center border-l border-white/20">
-                <p className="font-heading font-bold text-xs md:text-lg">Site Vitrine</p>
-                <p className="text-xl md:text-3xl font-bold mt-1">600€</p>
-              </div>
-              <div className="p-3 md:p-6 text-center border-l border-white/20 bg-white/10">
-                <p className="font-heading font-bold text-xs md:text-lg">Pack Acquisition</p>
-                <p className="text-xl md:text-3xl font-bold mt-1">1 200€</p>
+            <div className="bg-gradient-primary p-[2px] rounded-t-3xl">
+              <div className="grid grid-cols-3 bg-card rounded-t-[22px]">
+                <div className="p-3 md:p-6 font-heading font-bold text-xs md:text-base gradient-text">Ce qui est inclus</div>
+                <div className="p-3 md:p-6 text-center border-l-2 border-primary/20">
+                  <p className="font-heading font-bold text-xs md:text-lg gradient-text">Site Vitrine</p>
+                  <p className="text-xl md:text-3xl font-bold mt-1 text-foreground">600€</p>
+                </div>
+                <div className="p-3 md:p-6 text-center border-l-2 border-primary/20 bg-primary/5 rounded-tr-[22px]">
+                  <p className="font-heading font-bold text-xs md:text-lg gradient-text">Pack Acquisition</p>
+                  <p className="text-xl md:text-3xl font-bold mt-1 text-foreground">1 200€</p>
+                </div>
               </div>
             </div>
 
