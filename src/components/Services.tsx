@@ -10,7 +10,7 @@ const Services = () => {
   const mainServices = [
     {
       icon: Globe,
-      title: "Site Vitrine Complet",
+      title: "Site Pro Complet",
       price: "600€",
       badge: "🔥 Populaire",
       badgeColor: "bg-warning text-warning-foreground",
@@ -89,9 +89,9 @@ const Services = () => {
           className="text-center mb-16"
         >
           <h2 className="section-title">
-            Mes Services — <span className="gradient-text">Votre Succès Digital</span>
+            Un investissement maîtrisé, <span className="gradient-text">sans surprises</span>
           </h2>
-          <p className="section-subtitle">Des solutions claires et transparentes pour propulser votre business local</p>
+          <p className="section-subtitle">Pas de frais cachés, pas d'abonnement surprise. Choisissez la formule adaptée à vos besoins pour être visible, inspirer confiance et transformer votre présence en ligne en une machine à trouver des clients.</p>
         </motion.div>
 
         {/* Main Services Grid */}
