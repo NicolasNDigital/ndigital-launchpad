@@ -14,18 +14,18 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(e.currentTarget);
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-    
+
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Demande envoyée ! Je vous réponds sous 24h.");
         (e.target as HTMLFormElement).reset();
@@ -57,7 +57,7 @@ const Contact = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-            Lancez Votre Projet Dès Aujourd'hui
+            Créons votre site dès aujourd'hui
           </h2>
           <p className="text-lg text-white/80">
             Un site pro qui génère des clients ? Parlons-en. Devis gratuit sous 24h.
@@ -74,12 +74,15 @@ const Contact = () => {
           >
             {/* Gradient border effect */}
             <div className="absolute -inset-[1px] bg-gradient-to-r from-electric-blue via-vibrant-violet to-electric-blue rounded-3xl opacity-50 group-hover:opacity-100 blur-sm transition-opacity" />
-            <form onSubmit={handleSubmit} className="relative bg-deep-black/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+            <form
+              onSubmit={handleSubmit}
+              className="relative bg-deep-black/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10"
+            >
               {/* Champs cachés Web3Forms */}
               <input type="hidden" name="subject" value="Nouvelle demande de devis - NDigital" />
               <input type="hidden" name="from_name" value="NDigital - Formulaire Contact" />
               <input type="checkbox" name="botcheck" className="hidden" />
-              
+
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-white/80 text-sm mb-2 font-medium">👤 Nom Prénom *</label>
@@ -137,11 +140,21 @@ const Contact = () => {
                     name="project_type"
                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                   >
-                    <option value="" className="text-deep-black">Choisir...</option>
-                    <option value="Site vitrine simple" className="text-deep-black">Site vitrine simple</option>
-                    <option value="Pack Site + Google Ads" className="text-deep-black">Pack Site + Google Ads</option>
-                    <option value="Refonte site existant" className="text-deep-black">Refonte site existant</option>
-                    <option value="Autre besoin digital" className="text-deep-black">Autre besoin digital</option>
+                    <option value="" className="text-deep-black">
+                      Choisir...
+                    </option>
+                    <option value="Site vitrine simple" className="text-deep-black">
+                      Site vitrine simple
+                    </option>
+                    <option value="Pack Site + Google Ads" className="text-deep-black">
+                      Pack Site + Google Ads
+                    </option>
+                    <option value="Refonte site existant" className="text-deep-black">
+                      Refonte site existant
+                    </option>
+                    <option value="Autre besoin digital" className="text-deep-black">
+                      Autre besoin digital
+                    </option>
                   </select>
                 </div>
                 <div>
@@ -170,16 +183,28 @@ const Contact = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-white/80 text-sm mb-2 font-medium">📅 Quand souhaitez-vous démarrer ?</label>
+                <label className="block text-white/80 text-sm mb-2 font-medium">
+                  📅 Quand souhaitez-vous démarrer ?
+                </label>
                 <select
                   name="timeline"
                   className="w-full px-4 py-3 rounded-xl bg-white/5 border border-electric-blue/20 text-white focus:outline-none focus:border-electric-blue/60 focus:bg-white/[0.08] transition-all"
                 >
-                  <option value="" className="text-deep-black">Choisir...</option>
-                  <option value="Urgent (< 1 semaine)" className="text-deep-black">Urgent (&lt; 1 semaine)</option>
-                  <option value="Ce mois-ci" className="text-deep-black">Ce mois-ci</option>
-                  <option value="Dans 1-2 mois" className="text-deep-black">Dans 1-2 mois</option>
-                  <option value="Simple estimation" className="text-deep-black">Simple estimation</option>
+                  <option value="" className="text-deep-black">
+                    Choisir...
+                  </option>
+                  <option value="Urgent (< 1 semaine)" className="text-deep-black">
+                    Urgent (&lt; 1 semaine)
+                  </option>
+                  <option value="Ce mois-ci" className="text-deep-black">
+                    Ce mois-ci
+                  </option>
+                  <option value="Dans 1-2 mois" className="text-deep-black">
+                    Dans 1-2 mois
+                  </option>
+                  <option value="Simple estimation" className="text-deep-black">
+                    Simple estimation
+                  </option>
                 </select>
               </div>
 
@@ -187,9 +212,9 @@ const Contact = () => {
               <div className="mb-6 text-xs text-white/60">
                 <p>
                   Vos données sont collectées par NDigital pour répondre à votre demande (mesures pré-contractuelles).
-                  Elles sont conservées 3 ans après le dernier contact et ne sont partagées avec aucun tiers.
-                  Vous disposez d'un droit d'accès, rectification, effacement et portabilité sur vos données.
-                  Contact : contact@ndigital.fr
+                  Elles sont conservées 3 ans après le dernier contact et ne sont partagées avec aucun tiers. Vous
+                  disposez d'un droit d'accès, rectification, effacement et portabilité sur vos données. Contact :
+                  contact@ndigital.fr
                 </p>
               </div>
 
