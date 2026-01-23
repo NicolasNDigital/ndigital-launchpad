@@ -27,17 +27,22 @@ interface CriteriaItem {
   score?: number;
 }
 
-// API can return points with different property names
+// API returns points with these exact property names: label, status, text, action
 interface ApiPoint {
-  label?: string;
-  name?: string;
-  status?: string;
+  label: string;
+  status: string;
+  text: string;
+  action: string;
   score?: number;
-  explanation?: string;
-  analysis?: string;
-  action?: string;
-  plan_action?: string;
 }
+
+// Default actions for fallback when API doesn't provide one
+const defaultActions: Record<string, string> = {
+  "Autorité Sémantique": "Créez des contenus piliers approfondis (guides, études de cas) sur vos sujets d'expertise pour établir votre autorité thématique.",
+  "Indexation GEO": "Optimisez vos pages avec des données structurées LocalBusiness et créez du contenu géolocalisé pour chaque zone de chalandise.",
+  "Mentions Locales": "Développez votre présence sur les annuaires locaux, sollicitez des avis Google et créez des partenariats avec des acteurs locaux.",
+  "Compatibilité E-E-A-T": "Mettez en avant vos certifications, témoignages clients et l'expertise de votre équipe sur vos pages clés."
+};
 
 interface ApiResponse {
   score: number;
@@ -157,19 +162,31 @@ const AuditVisibiliteIA = () => {
       setAnalysis(apiResultRef.current.analysis);
       setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
       
-      // Map API response to CriteriaItem - handle both 'criteria' and 'points' arrays
-      // Also handle different property names (action vs plan_action, label vs name, etc.)
-      const rawPoints = apiResultRef.current.criteria || apiResultRef.current.points || [];
-      
+      // Map API response to CriteriaItem - API uses 'points' array with label, status, text, action
       let criteriaData: CriteriaItem[];
       
-      if (rawPoints.length > 0) {
-        criteriaData = rawPoints.map((point: ApiPoint): CriteriaItem => ({
-          name: point.label || point.name || "Point d'analyse",
-          status: (point.status === "danger" || (point.score !== undefined && point.score < 40)) ? "danger" as const : "warning" as const,
-          explanation: point.explanation || point.analysis || "",
-          action: point.action || point.plan_action || undefined,
-          score: point.score
+      // Check for points array from API first
+      if (apiResultRef.current.points && apiResultRef.current.points.length > 0) {
+        criteriaData = apiResultRef.current.points.map((point: ApiPoint): CriteriaItem => {
+          const label = point.label || "Point d'analyse";
+          // Use API action, or fallback to default action based on label
+          const actionText = point.action && point.action.trim() !== "" 
+            ? point.action 
+            : defaultActions[label] || "Contactez un expert GEO pour une analyse personnalisée.";
+          
+          return {
+            name: label,
+            status: point.status === "danger" ? "danger" as const : "warning" as const,
+            explanation: point.text || "",
+            action: actionText,
+            score: point.score
+          };
+        });
+      } else if (apiResultRef.current.criteria && apiResultRef.current.criteria.length > 0) {
+        // Fallback to criteria array if present
+        criteriaData = apiResultRef.current.criteria.map((item): CriteriaItem => ({
+          ...item,
+          action: item.action || defaultActions[item.name] || "Contactez un expert GEO pour une analyse personnalisée."
         }));
       } else {
         criteriaData = generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
