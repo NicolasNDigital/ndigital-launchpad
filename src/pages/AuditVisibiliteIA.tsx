@@ -249,7 +249,7 @@ const AuditVisibiliteIA = () => {
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6 relative overflow-hidden">
-                <span className="block">Votre entreprise est-elle prête pour</span>
+                <span className="block">Votre site est-il prêt pour</span>
                 <span className="relative inline-block">
                   <span className="bg-gradient-to-r from-primary via-secondary to-neon-cyan bg-clip-text text-transparent">
                     l'ère de la recherche I
