@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -19,11 +19,44 @@ const scanMessages = [
 
 const MIN_SCAN_DURATION = 5000; // 5 seconds minimum
 
+interface CriteriaItem {
+  name: string;
+  status: "danger" | "warning";
+  explanation: string;
+}
+
 interface ApiResponse {
   score: number;
   analysis: string;
+  criteria?: CriteriaItem[];
   error?: string;
 }
+
+// Default criteria based on analysis for backwards compatibility
+const generateCriteriaFromAnalysis = (analysis: string, score: number): CriteriaItem[] => {
+  return [
+    {
+      name: "Autorité Sémantique",
+      status: score < 40 ? "danger" : "warning",
+      explanation: "Votre site manque de contenu structuré reconnu par les IA conversationnelles."
+    },
+    {
+      name: "Indexation GEO",
+      status: score < 50 ? "danger" : "warning",
+      explanation: "Les moteurs d'IA ne vous identifient pas clairement dans votre zone géographique."
+    },
+    {
+      name: "Mentions Locales",
+      status: score < 60 ? "warning" : "warning",
+      explanation: "Peu de signaux locaux détectés sur les sources externes citées par les IA."
+    },
+    {
+      name: "Compatibilité E-E-A-T",
+      status: score < 45 ? "danger" : "warning",
+      explanation: "Les critères d'expertise et de confiance ne sont pas suffisamment mis en avant."
+    }
+  ];
+};
 
 const AuditVisibiliteIA = () => {
   const [url, setUrl] = useState("");
@@ -36,6 +69,8 @@ const AuditVisibiliteIA = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const [score, setScore] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<string | null>(null);
+  const [criteria, setCriteria] = useState<CriteriaItem[]>([]);
+  const [showCriteria, setShowCriteria] = useState<number>(0);
   
   const apiResultRef = useRef<ApiResponse | null>(null);
   const scanStartTimeRef = useRef<number>(0);
@@ -60,6 +95,8 @@ const AuditVisibiliteIA = () => {
     setApiError(null);
     setScore(null);
     setAnalysis(null);
+    setCriteria([]);
+    setShowCriteria(0);
     apiResultRef.current = null;
     scanStartTimeRef.current = Date.now();
 
@@ -100,7 +137,17 @@ const AuditVisibiliteIA = () => {
     } else if (apiResultRef.current) {
       setScore(apiResultRef.current.score);
       setAnalysis(apiResultRef.current.analysis);
+      const criteriaData = apiResultRef.current.criteria || 
+        generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
+      setCriteria(criteriaData);
       setScanComplete(true);
+      
+      // Cascade animation for criteria
+      criteriaData.forEach((_, index) => {
+        setTimeout(() => {
+          setShowCriteria(prev => prev + 1);
+        }, (index + 1) * 400);
+      });
     }
   };
 
@@ -147,6 +194,8 @@ const AuditVisibiliteIA = () => {
     setApiError(null);
     setScore(null);
     setAnalysis(null);
+    setCriteria([]);
+    setShowCriteria(0);
   };
 
   return (
@@ -199,12 +248,18 @@ const AuditVisibiliteIA = () => {
                 Outil de diagnostic GEO gratuit
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
-                Votre entreprise est-elle prête pour{" "}
-                <span className="bg-gradient-to-r from-primary via-secondary to-neon-cyan bg-clip-text text-transparent">
-                  l'ère de la recherche IA
-                </span>{" "}
-                ?
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6 relative overflow-hidden">
+                <span className="block">Votre entreprise est-elle prête pour</span>
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-primary via-secondary to-neon-cyan bg-clip-text text-transparent">
+                    l'ère de la recherche I
+                  </span>
+                  <span className="bg-gradient-to-r from-neon-cyan to-primary bg-clip-text text-transparent relative">
+                    A
+                    <span className="absolute right-0 top-0 w-[60%] h-full bg-gradient-to-l from-deep-black via-deep-black/90 to-transparent" />
+                  </span>
+                  <span className="text-white ml-1">?</span>
+                </span>
               </h1>
 
               <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-12">
@@ -384,18 +439,59 @@ const AuditVisibiliteIA = () => {
                           </div>
                         )}
 
-                        {/* Analysis excerpt */}
-                        {analysis && (
-                          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6 text-left">
-                            <p className="text-white/70 text-sm line-clamp-3">
-                              {analysis.slice(0, 200)}{analysis.length > 200 ? "..." : ""}
-                            </p>
+                        {/* Criteria cards with cascade animation */}
+                        {criteria.length > 0 && (
+                          <div className="space-y-3 mb-6 text-left">
+                            {criteria.map((item, index) => (
+                              <motion.div
+                                key={item.name}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ 
+                                  opacity: showCriteria > index ? 1 : 0, 
+                                  x: showCriteria > index ? 0 : -20 
+                                }}
+                                transition={{ duration: 0.4, ease: "easeOut" }}
+                                className="flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-xl"
+                              >
+                                {item.status === "danger" ? (
+                                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/20 flex items-center justify-center">
+                                    <AlertCircle className="w-4 h-4 text-destructive" />
+                                  </div>
+                                ) : (
+                                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-warning/20 flex items-center justify-center">
+                                    <AlertTriangle className="w-4 h-4 text-warning" />
+                                  </div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="font-semibold text-white text-sm">{item.name}</span>
+                                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                      item.status === "danger" 
+                                        ? "bg-destructive/20 text-destructive" 
+                                        : "bg-warning/20 text-warning"
+                                    }`}>
+                                      {item.status === "danger" ? "Critique" : "À améliorer"}
+                                    </span>
+                                  </div>
+                                  <p className="text-white/60 text-xs leading-relaxed">{item.explanation}</p>
+                                </div>
+                              </motion.div>
+                            ))}
                           </div>
                         )}
 
-                        <p className="text-white/80 mb-6">
-                          Pour recevoir votre <span className="text-primary font-semibold">rapport complet</span> et nos conseils d'optimisation, entrez votre email.
-                        </p>
+                        {/* Conclusion hook */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: showCriteria >= criteria.length ? 1 : 0 }}
+                          transition={{ duration: 0.5, delay: 0.3 }}
+                          className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-4 mb-6"
+                        >
+                          <p className="text-white/90 text-sm font-medium">
+                            ⚠️ Ces points bloquent votre recommandation sur <span className="text-primary">ChatGPT</span> et <span className="text-secondary">Gemini</span>.{" "}
+                            <span className="text-white">Recevez le guide correctif par email.</span>
+                          </p>
+                        </motion.div>
 
                         <form onSubmit={handleEmailSubmit} className="space-y-4">
                           <div className="relative">
