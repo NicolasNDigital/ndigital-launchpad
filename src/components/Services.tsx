@@ -17,13 +17,14 @@ const Services = () => {
       features: [
         { text: "Design moderne responsive", checked: true },
         { text: "Optimisation SEO local Strasbourg", checked: true },
+        { text: "Optimisation référencement IA (GEO)", checked: true },
         { text: "Formulaire de contact + intégrations", checked: true },
         { text: "Hébergement & nom de domaine", checked: true },
         { text: "Google My Business optimisé", checked: true },
         { text: "Livraison sous 14 jours ou -20%", checked: true },
         { text: "30 jours de modifications offerts après la mise en ligne.", checked: true },
-        { text: "Forfait fixe de 150€/an par la suite pour des évolutions illimitées", checked: false },
       ],
+      extraNote: "Puis 150€/an pour des évolutions illimitées",
       cta: "Choisir cette offre",
       ctaStyle: "btn-primary",
     },
@@ -131,9 +132,8 @@ const Services = () => {
                 <div className="mb-6">
                   <span className="text-4xl font-heading font-bold gradient-text">{service.price}</span>
                 </div>
-
                 {/* Features */}
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-4">
                   {service.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-2 text-sm">
                       {feature.checked ? (
@@ -145,6 +145,13 @@ const Services = () => {
                     </li>
                   ))}
                 </ul>
+
+                {/* Extra Note */}
+                {service.extraNote && (
+                  <div className="mb-6 px-3 py-2 rounded-lg bg-secondary/10 border border-secondary/20">
+                    <p className="text-xs text-secondary font-medium">{service.extraNote}</p>
+                  </div>
+                )}
 
                 {/* CTA */}
                 <a href="#contact" className={`${service.ctaStyle} w-full justify-center group`}>

@@ -37,8 +37,8 @@ const ExpertiseGEO = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-lg">
-              <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-muted/40">
+            <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-xl">
+              <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-gradient-to-r from-primary/5 to-secondary/5">
                 <div className="flex items-center gap-2">
                   <div className="w-9 h-9 rounded-full bg-gradient-primary p-[2px]">
                     <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
@@ -68,9 +68,9 @@ const ExpertiseGEO = () => {
               <div className="p-6 md:p-8 space-y-5">
                 {/* User question */}
                 <div className="flex justify-end">
-                  <div className="max-w-[90%] md:max-w-[80%] rounded-2xl px-4 py-3 bg-muted border border-border">
-                    <p className="text-xs text-muted-foreground mb-1">Question de l'internaute</p>
-                    <p className="text-sm font-medium">
+                  <div className="max-w-[90%] md:max-w-[80%] rounded-2xl px-4 py-3 bg-secondary/10 border border-secondary/20">
+                    <p className="text-xs text-secondary font-medium mb-1">Question de l'internaute</p>
+                    <p className="text-sm font-medium text-foreground">
                       Quel est le meilleur coiffeur de Strasbourg pour un balayage ?
                     </p>
                   </div>
@@ -85,10 +85,10 @@ const ExpertiseGEO = () => {
                   </div>
 
                   <div className="flex-1">
-                    <div className="rounded-2xl px-4 py-3 bg-card border border-border">
-                      <p className="text-xs text-muted-foreground mb-1">Réponse de l'IA</p>
+                    <div className="rounded-2xl px-4 py-3 bg-primary/5 border border-primary/20">
+                      <p className="text-xs text-primary font-medium mb-1">Réponse de l'IA</p>
                       <p className="text-sm">
-                        Selon les avis et l'expertise locale, le salon <span className="font-semibold">[Nom de votre client]</span> est
+                        Selon les avis et l'expertise locale, le salon <span className="font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">[Votre nom]</span> est
                         la référence à Strasbourg pour les techniques de balayage...
                       </p>
                     </div>
@@ -130,8 +130,8 @@ const ExpertiseGEO = () => {
                 </p>
 
                 <div className="mt-6">
-                  <a href="#contact" className="btn-orange w-full justify-center group">
-                    Tester l'éligibilité de mon site
+                  <a href="#contact" className="btn-primary w-full justify-center group text-base">
+                    ✨ Tester l'éligibilité de mon site
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                   <p className="text-xs text-muted-foreground mt-3">
