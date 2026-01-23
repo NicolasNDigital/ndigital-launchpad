@@ -38,7 +38,7 @@ const ExpertiseGEO = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <div className="rounded-3xl overflow-hidden shadow-xl" style={{ backgroundColor: '#ffffff' }}>
+            <div className="bg-background border border-border rounded-3xl overflow-hidden shadow-xl relative z-10">
               <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-gradient-to-r from-primary/5 to-secondary/5">
                 <div className="flex items-center gap-2">
                   <div className="w-9 h-9 rounded-full bg-gradient-primary p-[2px]">
@@ -66,7 +66,7 @@ const ExpertiseGEO = () => {
                 </div>
               </div>
 
-              <div className="p-6 md:p-8 space-y-5" style={{ backgroundColor: '#ffffff' }}>
+              <div className="p-6 md:p-8 space-y-5 bg-background">
                 {/* User question */}
                 <div className="flex justify-end">
                   <div className="max-w-[90%] md:max-w-[80%] rounded-2xl px-4 py-3 bg-muted border border-border shadow-sm">
@@ -116,7 +116,7 @@ const ExpertiseGEO = () => {
             className="lg:col-span-5"
           >
             <div className="bg-gradient-primary p-[2px] rounded-3xl shadow-xl">
-              <div className="rounded-[22px] p-8" style={{ backgroundColor: '#ffffff' }}>
+              <div className="bg-background rounded-[22px] p-8 relative z-10">
                 <div className="badge-pulse bg-neon-cyan/20 text-neon-cyan text-xs w-fit mb-5">
                   🔍 Diagnostic gratuit
                 </div>
