@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Globe, TrendingUp, Layers, Check, ArrowRight, ShoppingCart, FileText, FormInput } from "lucide-react";
+import { Globe, TrendingUp, Layers, Check, ArrowRight, ShoppingCart, FileText, FormInput, Circle } from "lucide-react";
 
 const Services = () => {
   const ref = useRef(null);
@@ -15,14 +15,14 @@ const Services = () => {
       badge: "🔥 Populaire",
       badgeColor: "bg-warning text-warning-foreground",
       features: [
-        "Design moderne responsive",
-        "Optimisation SEO local Strasbourg",
-        "Formulaire de contact + intégrations",
-        "Hébergement & nom de domaine",
-        "Google My Business optimisé",
-        "Livraison sous 14 jours ou -20%",
-        "30 jours de modifications offertes",
-        "Forfait 150€/an illimité ensuite",
+        { text: "Design moderne responsive", checked: true },
+        { text: "Optimisation SEO local Strasbourg", checked: true },
+        { text: "Formulaire de contact + intégrations", checked: true },
+        { text: "Hébergement & nom de domaine", checked: true },
+        { text: "Google My Business optimisé", checked: true },
+        { text: "Livraison sous 14 jours ou -20%", checked: true },
+        { text: "30 jours de modifications offerts après la mise en ligne.", checked: true },
+        { text: "Forfait fixe de 150€/an par la suite pour des évolutions illimitées", checked: false },
       ],
       cta: "Choisir cette offre",
       ctaStyle: "btn-primary",
@@ -34,14 +34,14 @@ const Services = () => {
       badge: "⭐ Meilleure valeur",
       badgeColor: "bg-secondary text-secondary-foreground",
       features: [
-        "Tout du Site Vitrine Complet",
-        "+ Campagne Google Ads configurée",
-        "+ Ciblage géographique Strasbourg",
-        "+ Mots-clés optimisés métier",
-        "+ Tracking conversions installé",
-        "+ 2 mois de gestion Ads incluse",
-        "+ Rapports de performance",
-        "+ Optimisations continues",
+        { text: "Tout du Site Vitrine Complet", checked: true },
+        { text: "+ Campagne Google Ads configurée", checked: true },
+        { text: "+ Ciblage géographique Strasbourg", checked: true },
+        { text: "+ Mots-clés optimisés métier", checked: true },
+        { text: "+ Tracking conversions installé", checked: true },
+        { text: "+ 2 mois de gestion Ads incluse", checked: true },
+        { text: "+ Rapports de performance", checked: true },
+        { text: "+ Optimisations continues", checked: true },
       ],
       cta: "Booster mon business",
       ctaStyle: "btn-orange",
@@ -54,14 +54,14 @@ const Services = () => {
       badge: "🛒 Avancé",
       badgeColor: "bg-neon-cyan/20 text-neon-cyan",
       features: [
-        "Site multi-pages illimité",
-        "Boutique en ligne complète",
-        "Tunnels de vente optimisés",
-        "Formulaires interactifs avancés",
-        "Intégration paiement (Stripe, PayPal)",
-        "Gestion catalogue produits",
-        "Espace client / membre",
-        "Automatisations sur-mesure",
+        { text: "Site multi-pages illimité", checked: true },
+        { text: "Boutique en ligne complète", checked: true },
+        { text: "Tunnels de vente optimisés", checked: true },
+        { text: "Formulaires interactifs avancés", checked: true },
+        { text: "Intégration paiement (Stripe, PayPal)", checked: true },
+        { text: "Gestion catalogue produits", checked: true },
+        { text: "Espace client / membre", checked: true },
+        { text: "Automatisations sur-mesure", checked: true },
       ],
       cta: "Discutons de votre projet",
       ctaStyle: "btn-primary",
@@ -136,8 +136,12 @@ const Services = () => {
                 <ul className="space-y-3 mb-8">
                   {service.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-2 text-sm">
-                      <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
-                      <span>{feature.replace(/^[+]\s*/, "")}</span>
+                      {feature.checked ? (
+                        <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                      )}
+                      <span>{feature.text.replace(/^[+]\s*/, "")}</span>
                     </li>
                   ))}
                 </ul>
