@@ -164,38 +164,65 @@ const AuditVisibiliteIA = () => {
     setIsSubmittingEmail(true);
     
     try {
-      // Build detailed criteria text for email
-      const criteriaDetails = criteria.map((item, index) => {
-        return `
---- Point ${index + 1}: ${item.name} ---
-Statut: ${item.status === "danger" ? "Critique" : "À améliorer"}${item.score !== undefined ? ` (Score: ${item.score}/100)` : ''}
-Analyse: ${item.explanation}
-Plan d'action: ${item.action || "Non disponible"}
-`;
-      }).join('\n');
-
-      const emailBody = `
-=== AUDIT DE VISIBILITÉ IA ===
-
-URL testée: ${url}
-Score Global: ${score}/100
-
-=== DÉTAIL DES POINTS ANALYSÉS ===
-${criteriaDetails}
-
-=== CONCLUSION STRATÉGIQUE ===
-${conclusionStrategique || "Non disponible"}
-
-=== CONTACT ===
-Email du prospect: ${email}
-`;
+      // Build detailed criteria text with all actions
+      const detailPoints = criteria.map((item, index) => {
+        const statusText = item.status === "danger" ? "🔴 CRITIQUE" : "🟠 À améliorer";
+        const scoreText = item.score !== undefined ? ` [${item.score}/100]` : '';
+        return `▸ ${item.name}${scoreText} - ${statusText}
+  Analyse: ${item.explanation}
+  ➜ ACTION: ${item.action || "Non spécifiée"}`;
+      }).join('\n\n');
 
       const formData = new FormData();
       formData.append("access_key", "cb6a48ec-fcf8-4e60-812f-b001d893a6db");
-      formData.append("subject", `Nouveau lead Audit IA - Score ${score}/100 - ${url}`);
-      formData.append("email", email.trim());
-      formData.append("message", emailBody);
+      formData.append("subject", `🎯 AUDIT IA - Score ${score}/100 - ${url}`);
       formData.append("from_name", "NDIGITAL Audit IA");
+      
+      // Champs structurés pour le mail
+      formData.append("URL_Testée", url);
+      formData.append("Score_Global", `${score}/100`);
+      formData.append("Email_Prospect", email.trim());
+      formData.append("Conclusion_Stratégique", conclusionStrategique || "Non disponible");
+      formData.append("Détail_des_Points", detailPoints);
+      
+      // Message formaté complet
+      formData.append("message", `
+══════════════════════════════════════
+   RAPPORT D'AUDIT VISIBILITÉ IA
+══════════════════════════════════════
+
+📌 URL TESTÉE
+${url}
+
+📊 SCORE GLOBAL
+${score}/100
+
+══════════════════════════════════════
+   DÉTAIL DES POINTS ANALYSÉS
+══════════════════════════════════════
+
+${detailPoints}
+
+══════════════════════════════════════
+   CONCLUSION STRATÉGIQUE
+══════════════════════════════════════
+
+${conclusionStrategique || "Non disponible"}
+
+══════════════════════════════════════
+   INFORMATIONS PROSPECT
+══════════════════════════════════════
+
+📧 Email: ${email.trim()}
+📅 Date: ${new Date().toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
+`);
       
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
