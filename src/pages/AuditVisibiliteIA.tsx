@@ -23,12 +23,15 @@ interface CriteriaItem {
   name: string;
   status: "danger" | "warning";
   explanation: string;
+  action?: string;
+  score?: number;
 }
 
 interface ApiResponse {
   score: number;
   analysis: string;
   criteria?: CriteriaItem[];
+  conclusion_strategique?: string;
   error?: string;
 }
 
@@ -71,6 +74,7 @@ const AuditVisibiliteIA = () => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [criteria, setCriteria] = useState<CriteriaItem[]>([]);
   const [showCriteria, setShowCriteria] = useState<number>(0);
+  const [conclusionStrategique, setConclusionStrategique] = useState<string | null>(null);
   
   const apiResultRef = useRef<ApiResponse | null>(null);
   const scanStartTimeRef = useRef<number>(0);
@@ -97,6 +101,7 @@ const AuditVisibiliteIA = () => {
     setAnalysis(null);
     setCriteria([]);
     setShowCriteria(0);
+    setConclusionStrategique(null);
     apiResultRef.current = null;
     scanStartTimeRef.current = Date.now();
 
@@ -137,6 +142,7 @@ const AuditVisibiliteIA = () => {
     } else if (apiResultRef.current) {
       setScore(apiResultRef.current.score);
       setAnalysis(apiResultRef.current.analysis);
+      setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
       const criteriaData = apiResultRef.current.criteria || 
         generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
       setCriteria(criteriaData);
@@ -158,12 +164,37 @@ const AuditVisibiliteIA = () => {
     setIsSubmittingEmail(true);
     
     try {
+      // Build detailed criteria text for email
+      const criteriaDetails = criteria.map((item, index) => {
+        return `
+--- Point ${index + 1}: ${item.name} ---
+Statut: ${item.status === "danger" ? "Critique" : "À améliorer"}${item.score !== undefined ? ` (Score: ${item.score}/100)` : ''}
+Analyse: ${item.explanation}
+Plan d'action: ${item.action || "Non disponible"}
+`;
+      }).join('\n');
+
+      const emailBody = `
+=== AUDIT DE VISIBILITÉ IA ===
+
+URL testée: ${url}
+Score Global: ${score}/100
+
+=== DÉTAIL DES POINTS ANALYSÉS ===
+${criteriaDetails}
+
+=== CONCLUSION STRATÉGIQUE ===
+${conclusionStrategique || "Non disponible"}
+
+=== CONTACT ===
+Email du prospect: ${email}
+`;
+
       const formData = new FormData();
       formData.append("access_key", "cb6a48ec-fcf8-4e60-812f-b001d893a6db");
-      formData.append("subject", `Nouveau lead Audit IA - Score ${score}/100`);
+      formData.append("subject", `Nouveau lead Audit IA - Score ${score}/100 - ${url}`);
       formData.append("email", email.trim());
-      formData.append("url_testee", url);
-      formData.append("score_geo", String(score));
+      formData.append("message", emailBody);
       formData.append("from_name", "NDIGITAL Audit IA");
       
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -196,6 +227,7 @@ const AuditVisibiliteIA = () => {
     setAnalysis(null);
     setCriteria([]);
     setShowCriteria(0);
+    setConclusionStrategique(null);
   };
 
   return (
@@ -465,6 +497,9 @@ const AuditVisibiliteIA = () => {
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1">
                                     <span className="font-semibold text-white text-sm">{item.name}</span>
+                                    {item.score !== undefined && (
+                                      <span className="text-xs text-white/50">{item.score}/100</span>
+                                    )}
                                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                                       item.status === "danger" 
                                         ? "bg-destructive/20 text-destructive" 
@@ -474,10 +509,33 @@ const AuditVisibiliteIA = () => {
                                     </span>
                                   </div>
                                   <p className="text-white/60 text-xs leading-relaxed">{item.explanation}</p>
+                                  {item.action && (
+                                    <div className="mt-2 pt-2 border-t border-white/5">
+                                      <p className="text-white/40 text-xs italic">
+                                        <span className="text-primary/70 font-medium not-italic">💡 Recommandation d'expert :</span>{" "}
+                                        {item.action}
+                                      </p>
+                                    </div>
+                                  )}
                                 </div>
                               </motion.div>
                             ))}
                           </div>
+                        )}
+
+                        {/* Strategic conclusion from API */}
+                        {conclusionStrategique && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: showCriteria >= criteria.length ? 1 : 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="bg-gradient-to-r from-secondary/10 to-primary/10 border border-secondary/20 rounded-xl p-4 mb-4"
+                          >
+                            <p className="text-white/80 text-sm leading-relaxed">
+                              <span className="text-secondary font-semibold">📊 Conclusion stratégique :</span>{" "}
+                              {conclusionStrategique}
+                            </p>
+                          </motion.div>
                         )}
 
                         {/* Conclusion hook */}
