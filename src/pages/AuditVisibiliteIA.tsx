@@ -19,64 +19,73 @@ const scanMessages = [
 
 const MIN_SCAN_DURATION = 5000; // 5 seconds minimum
 
-interface CriteriaItem {
+// Structure for displaying pilier results
+interface PilierDisplay {
   name: string;
-  status: "danger" | "warning";
-  explanation: string;
-  action?: string;
+  key: string;
   score?: number;
+  points_forts: string[];
+  points_faibles: string[];
+  recommandation?: string;
 }
 
-// API returns points with these exact property names: label, status, text, action
-interface ApiPoint {
-  label: string;
-  status: string;
-  text: string;
-  action: string;
+// API pilier structure
+interface ApiPilier {
   score?: number;
+  points_forts?: string[];
+  points_faibles?: string[];
+  recommandation?: string;
 }
 
-// Default actions for fallback when API doesn't provide one
-const defaultActions: Record<string, string> = {
-  "Autorité Sémantique": "Créez des contenus piliers approfondis (guides, études de cas) sur vos sujets d'expertise pour établir votre autorité thématique.",
-  "Indexation GEO": "Optimisez vos pages avec des données structurées LocalBusiness et créez du contenu géolocalisé pour chaque zone de chalandise.",
-  "Mentions Locales": "Développez votre présence sur les annuaires locaux, sollicitez des avis Google et créez des partenariats avec des acteurs locaux.",
-  "Compatibilité E-E-A-T": "Mettez en avant vos certifications, témoignages clients et l'expertise de votre équipe sur vos pages clés."
-};
-
+// API response structure with piliers
 interface ApiResponse {
   score: number;
-  analysis: string;
-  criteria?: CriteriaItem[];
-  points?: ApiPoint[];
+  analysis?: string;
+  piliers?: {
+    citabilite?: ApiPilier;
+    autorite?: ApiPilier;
+    geo?: ApiPilier;
+    eeat?: ApiPilier;
+  };
   conclusion_strategique?: string;
   error?: string;
 }
 
-// Default criteria based on analysis for backwards compatibility
-const generateCriteriaFromAnalysis = (analysis: string, score: number): CriteriaItem[] => {
-  return [
-    {
-      name: "Autorité Sémantique",
-      status: score < 40 ? "danger" : "warning",
-      explanation: "Votre site manque de contenu structuré reconnu par les IA conversationnelles."
-    },
-    {
-      name: "Indexation GEO",
-      status: score < 50 ? "danger" : "warning",
-      explanation: "Les moteurs d'IA ne vous identifient pas clairement dans votre zone géographique."
-    },
-    {
-      name: "Mentions Locales",
-      status: score < 60 ? "warning" : "warning",
-      explanation: "Peu de signaux locaux détectés sur les sources externes citées par les IA."
-    },
-    {
-      name: "Compatibilité E-E-A-T",
-      status: score < 45 ? "danger" : "warning",
-      explanation: "Les critères d'expertise et de confiance ne sont pas suffisamment mis en avant."
-    }
-  ];
+// Pilier labels mapping
+const pilierLabels: Record<string, string> = {
+  citabilite: "Citabilité IA",
+  autorite: "Autorité Sémantique",
+  geo: "Indexation GEO",
+  eeat: "Compatibilité E-E-A-T"
+};
+
+// Default recommendations fallback
+const defaultRecommandations: Record<string, string> = {
+  citabilite: "Structurez vos contenus avec des réponses claires et directes pour être cité par les IA conversationnelles.",
+  autorite: "Créez des contenus piliers approfondis (guides, études de cas) sur vos sujets d'expertise.",
+  geo: "Optimisez vos pages avec des données structurées LocalBusiness et du contenu géolocalisé.",
+  eeat: "Mettez en avant vos certifications, témoignages clients et l'expertise de votre équipe."
+};
+
+// Generate piliers display from API response
+const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: number): PilierDisplay[] => {
+  if (!piliers) return [];
+  
+  const pilierKeys = ['citabilite', 'autorite', 'geo', 'eeat'] as const;
+  
+  return pilierKeys
+    .filter(key => piliers[key])
+    .map(key => {
+      const pilier = piliers[key]!;
+      return {
+        name: pilierLabels[key] || key,
+        key,
+        score: pilier.score,
+        points_forts: pilier.points_forts || [],
+        points_faibles: pilier.points_faibles || [],
+        recommandation: pilier.recommandation || defaultRecommandations[key]
+      };
+    });
 };
 
 const AuditVisibiliteIA = () => {
@@ -90,8 +99,8 @@ const AuditVisibiliteIA = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const [score, setScore] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<string | null>(null);
-  const [criteria, setCriteria] = useState<CriteriaItem[]>([]);
-  const [showCriteria, setShowCriteria] = useState<number>(0);
+  const [piliers, setPiliers] = useState<PilierDisplay[]>([]);
+  const [showPiliers, setShowPiliers] = useState<number>(0);
   const [conclusionStrategique, setConclusionStrategique] = useState<string | null>(null);
   
   const apiResultRef = useRef<ApiResponse | null>(null);
@@ -117,8 +126,8 @@ const AuditVisibiliteIA = () => {
     setApiError(null);
     setScore(null);
     setAnalysis(null);
-    setCriteria([]);
-    setShowCriteria(0);
+    setPiliers([]);
+    setShowPiliers(0);
     setConclusionStrategique(null);
     apiResultRef.current = null;
     scanStartTimeRef.current = Date.now();
@@ -136,12 +145,12 @@ const AuditVisibiliteIA = () => {
       const data = await response.json();
       
       if (!response.ok || data.error) {
-        apiResultRef.current = { score: 0, analysis: "", error: data.error || "Erreur d'analyse" };
+        apiResultRef.current = { score: 0, error: data.error || "Erreur d'analyse" };
       } else {
         apiResultRef.current = data;
       }
     } catch (error) {
-      apiResultRef.current = { score: 0, analysis: "", error: "Erreur d'analyse. Veuillez vérifier l'URL et réessayer." };
+      apiResultRef.current = { score: 0, error: "Erreur d'analyse. Veuillez vérifier l'URL et réessayer." };
     }
 
     // Ensure minimum scan duration
@@ -159,50 +168,23 @@ const AuditVisibiliteIA = () => {
       setApiError(apiResultRef.current.error);
     } else if (apiResultRef.current) {
       setScore(apiResultRef.current.score);
-      setAnalysis(apiResultRef.current.analysis);
+      setAnalysis(apiResultRef.current.analysis || null);
       setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
       
-      // Map API response to CriteriaItem - API uses 'points' array with label, status, text, action
-      let criteriaData: CriteriaItem[];
-      
-      // Check for points array from API first
-      if (apiResultRef.current.points && apiResultRef.current.points.length > 0) {
-        criteriaData = apiResultRef.current.points.map((point: ApiPoint): CriteriaItem => {
-          const label = point.label || "Point d'analyse";
-          // Use API action, or fallback to default action based on label
-          const actionText = point.action && point.action.trim() !== "" 
-            ? point.action 
-            : defaultActions[label] || "Contactez un expert GEO pour une analyse personnalisée.";
-          
-          return {
-            name: label,
-            status: point.status === "danger" ? "danger" as const : "warning" as const,
-            explanation: point.text || "",
-            action: actionText,
-            score: point.score
-          };
-        });
-      } else if (apiResultRef.current.criteria && apiResultRef.current.criteria.length > 0) {
-        // Fallback to criteria array if present
-        criteriaData = apiResultRef.current.criteria.map((item): CriteriaItem => ({
-          ...item,
-          action: item.action || defaultActions[item.name] || "Contactez un expert GEO pour une analyse personnalisée."
-        }));
-      } else {
-        criteriaData = generateCriteriaFromAnalysis(apiResultRef.current.analysis, apiResultRef.current.score);
-      }
+      // Map API piliers to display format
+      const piliersData = generatePiliersFromApi(apiResultRef.current.piliers, apiResultRef.current.score);
       
       // Debug log to verify data
       console.log("API Response:", apiResultRef.current);
-      console.log("Mapped Criteria:", criteriaData);
+      console.log("Mapped Piliers:", piliersData);
       
-      setCriteria(criteriaData);
+      setPiliers(piliersData);
       setScanComplete(true);
       
-      // Cascade animation for criteria
-      criteriaData.forEach((_, index) => {
+      // Cascade animation for piliers
+      piliersData.forEach((_, index) => {
         setTimeout(() => {
-          setShowCriteria(prev => prev + 1);
+          setShowPiliers(prev => prev + 1);
         }, (index + 1) * 400);
       });
     }
@@ -215,13 +197,19 @@ const AuditVisibiliteIA = () => {
     setIsSubmittingEmail(true);
     
     try {
-      // Build detailed criteria text with all actions
-      const detailPoints = criteria.map((item, index) => {
-        const statusText = item.status === "danger" ? "🔴 CRITIQUE" : "🟠 À améliorer";
-        const scoreText = item.score !== undefined ? ` [${item.score}/100]` : '';
-        return `▸ ${item.name}${scoreText} - ${statusText}
-  Analyse: ${item.explanation}
-  ➜ ACTION: ${item.action || "Non spécifiée"}`;
+      // Build detailed piliers text with points forts/faibles
+      const detailPoints = piliers.map((pilier) => {
+        const scoreText = pilier.score !== undefined ? ` [${pilier.score}/100]` : '';
+        const pointsForts = pilier.points_forts.length > 0 
+          ? `  ✅ Points forts:\n${pilier.points_forts.map(p => `     • ${p}`).join('\n')}`
+          : '';
+        const pointsFaibles = pilier.points_faibles.length > 0 
+          ? `  ⚠️ Points faibles:\n${pilier.points_faibles.map(p => `     • ${p}`).join('\n')}`
+          : '';
+        return `▸ ${pilier.name}${scoreText}
+${pointsForts}
+${pointsFaibles}
+  💡 Recommandation: ${pilier.recommandation || "Non spécifiée"}`;
       }).join('\n\n');
 
       const formData = new FormData();
@@ -234,7 +222,7 @@ const AuditVisibiliteIA = () => {
       formData.append("Score_Global", `${score}/100`);
       formData.append("Email_Prospect", email.trim());
       formData.append("Conclusion_Stratégique", conclusionStrategique || "Non disponible");
-      formData.append("Détail_des_Points", detailPoints);
+      formData.append("Détail_des_Piliers", detailPoints);
       
       // Message formaté complet
       formData.append("message", `
@@ -249,7 +237,7 @@ ${url}
 ${score}/100
 
 ══════════════════════════════════════
-   DÉTAIL DES POINTS ANALYSÉS
+   DÉTAIL DES PILIERS ANALYSÉS
 ══════════════════════════════════════
 
 ${detailPoints}
@@ -303,8 +291,8 @@ ${conclusionStrategique || "Non disponible"}
     setApiError(null);
     setScore(null);
     setAnalysis(null);
-    setCriteria([]);
-    setShowCriteria(0);
+    setPiliers([]);
+    setShowPiliers(0);
     setConclusionStrategique(null);
   };
 
@@ -549,53 +537,67 @@ ${conclusionStrategique || "Non disponible"}
                           </div>
                         )}
 
-                        {/* Criteria cards with cascade animation */}
-                        {criteria.length > 0 && (
-                          <div className="space-y-3 mb-6 text-left">
-                            {criteria.map((item, index) => (
+                        {/* Piliers cards with cascade animation */}
+                        {piliers.length > 0 && (
+                          <div className="space-y-4 mb-6 text-left">
+                            {piliers.map((pilier, index) => (
                               <motion.div
-                                key={item.name}
+                                key={pilier.key}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ 
-                                  opacity: showCriteria > index ? 1 : 0, 
-                                  x: showCriteria > index ? 0 : -20 
+                                  opacity: showPiliers > index ? 1 : 0, 
+                                  x: showPiliers > index ? 0 : -20 
                                 }}
                                 transition={{ duration: 0.4, ease: "easeOut" }}
-                                className="flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-xl"
+                                className="p-4 bg-white/5 border border-white/10 rounded-xl"
                               >
-                                {item.status === "danger" ? (
-                                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/20 flex items-center justify-center">
-                                    <AlertCircle className="w-4 h-4 text-destructive" />
-                                  </div>
-                                ) : (
-                                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-warning/20 flex items-center justify-center">
-                                    <AlertTriangle className="w-4 h-4 text-warning" />
-                                  </div>
-                                )}
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className="font-semibold text-white text-sm">{item.name}</span>
-                                    {item.score !== undefined && (
-                                      <span className="text-xs text-white/50">{item.score}/100</span>
-                                    )}
-                                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                      item.status === "danger" 
-                                        ? "bg-destructive/20 text-destructive" 
-                                        : "bg-warning/20 text-warning"
-                                    }`}>
-                                      {item.status === "danger" ? "Critique" : "À améliorer"}
+                                {/* Pilier header */}
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span className="font-semibold text-white">{pilier.name}</span>
+                                  {pilier.score !== undefined && (
+                                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">
+                                      {pilier.score}/100
                                     </span>
-                                  </div>
-                                  <p className="text-white/60 text-xs leading-relaxed">{item.explanation}</p>
-                                  {item.action && (
-                                    <div className="mt-2 pt-2 border-t border-white/5">
-                                      <p className="text-white/40 text-xs italic">
-                                        <span className="text-primary/70 font-medium not-italic">💡 Recommandation d'expert :</span>{" "}
-                                        {item.action}
-                                      </p>
-                                    </div>
                                   )}
                                 </div>
+                                
+                                {/* Points forts */}
+                                {pilier.points_forts.length > 0 && (
+                                  <div className="mb-3">
+                                    <p className="text-success text-xs font-medium mb-1">✅ Points forts</p>
+                                    <ul className="space-y-1">
+                                      {pilier.points_forts.map((point, i) => (
+                                        <li key={i} className="text-white/70 text-xs pl-3 border-l-2 border-success/30">
+                                          {point}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                                
+                                {/* Points faibles */}
+                                {pilier.points_faibles.length > 0 && (
+                                  <div className="mb-3">
+                                    <p className="text-warning text-xs font-medium mb-1">⚠️ Points faibles</p>
+                                    <ul className="space-y-1">
+                                      {pilier.points_faibles.map((point, i) => (
+                                        <li key={i} className="text-white/70 text-xs pl-3 border-l-2 border-warning/30">
+                                          {point}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                                
+                                {/* Recommandation */}
+                                {pilier.recommandation && (
+                                  <div className="pt-2 border-t border-white/5">
+                                    <p className="text-white/40 text-xs italic">
+                                      <span className="text-primary/70 font-medium not-italic">💡 Recommandation :</span>{" "}
+                                      {pilier.recommandation}
+                                    </p>
+                                  </div>
+                                )}
                               </motion.div>
                             ))}
                           </div>
@@ -605,7 +607,7 @@ ${conclusionStrategique || "Non disponible"}
                         {conclusionStrategique && (
                           <motion.div
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: showCriteria >= criteria.length ? 1 : 0 }}
+                            animate={{ opacity: showPiliers >= piliers.length ? 1 : 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                             className="bg-gradient-to-r from-secondary/10 to-primary/10 border border-secondary/20 rounded-xl p-4 mb-4"
                           >
@@ -619,7 +621,7 @@ ${conclusionStrategique || "Non disponible"}
                         {/* Conclusion hook */}
                         <motion.div
                           initial={{ opacity: 0 }}
-                          animate={{ opacity: showCriteria >= criteria.length ? 1 : 0 }}
+                          animate={{ opacity: showPiliers >= piliers.length ? 1 : 0 }}
                           transition={{ duration: 0.5, delay: 0.3 }}
                           className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-4 mb-6"
                         >
