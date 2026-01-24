@@ -20,6 +20,8 @@ const scanMessages = [
   "Compilation du rapport final...",
 ];
 
+const DEEP_ANALYSIS_MESSAGE = "🔬 Analyse sémantique profonde en cours... (cela peut prendre 30s)";
+
 const MIN_SCAN_DURATION = 15000; // 15 seconds minimum for realistic analysis feel
 
 // Structure for displaying pilier results
@@ -224,10 +226,14 @@ const AuditVisibiliteIA = () => {
     apiResultRef.current = null;
     scanStartTimeRef.current = Date.now();
 
-    // Start API call with robust error handling
+    // Start API call with robust error handling and 60s timeout
     try {
       console.log("🔍 Starting API call to: https://ndigital-api.vercel.app/api/analyze");
       console.log("📤 Request payload:", { url: url.trim() });
+      
+      // Create abort controller with 60 second timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
       
       const response = await fetch("https://ndigital-api.vercel.app/api/analyze", {
         method: "POST",
@@ -235,7 +241,10 @@ const AuditVisibiliteIA = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ url: url.trim() }),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
 
       console.log("📥 Response status:", response.status, response.statusText);
 
@@ -271,9 +280,12 @@ const AuditVisibiliteIA = () => {
     } catch (error) {
       console.error("❌ Fetch error:", error);
       if (!apiResultRef.current) {
+        const isTimeout = error instanceof Error && error.name === 'AbortError';
         apiResultRef.current = { 
           score: 0, 
-          error: "Impossible de contacter l'API. Vérifiez votre connexion et réessayez." 
+          error: isTimeout 
+            ? "L'analyse a pris trop de temps (>60s). L'API est peut-être surchargée, veuillez réessayer."
+            : "Impossible de contacter l'API. Vérifiez votre connexion et réessayez." 
         };
       }
     }
@@ -320,7 +332,11 @@ const AuditVisibiliteIA = () => {
     
     try {
       console.log("🎯 Processing successful API response");
-      setScore(data.score ?? 0);
+      console.log("🎯 Raw score from API:", data.score, "Type:", typeof data.score);
+      // Ensure we properly read the score - check for undefined/null explicitly
+      const apiScore = typeof data.score === 'number' ? data.score : 0;
+      console.log("🎯 Final score to display:", apiScore);
+      setScore(apiScore);
       setAnalysis(data.analysis || null);
       setConclusionStrategique(data.conclusion_strategique || null);
       
@@ -648,9 +664,14 @@ ${conclusionText}
                         exit={{ opacity: 0 }}
                         className="py-8"
                       >
-                        <div className="flex items-center justify-center gap-3 mb-8">
-                          <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                          <span className="text-white font-semibold text-lg">Scan en cours...</span>
+                        <div className="flex flex-col items-center justify-center gap-2 mb-8">
+                          <div className="flex items-center gap-3">
+                            <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                            <span className="text-white font-semibold text-lg">Scan en cours...</span>
+                          </div>
+                          <span className="text-amber-400/90 text-sm font-medium animate-pulse">
+                            {DEEP_ANALYSIS_MESSAGE}
+                          </span>
                         </div>
 
                         {/* Progress bar */}
