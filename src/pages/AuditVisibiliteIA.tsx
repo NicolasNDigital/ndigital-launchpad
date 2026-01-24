@@ -103,20 +103,22 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
     return [];
   }
   
-  console.log("generatePiliersFromApi input:", piliers);
+  console.log("generatePiliersFromApi input:", JSON.stringify(piliers, null, 2));
   
   // Handle ARRAY format (new API structure)
   if (Array.isArray(piliers)) {
     console.log("generatePiliersFromApi: detected ARRAY format with", piliers.length, "items");
     return piliers.map((pilier, index) => {
       const key = pilier.key || pilier.name?.toLowerCase().replace(/\s+/g, '_') || `pilier_${index}`;
-      // Priority: item.label (API) > item.name > pilierLabels[key] > fallback
+      // PRIORITY: item.label from API is the main title source
       const name = pilier.label || pilier.name || pilierLabels[key] || `Pilier ${index + 1}`;
       const status = getStatusFromData(pilier.status, pilier.score);
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
         ? pilier.actions_preview.slice(0, 2) 
         : defaultActionsPreview[key] || [];
       const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
+      
+      console.log(`Pilier ${index}: label="${pilier.label}", name="${pilier.name}", final="${name}"`);
       
       return {
         name,
@@ -147,8 +149,11 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
         : defaultActionsPreview[key] || [];
       const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
       
+      // PRIORITY: item.label from API is the main title source
+      const name = pilier.label || pilier.name || pilierLabels[key] || key;
+      
       return {
-        name: pilierLabels[key] || key,
+        name,
         key,
         score: pilier.score,
         status,
@@ -701,7 +706,7 @@ ${conclusionText}
                         )}
 
                         {/* Strategic conclusion from API */}
-                        {conclusionStrategique && (
+                        {(conclusionStrategique || apiResultRef.current?.conclusion_strategique) && (
                           <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: showPiliers >= piliers.length ? 1 : 0 }}
@@ -710,7 +715,7 @@ ${conclusionText}
                           >
                             <p className="text-white/80 text-sm leading-relaxed">
                               <span className="text-secondary font-semibold">📊 Conclusion stratégique :</span>{" "}
-                              {conclusionStrategique}
+                              {conclusionStrategique || apiResultRef.current?.conclusion_strategique || "Analyse en cours de finalisation par notre équipe."}
                             </p>
                           </motion.div>
                         )}
