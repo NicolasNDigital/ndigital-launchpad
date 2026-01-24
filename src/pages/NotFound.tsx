@@ -21,6 +21,79 @@ const BAD_KEYWORDS = [
   "broken link"
 ];
 
+// Générateur de sons rétro via Web Audio API
+const createAudioContext = () => {
+  return new (window.AudioContext || (window as any).webkitAudioContext)();
+};
+
+const playJumpSound = () => {
+  try {
+    const ctx = createAudioContext();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    oscillator.type = 'square'; // Son 8-bit
+    oscillator.frequency.setValueAtTime(400, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
+    
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+    
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.1);
+  } catch (e) {
+    // Silently fail if audio not supported
+  }
+};
+
+const playGameOverSound = () => {
+  try {
+    const ctx = createAudioContext();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    oscillator.type = 'sawtooth'; // Son plus "crash"
+    oscillator.frequency.setValueAtTime(300, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
+    
+    gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.3);
+  } catch (e) {
+    // Silently fail if audio not supported
+  }
+};
+
+const playScoreSound = () => {
+  try {
+    const ctx = createAudioContext();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    
+    gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+    
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.05);
+  } catch (e) {
+    // Silently fail if audio not supported
+  }
+};
+
 const NotFound = () => {
   const navigate = useNavigate();
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'gameover'>('idle');
@@ -43,6 +116,7 @@ const NotFound = () => {
   const jump = useCallback(() => {
     if (isJumping || gameState !== 'playing') return;
     
+    playJumpSound(); // Son de saut
     setIsJumping(true);
     setPlayerY(JUMP_HEIGHT);
     
@@ -124,6 +198,7 @@ const NotFound = () => {
           if (obsLeft < playerRight && obsRight > playerLeft) {
             const currentPlayerY = playerY;
             if (currentPlayerY < 25) { // Seuil réduit pour plus de tolérance
+              playGameOverSound(); // Son de game over
               setGameState('gameover');
               setHighScore(prev => Math.max(prev, score));
             }
@@ -140,6 +215,7 @@ const NotFound = () => {
         if (currentMilestone > lastSpeedIncreaseRef.current) {
           lastSpeedIncreaseRef.current = currentMilestone;
           gameSpeedRef.current = Math.min(gameSpeedRef.current + 0.8, 10);
+          playScoreSound(); // Son de palier atteint
         }
         return newScore;
       });
