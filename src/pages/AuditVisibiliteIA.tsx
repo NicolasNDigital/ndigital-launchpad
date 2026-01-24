@@ -276,41 +276,66 @@ const AuditVisibiliteIA = () => {
     setIsScanning(false);
     
     // Handle results or errors
-    if (apiResultRef.current?.error) {
-      console.log("🚨 Setting error state:", apiResultRef.current.error);
-      setApiError(apiResultRef.current.error);
-      setScanComplete(false);
-    } else if (apiResultRef.current) {
-      try {
-        console.log("🎯 Processing successful API response");
-        setScore(apiResultRef.current.score ?? 0);
-        setAnalysis(apiResultRef.current.analysis || null);
-        setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
-        
-        // Map API piliers to display format with error handling
-        const piliersData = generatePiliersFromApi(apiResultRef.current.piliers, apiResultRef.current.score ?? 0);
-        
-        console.log("📊 API Response:", apiResultRef.current);
-        console.log("📊 Mapped Piliers:", piliersData);
-        
-        setPiliers(piliersData);
-        setScanComplete(true);
-        
-        // Cascade animation for piliers
-        piliersData.forEach((_, index) => {
-          setTimeout(() => {
-            setShowPiliers(prev => prev + 1);
-          }, (index + 1) * 400);
-        });
-      } catch (processingError) {
-        console.error("❌ Error processing API data:", processingError);
-        setApiError("Erreur lors du traitement des résultats. Format de données inattendu.");
-        setScanComplete(false);
-      }
-    } else {
-      // Fallback: no result at all
+    const data = apiResultRef.current;
+    
+    // DEBUG: Log received data for troubleshooting
+    console.log('========== DONNÉES REÇUES ==========');
+    console.log('Données reçues:', data);
+    console.log('data.piliers:', data?.piliers);
+    console.log('=====================================');
+    
+    // Safety check: if no data or no piliers, show error
+    if (!data) {
       console.error("❌ No API result available");
       setApiError("Aucune réponse reçue de l'API. Veuillez réessayer.");
+      setScanComplete(false);
+      return;
+    }
+    
+    if (data.error) {
+      console.log("🚨 Setting error state:", data.error);
+      setApiError(data.error);
+      setScanComplete(false);
+      return;
+    }
+    
+    // Safety check for piliers
+    if (!data.piliers) {
+      console.warn("⚠️ No piliers in API response, using fallback");
+    }
+    
+    try {
+      console.log("🎯 Processing successful API response");
+      setScore(data.score ?? 0);
+      setAnalysis(data.analysis || null);
+      setConclusionStrategique(data.conclusion_strategique || null);
+      
+      // Map API piliers to display format with error handling
+      const piliersData = generatePiliersFromApi(data.piliers, data.score ?? 0);
+      
+      console.log("📊 API Response complète:", JSON.stringify(data, null, 2));
+      console.log("📊 Mapped Piliers:", piliersData);
+      console.log("📊 Nombre de piliers:", piliersData.length);
+      
+      // Log each pilier for debugging
+      piliersData.forEach((p, i) => {
+        console.log(`📊 Pilier ${i}: label="${p.name}", status="${p.status}"`);
+      });
+      
+      setPiliers(piliersData);
+      setScanComplete(true);
+      
+      console.log("✅ scanComplete set to TRUE, piliers count:", piliersData.length);
+      
+      // Cascade animation for piliers
+      piliersData.forEach((_, index) => {
+        setTimeout(() => {
+          setShowPiliers(prev => prev + 1);
+        }, (index + 1) * 400);
+      });
+    } catch (processingError) {
+      console.error("❌ Error processing API data:", processingError);
+      setApiError("Erreur lors du traitement des résultats. Format de données inattendu.");
       setScanComplete(false);
     }
   };
