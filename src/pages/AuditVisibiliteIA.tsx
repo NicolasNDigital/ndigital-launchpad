@@ -210,8 +210,11 @@ const AuditVisibiliteIA = () => {
     apiResultRef.current = null;
     scanStartTimeRef.current = Date.now();
 
-    // Start API call
+    // Start API call with robust error handling
     try {
+      console.log("🔍 Starting API call to: https://ndigital-api.vercel.app/api/analyze");
+      console.log("📤 Request payload:", { url: url.trim() });
+      
       const response = await fetch("https://ndigital-api.vercel.app/api/analyze", {
         method: "POST",
         headers: {
@@ -220,18 +223,48 @@ const AuditVisibiliteIA = () => {
         body: JSON.stringify({ url: url.trim() }),
       });
 
-      const data = await response.json();
+      console.log("📥 Response status:", response.status, response.statusText);
+
+      // Try to parse JSON, handle parse errors
+      let data: ApiResponse;
+      try {
+        const rawText = await response.text();
+        console.log("📄 Raw response (first 500 chars):", rawText.substring(0, 500));
+        data = JSON.parse(rawText);
+      } catch (parseError) {
+        console.error("❌ JSON parse error:", parseError);
+        apiResultRef.current = { 
+          score: 0, 
+          error: "Erreur de lecture de la réponse API. Le serveur a peut-être renvoyé une réponse invalide." 
+        };
+        throw new Error("JSON parse failed");
+      }
       
-      if (!response.ok || data.error) {
-        apiResultRef.current = { score: 0, error: data.error || "Erreur d'analyse" };
+      console.log("✅ Parsed API data:", data);
+      
+      if (!response.ok) {
+        console.error("❌ HTTP error:", response.status);
+        apiResultRef.current = { 
+          score: 0, 
+          error: data.error || `Erreur serveur (${response.status}). Veuillez réessayer.` 
+        };
+      } else if (data.error) {
+        console.error("❌ API returned error:", data.error);
+        apiResultRef.current = { score: 0, error: data.error };
       } else {
         apiResultRef.current = data;
       }
     } catch (error) {
-      apiResultRef.current = { score: 0, error: "Erreur d'analyse. Veuillez vérifier l'URL et réessayer." };
+      console.error("❌ Fetch error:", error);
+      if (!apiResultRef.current) {
+        apiResultRef.current = { 
+          score: 0, 
+          error: "Impossible de contacter l'API. Vérifiez votre connexion et réessayez." 
+        };
+      }
     }
 
-    // Ensure minimum scan duration
+    // Ensure minimum scan duration for UX
     const elapsed = Date.now() - scanStartTimeRef.current;
     const remaining = MIN_SCAN_DURATION - elapsed;
     
@@ -239,32 +272,46 @@ const AuditVisibiliteIA = () => {
       await new Promise(resolve => setTimeout(resolve, remaining));
     }
 
-    // Complete scan
+    // CRITICAL: Always stop loading state, even on error
     setIsScanning(false);
     
+    // Handle results or errors
     if (apiResultRef.current?.error) {
+      console.log("🚨 Setting error state:", apiResultRef.current.error);
       setApiError(apiResultRef.current.error);
+      setScanComplete(false);
     } else if (apiResultRef.current) {
-      setScore(apiResultRef.current.score);
-      setAnalysis(apiResultRef.current.analysis || null);
-      setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
-      
-      // Map API piliers to display format
-      const piliersData = generatePiliersFromApi(apiResultRef.current.piliers, apiResultRef.current.score);
-      
-      // Debug log to verify data
-      console.log("API Response:", apiResultRef.current);
-      console.log("Mapped Piliers:", piliersData);
-      
-      setPiliers(piliersData);
-      setScanComplete(true);
-      
-      // Cascade animation for piliers
-      piliersData.forEach((_, index) => {
-        setTimeout(() => {
-          setShowPiliers(prev => prev + 1);
-        }, (index + 1) * 400);
-      });
+      try {
+        console.log("🎯 Processing successful API response");
+        setScore(apiResultRef.current.score ?? 0);
+        setAnalysis(apiResultRef.current.analysis || null);
+        setConclusionStrategique(apiResultRef.current.conclusion_strategique || null);
+        
+        // Map API piliers to display format with error handling
+        const piliersData = generatePiliersFromApi(apiResultRef.current.piliers, apiResultRef.current.score ?? 0);
+        
+        console.log("📊 API Response:", apiResultRef.current);
+        console.log("📊 Mapped Piliers:", piliersData);
+        
+        setPiliers(piliersData);
+        setScanComplete(true);
+        
+        // Cascade animation for piliers
+        piliersData.forEach((_, index) => {
+          setTimeout(() => {
+            setShowPiliers(prev => prev + 1);
+          }, (index + 1) * 400);
+        });
+      } catch (processingError) {
+        console.error("❌ Error processing API data:", processingError);
+        setApiError("Erreur lors du traitement des résultats. Format de données inattendu.");
+        setScanComplete(false);
+      }
+    } else {
+      // Fallback: no result at all
+      console.error("❌ No API result available");
+      setApiError("Aucune réponse reçue de l'API. Veuillez réessayer.");
+      setScanComplete(false);
     }
   };
 
