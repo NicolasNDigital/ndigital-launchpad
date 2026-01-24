@@ -383,8 +383,8 @@ const AuditVisibiliteIA = () => {
       // Build detailed piliers text with FULL ACTIONS LIST for expert email
       const detailPoints = piliers.map((pilier) => {
         const scoreText = pilier.score !== undefined ? ` [${pilier.score}/100]` : '';
-        const statusEmoji = pilier.status === 'critique' ? '🔴' : pilier.status === 'ameliorer' ? '🟠' : '🟢';
-        const statusLabel = pilier.status === 'critique' ? 'CRITIQUE' : pilier.status === 'ameliorer' ? 'À AMÉLIORER' : 'BON';
+        const statusEmoji = pilier.status === 'critique' ? '🔴🚨' : pilier.status === 'ameliorer' ? '🟠' : '🟢';
+        const statusLabel = pilier.status === 'critique' ? '⚠️ CRITIQUE - ACTION URGENTE' : pilier.status === 'ameliorer' ? 'À AMÉLIORER' : 'BON';
         
         // Full detailed analysis - no truncation
         const analyseBlock = pilier.analyse_detaillee 
@@ -764,14 +764,14 @@ ${conclusionText}
                                     </span>
                                     <span className="font-bold text-white text-lg">{pilier.name}</span>
                                   </div>
-                                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                                  <span className={`text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide ${
                                     pilier.status === 'critique' 
-                                      ? 'bg-destructive/20 text-destructive border border-destructive/30' 
+                                      ? 'bg-red-600/30 text-red-400 border-2 border-red-500/60 shadow-lg shadow-red-500/20 animate-pulse' 
                                       : pilier.status === 'ameliorer'
                                       ? 'bg-warning/20 text-warning border border-warning/30'
                                       : 'bg-success/20 text-success border border-success/30'
                                   }`}>
-                                    {pilier.status === 'critique' ? 'Critique' : pilier.status === 'ameliorer' ? 'À améliorer' : 'Bon'}
+                                    {pilier.status === 'critique' ? '⚠️ CRITIQUE' : pilier.status === 'ameliorer' ? 'À améliorer' : 'Bon'}
                                   </span>
                                 </div>
                                 
