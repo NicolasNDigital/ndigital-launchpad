@@ -32,6 +32,7 @@ interface PilierDisplay {
   points_forts: string[];
   points_faibles: string[];
   actions_preview: string[];
+  actions_full: string[]; // Full list of actions for expert email
   actions_cachees_count: number;
 }
 
@@ -46,6 +47,7 @@ interface ApiPilierItem {
   points_forts?: string[];
   points_faibles?: string[];
   actions_preview?: string[];
+  actions_full?: string[]; // Full list of actions from API
   actions_cachees_count?: number;
   recommandation?: string;
 }
@@ -116,9 +118,13 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
         ? pilier.actions_preview.slice(0, 2) 
         : defaultActionsPreview[key] || [];
+      // Full actions list for expert email - use actions_full if available, fallback to actions_preview
+      const actionsFull = pilier.actions_full && pilier.actions_full.length > 0 
+        ? pilier.actions_full 
+        : pilier.actions_preview || defaultActionsPreview[key] || [];
       const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
       
-      console.log(`Pilier ${index}: label="${pilier.label}", name="${pilier.name}", final="${name}"`);
+      console.log(`Pilier ${index}: label="${pilier.label}", name="${pilier.name}", final="${name}", actions_full count=${actionsFull.length}`);
       
       return {
         name,
@@ -129,6 +135,7 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
         points_forts: pilier.points_forts || [],
         points_faibles: pilier.points_faibles || [],
         actions_preview: actionsPreview,
+        actions_full: actionsFull,
         actions_cachees_count: actionsCacheesCount
       };
     });
@@ -147,6 +154,10 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
         ? pilier.actions_preview.slice(0, 2) 
         : defaultActionsPreview[key] || [];
+      // Full actions list for expert email
+      const actionsFull = pilier.actions_full && pilier.actions_full.length > 0 
+        ? pilier.actions_full 
+        : pilier.actions_preview || defaultActionsPreview[key] || [];
       const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
       
       // PRIORITY: item.label from API is the main title source
@@ -161,6 +172,7 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
         points_forts: pilier.points_forts || [],
         points_faibles: pilier.points_faibles || [],
         actions_preview: actionsPreview,
+        actions_full: actionsFull,
         actions_cachees_count: actionsCacheesCount
       };
     });
@@ -350,7 +362,7 @@ const AuditVisibiliteIA = () => {
     const conclusionText = conclusionStrategique || apiResultRef.current?.conclusion_strategique || "Analyse en cours de finalisation par notre équipe.";
     
     try {
-      // Build detailed piliers text with full content
+      // Build detailed piliers text with FULL ACTIONS LIST for expert email
       const detailPoints = piliers.map((pilier) => {
         const scoreText = pilier.score !== undefined ? ` [${pilier.score}/100]` : '';
         const statusEmoji = pilier.status === 'critique' ? '🔴' : pilier.status === 'ameliorer' ? '🟠' : '🟢';
@@ -361,23 +373,18 @@ const AuditVisibiliteIA = () => {
           ? `\n  📋 ANALYSE DÉTAILLÉE:\n  ${pilier.analyse_detaillee}`
           : '';
         
-        // All actions preview with full text
-        const actionsBlock = pilier.actions_preview.length > 0 
-          ? `\n\n  🛠️ ACTIONS À METTRE EN PLACE (Aperçu):\n${pilier.actions_preview.map((a, i) => `     ${i + 1}. ${a}`).join('\n')}`
-          : '';
-        
-        // Hidden actions teaser
-        const hiddenActionsBlock = pilier.actions_cachees_count > 0 
-          ? `\n\n  📎 + ${pilier.actions_cachees_count} actions stratégiques supplémentaires disponibles dans le rapport complet`
+        // FULL ACTIONS LIST (actions_full) for expert email - not just preview
+        const actionsBlock = pilier.actions_full && pilier.actions_full.length > 0 
+          ? `\n\n  🛠️ LISTE COMPLÈTE DES ACTIONS (${pilier.actions_full.length} recommandations):\n${pilier.actions_full.map((a, i) => `     ${i + 1}. ${a}`).join('\n')}`
           : '';
         
         return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${statusEmoji} ${pilier.name}${scoreText} — ${statusLabel}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${analyseBlock}${actionsBlock}${hiddenActionsBlock}`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${analyseBlock}${actionsBlock}`;
       }).join('\n\n');
 
-      // Calculate total hidden actions
-      const totalHiddenActions = piliers.reduce((sum, p) => sum + (p.actions_cachees_count || 0), 0);
+      // Calculate total actions for email stats
+      const totalActions = piliers.reduce((sum, p) => sum + (p.actions_full?.length || 0), 0);
 
       const formData = new FormData();
       formData.append("access_key", "cb6a48ec-fcf8-4e60-812f-b001d893a6db");
@@ -388,7 +395,7 @@ ${statusEmoji} ${pilier.name}${scoreText} — ${statusLabel}
       formData.append("1_URL_Testée", url);
       formData.append("2_Score_Global", `${score}/100`);
       formData.append("3_Email_Prospect", email.trim());
-      formData.append("4_Total_Actions_Cachées", `${totalHiddenActions} correctifs stratégiques`);
+      formData.append("4_Total_Actions", `${totalActions} recommandations complètes`);
       formData.append("5_Conclusion_Stratégique", conclusionText);
       
       // Complete formatted message with rich content
@@ -428,10 +435,10 @@ ${conclusionText}
 
 
 ┌──────────────────────────────────────────────────────────────┐
-│ 📈 POTENTIEL DE CONVERSION                                   │
+│ 📈 AIDE-MÉMOIRE EXPERT                                       │
 └──────────────────────────────────────────────────────────────┘
 
-  → ${totalHiddenActions} actions stratégiques supplémentaires à dévoiler
+  ✅ ${totalActions} recommandations stratégiques complètes ci-dessus
   → Lead intéressé par l'optimisation GEO/IA
   → Recommandation: Contacter sous 24h pour proposer un accompagnement
 
