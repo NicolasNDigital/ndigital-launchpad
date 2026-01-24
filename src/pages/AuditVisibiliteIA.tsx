@@ -38,6 +38,7 @@ interface PilierDisplay {
 // API pilier structure (can be in array or object format)
 interface ApiPilierItem {
   name?: string;
+  label?: string; // API uses "label" for pillar titles
   key?: string;
   score?: number;
   status?: string;
@@ -109,7 +110,8 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
     console.log("generatePiliersFromApi: detected ARRAY format with", piliers.length, "items");
     return piliers.map((pilier, index) => {
       const key = pilier.key || pilier.name?.toLowerCase().replace(/\s+/g, '_') || `pilier_${index}`;
-      const name = pilier.name || pilierLabels[key] || key;
+      // Priority: item.label (API) > item.name > pilierLabels[key] > fallback
+      const name = pilier.label || pilier.name || pilierLabels[key] || `Pilier ${index + 1}`;
       const status = getStatusFromData(pilier.status, pilier.score);
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
         ? pilier.actions_preview.slice(0, 2) 
@@ -267,66 +269,65 @@ const AuditVisibiliteIA = () => {
     
     setIsSubmittingEmail(true);
     
+    // Use the actual conclusion from API or provide meaningful fallback
+    const conclusionText = conclusionStrategique || apiResultRef.current?.conclusion_strategique || "Analyse en cours de finalisation par notre équipe.";
+    
     try {
-      // Build detailed piliers text with actions
+      // Build detailed piliers text with full content
       const detailPoints = piliers.map((pilier) => {
         const scoreText = pilier.score !== undefined ? ` [${pilier.score}/100]` : '';
-        const statusText = pilier.status === 'critique' ? '🔴 CRITIQUE' : pilier.status === 'ameliorer' ? '🟠 À AMÉLIORER' : '🟢 BON';
-        const analyseText = pilier.analyse_detaillee ? `  📋 Analyse: ${pilier.analyse_detaillee}` : '';
-        const actionsText = pilier.actions_preview.length > 0 
-          ? `  🛠️ Actions (Aperçu):\n${pilier.actions_preview.map(a => `     → ${a}`).join('\n')}`
+        const statusEmoji = pilier.status === 'critique' ? '🔴' : pilier.status === 'ameliorer' ? '🟠' : '🟢';
+        const statusLabel = pilier.status === 'critique' ? 'CRITIQUE' : pilier.status === 'ameliorer' ? 'À AMÉLIORER' : 'BON';
+        
+        // Full detailed analysis - no truncation
+        const analyseBlock = pilier.analyse_detaillee 
+          ? `\n  📋 ANALYSE DÉTAILLÉE:\n  ${pilier.analyse_detaillee}`
           : '';
-        const hiddenActionsText = pilier.actions_cachees_count > 0 
-          ? `  📎 + ${pilier.actions_cachees_count} actions stratégiques supplémentaires dans le rapport complet`
+        
+        // All actions preview with full text
+        const actionsBlock = pilier.actions_preview.length > 0 
+          ? `\n\n  🛠️ ACTIONS À METTRE EN PLACE (Aperçu):\n${pilier.actions_preview.map((a, i) => `     ${i + 1}. ${a}`).join('\n')}`
           : '';
-        return `▸ ${pilier.name}${scoreText} - ${statusText}
-${analyseText}
-${actionsText}
-${hiddenActionsText}`;
+        
+        // Hidden actions teaser
+        const hiddenActionsBlock = pilier.actions_cachees_count > 0 
+          ? `\n\n  📎 + ${pilier.actions_cachees_count} actions stratégiques supplémentaires disponibles dans le rapport complet`
+          : '';
+        
+        return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${statusEmoji} ${pilier.name}${scoreText} — ${statusLabel}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${analyseBlock}${actionsBlock}${hiddenActionsBlock}`;
       }).join('\n\n');
+
+      // Calculate total hidden actions
+      const totalHiddenActions = piliers.reduce((sum, p) => sum + (p.actions_cachees_count || 0), 0);
 
       const formData = new FormData();
       formData.append("access_key", "cb6a48ec-fcf8-4e60-812f-b001d893a6db");
-      formData.append("subject", `🎯 AUDIT IA - Score ${score}/100 - ${url}`);
+      formData.append("subject", `🎯 NOUVEAU LEAD AUDIT IA - Score ${score}/100 - ${url}`);
       formData.append("from_name", "NDIGITAL Audit IA");
       
-      // Champs structurés pour le mail
-      formData.append("URL_Testée", url);
-      formData.append("Score_Global", `${score}/100`);
-      formData.append("Email_Prospect", email.trim());
-      formData.append("Conclusion_Stratégique", conclusionStrategique || "Non disponible");
-      formData.append("Détail_des_Piliers", detailPoints);
+      // Structured fields for easy reading
+      formData.append("1_URL_Testée", url);
+      formData.append("2_Score_Global", `${score}/100`);
+      formData.append("3_Email_Prospect", email.trim());
+      formData.append("4_Total_Actions_Cachées", `${totalHiddenActions} correctifs stratégiques`);
+      formData.append("5_Conclusion_Stratégique", conclusionText);
       
-      // Message formaté complet
+      // Complete formatted message with rich content
       formData.append("message", `
-══════════════════════════════════════
-   RAPPORT D'AUDIT VISIBILITÉ IA
-══════════════════════════════════════
+╔══════════════════════════════════════════════════════════════╗
+║           🎯 RAPPORT D'AUDIT VISIBILITÉ IA COMPLET           ║
+╚══════════════════════════════════════════════════════════════╝
 
-📌 URL TESTÉE
-${url}
+┌──────────────────────────────────────────────────────────────┐
+│ 📌 INFORMATIONS DE BASE                                      │
+└──────────────────────────────────────────────────────────────┘
 
-📊 SCORE GLOBAL
-${score}/100
-
-══════════════════════════════════════
-   DÉTAIL DES PILIERS ANALYSÉS
-══════════════════════════════════════
-
-${detailPoints}
-
-══════════════════════════════════════
-   CONCLUSION STRATÉGIQUE
-══════════════════════════════════════
-
-${conclusionStrategique || "Non disponible"}
-
-══════════════════════════════════════
-   INFORMATIONS PROSPECT
-══════════════════════════════════════
-
-📧 Email: ${email.trim()}
-📅 Date: ${new Date().toLocaleDateString('fr-FR', { 
+  🌐 URL analysée: ${url}
+  📊 Score global: ${score}/100
+  📧 Email prospect: ${email.trim()}
+  📅 Date d'analyse: ${new Date().toLocaleDateString('fr-FR', { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
@@ -334,6 +335,30 @@ ${conclusionStrategique || "Non disponible"}
         hour: '2-digit',
         minute: '2-digit'
       })}
+
+┌──────────────────────────────────────────────────────────────┐
+│ 📊 ANALYSE DÉTAILLÉE PAR PILIER                              │
+└──────────────────────────────────────────────────────────────┘
+
+${detailPoints}
+
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🎯 CONCLUSION STRATÉGIQUE                                    │
+└──────────────────────────────────────────────────────────────┘
+
+${conclusionText}
+
+
+┌──────────────────────────────────────────────────────────────┐
+│ 📈 POTENTIEL DE CONVERSION                                   │
+└──────────────────────────────────────────────────────────────┘
+
+  → ${totalHiddenActions} actions stratégiques supplémentaires à dévoiler
+  → Lead intéressé par l'optimisation GEO/IA
+  → Recommandation: Contacter sous 24h pour proposer un accompagnement
+
+══════════════════════════════════════════════════════════════
 `);
       
       const response = await fetch("https://api.web3forms.com/submit", {
