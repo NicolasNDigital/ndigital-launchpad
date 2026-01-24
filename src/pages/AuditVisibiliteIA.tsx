@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle, AlertTriangle, CheckCircle, Calendar } from "lucide-react";
+import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Loader2, AlertCircle, AlertTriangle, CheckCircle, Calendar, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -773,9 +773,26 @@ ${conclusionText}
                                       ))}
                                     </ul>
                                     {pilier.actions_cachees_count > 0 && (
-                                      <p className="text-white/40 text-xs italic pl-4">
-                                        + {pilier.actions_cachees_count} actions stratégiques supplémentaires détaillées dans votre rapport complet.
-                                      </p>
+                                      <button
+                                        onClick={() => {
+                                          const ctaSection = document.getElementById('rapport-cta');
+                                          ctaSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        }}
+                                        className="mt-4 w-full group cursor-pointer"
+                                      >
+                                        <div className="relative overflow-hidden bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 rounded-lg p-3 transition-all duration-300 hover:border-amber-500/50 hover:from-amber-500/15 hover:via-orange-500/15 hover:to-amber-500/15 hover:shadow-lg hover:shadow-amber-500/10">
+                                          <div className="flex items-center justify-center gap-2">
+                                            <Lock className="w-4 h-4 text-amber-400" />
+                                            <span className="text-amber-300 text-sm font-medium">
+                                              +{pilier.actions_cachees_count} recommandations stratégiques
+                                            </span>
+                                          </div>
+                                          <p className="text-amber-200/60 text-xs mt-1 text-center group-hover:text-amber-200/80 transition-colors">
+                                            Débloquées dans votre rapport personnalisé
+                                          </p>
+                                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                                        </div>
+                                      </button>
                                     )}
                                   </div>
                                 )}
@@ -812,7 +829,7 @@ ${conclusionText}
                           </p>
                         </motion.div>
 
-                        <form onSubmit={handleEmailSubmit} className="space-y-4">
+                        <form id="rapport-cta" onSubmit={handleEmailSubmit} className="space-y-4">
                           <div className="relative">
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                             <input
