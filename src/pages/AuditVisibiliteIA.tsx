@@ -35,9 +35,12 @@ interface PilierDisplay {
   actions_cachees_count: number;
 }
 
-// API pilier structure
-interface ApiPilier {
+// API pilier structure (can be in array or object format)
+interface ApiPilierItem {
+  name?: string;
+  key?: string;
   score?: number;
+  status?: string;
   analyse_detaillee?: string;
   points_forts?: string[];
   points_faibles?: string[];
@@ -46,15 +49,15 @@ interface ApiPilier {
   recommandation?: string;
 }
 
-// API response structure with piliers
+// API response structure with piliers (supports both array and object formats)
 interface ApiResponse {
   score: number;
   analysis?: string;
-  piliers?: {
-    citabilite?: ApiPilier;
-    autorite?: ApiPilier;
-    geo?: ApiPilier;
-    eeat?: ApiPilier;
+  piliers?: ApiPilierItem[] | {
+    citabilite?: ApiPilierItem;
+    autorite?: ApiPilierItem;
+    geo?: ApiPilierItem;
+    eeat?: ApiPilierItem;
   };
   conclusion_strategique?: string;
   error?: string;
@@ -76,25 +79,67 @@ const defaultActionsPreview: Record<string, string[]> = {
   eeat: ["Ajouter une page équipe avec biographies détaillées", "Intégrer des témoignages clients vérifiables"]
 };
 
-// Determine status based on score
-const getStatusFromScore = (score?: number): 'critique' | 'ameliorer' | 'ok' => {
+// Determine status from string or score
+const getStatusFromData = (status?: string, score?: number): 'critique' | 'ameliorer' | 'ok' => {
+  // First try to parse from status string
+  if (status) {
+    const s = status.toLowerCase();
+    if (s.includes('critique') || s.includes('critical') || s.includes('rouge')) return 'critique';
+    if (s.includes('ok') || s.includes('bon') || s.includes('vert') || s.includes('good')) return 'ok';
+    return 'ameliorer';
+  }
+  // Fallback to score-based determination
   if (score === undefined) return 'ameliorer';
   if (score < 40) return 'critique';
   if (score < 70) return 'ameliorer';
   return 'ok';
 };
 
-// Generate piliers display from API response
+// Generate piliers display from API response (handles both array and object formats)
 const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: number): PilierDisplay[] => {
-  if (!piliers) return [];
+  if (!piliers) {
+    console.log("generatePiliersFromApi: piliers is null/undefined");
+    return [];
+  }
   
+  console.log("generatePiliersFromApi input:", piliers);
+  
+  // Handle ARRAY format (new API structure)
+  if (Array.isArray(piliers)) {
+    console.log("generatePiliersFromApi: detected ARRAY format with", piliers.length, "items");
+    return piliers.map((pilier, index) => {
+      const key = pilier.key || pilier.name?.toLowerCase().replace(/\s+/g, '_') || `pilier_${index}`;
+      const name = pilier.name || pilierLabels[key] || key;
+      const status = getStatusFromData(pilier.status, pilier.score);
+      const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
+        ? pilier.actions_preview.slice(0, 2) 
+        : defaultActionsPreview[key] || [];
+      const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
+      
+      return {
+        name,
+        key,
+        score: pilier.score,
+        status,
+        analyse_detaillee: pilier.analyse_detaillee || pilier.recommandation,
+        points_forts: pilier.points_forts || [],
+        points_faibles: pilier.points_faibles || [],
+        actions_preview: actionsPreview,
+        actions_cachees_count: actionsCacheesCount
+      };
+    });
+  }
+  
+  // Handle OBJECT format (legacy structure)
+  console.log("generatePiliersFromApi: detected OBJECT format");
   const pilierKeys = ['citabilite', 'autorite', 'geo', 'eeat'] as const;
+  const piliersObj = piliers as { citabilite?: ApiPilierItem; autorite?: ApiPilierItem; geo?: ApiPilierItem; eeat?: ApiPilierItem };
   
   return pilierKeys
-    .filter(key => piliers[key])
+    .filter(key => piliersObj[key])
     .map(key => {
-      const pilier = piliers[key]!;
-      const status = getStatusFromScore(pilier.score);
+      const pilier = piliersObj[key]!;
+      const status = getStatusFromData(pilier.status, pilier.score);
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
         ? pilier.actions_preview.slice(0, 2) 
         : defaultActionsPreview[key] || [];
