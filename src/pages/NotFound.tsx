@@ -32,11 +32,12 @@ const NotFound = () => {
   const gameLoopRef = useRef<number>();
   const obstacleIdRef = useRef(0);
   const lastObstacleTimeRef = useRef(0);
-  const gameSpeedRef = useRef(5);
+  const gameSpeedRef = useRef(4); // Réduit de 20% (était 5)
+  const lastSpeedIncreaseRef = useRef(0); // Pour tracker les paliers de 500 points
 
   const PLAYER_SIZE = 40;
   const GROUND_Y = 60;
-  const JUMP_HEIGHT = 100;
+  const JUMP_HEIGHT = 120; // Augmenté pour un saut plus dynamique
   const OBSTACLE_WIDTH = 50;
 
   const jump = useCallback(() => {
@@ -55,7 +56,8 @@ const NotFound = () => {
     setGameState('playing');
     setScore(0);
     setObstacles([]);
-    gameSpeedRef.current = 5;
+    gameSpeedRef.current = 4; // Vitesse initiale réduite
+    lastSpeedIncreaseRef.current = 0;
     lastObstacleTimeRef.current = Date.now();
   }, []);
 
@@ -112,17 +114,16 @@ const NotFound = () => {
           .map(obs => ({ ...obs, x: obs.x - gameSpeedRef.current * 0.3 }))
           .filter(obs => obs.x > -15);
 
-        // Check collision
+        // Check collision - hitbox réduite pour être plus permissif
         updated.forEach(obs => {
-          const obsLeft = obs.x;
-          const obsRight = obs.x + 8;
-          const playerLeft = 15;
-          const playerRight = 15 + 6;
+          const obsLeft = obs.x + 1; // Marge intérieure
+          const obsRight = obs.x + 6; // Hitbox réduite
+          const playerLeft = 15 + 1; // Marge intérieure
+          const playerRight = 15 + 4; // Hitbox réduite
 
           if (obsLeft < playerRight && obsRight > playerLeft) {
-            // Get current playerY from state
             const currentPlayerY = playerY;
-            if (currentPlayerY < 30) {
+            if (currentPlayerY < 25) { // Seuil réduit pour plus de tolérance
               setGameState('gameover');
               setHighScore(prev => Math.max(prev, score));
             }
@@ -132,11 +133,13 @@ const NotFound = () => {
         return updated;
       });
 
-      // Increase score
+      // Increase score et accélération tous les 500 points
       setScore(prev => {
         const newScore = prev + 0.1;
-        if (newScore % 50 < 0.2) {
-          gameSpeedRef.current = Math.min(gameSpeedRef.current + 0.5, 12);
+        const currentMilestone = Math.floor(newScore / 500);
+        if (currentMilestone > lastSpeedIncreaseRef.current) {
+          lastSpeedIncreaseRef.current = currentMilestone;
+          gameSpeedRef.current = Math.min(gameSpeedRef.current + 0.8, 10);
         }
         return newScore;
       });
