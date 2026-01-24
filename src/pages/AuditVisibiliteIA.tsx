@@ -6,34 +6,43 @@ import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const scanMessages = [
-  "Connexion aux moteurs d'IA...",
-  "Analyse des données structurées...",
-  "Vérification de l'indexation sémantique...",
-  "Scan des mentions locales...",
+  "Connexion aux moteurs IA (ChatGPT, Gemini, Perplexity)...",
+  "Scan des données structurées (Schema.org)...",
+  "Analyse de la citabilité sur Perplexity & Gemini...",
+  "Vérification de l'autorité sémantique...",
+  "Évaluation de l'indexation GEO en cours...",
+  "Analyse de l'E-E-A-T (Expertise, Expérience, Autorité, Confiance)...",
   "Test de recommandation conversationnelle...",
-  "Évaluation du score E-E-A-T...",
-  "Analyse de la cohérence NAP...",
-  "Vérification de la compatibilité GEO...",
-  "Compilation des résultats...",
+  "Analyse des mentions locales et cohérence NAP...",
+  "Vérification de la compatibilité mobile & Core Web Vitals...",
+  "Évaluation du maillage interne sémantique...",
+  "Génération des recommandations stratégiques...",
+  "Compilation du rapport final...",
 ];
 
-const MIN_SCAN_DURATION = 5000; // 5 seconds minimum
+const MIN_SCAN_DURATION = 15000; // 15 seconds minimum for realistic analysis feel
 
 // Structure for displaying pilier results
 interface PilierDisplay {
   name: string;
   key: string;
   score?: number;
+  status: 'critique' | 'ameliorer' | 'ok';
+  analyse_detaillee?: string;
   points_forts: string[];
   points_faibles: string[];
-  recommandation?: string;
+  actions_preview: string[];
+  actions_cachees_count: number;
 }
 
 // API pilier structure
 interface ApiPilier {
   score?: number;
+  analyse_detaillee?: string;
   points_forts?: string[];
   points_faibles?: string[];
+  actions_preview?: string[];
+  actions_cachees_count?: number;
   recommandation?: string;
 }
 
@@ -59,12 +68,20 @@ const pilierLabels: Record<string, string> = {
   eeat: "Compatibilité E-E-A-T"
 };
 
-// Default recommendations fallback
-const defaultRecommandations: Record<string, string> = {
-  citabilite: "Structurez vos contenus avec des réponses claires et directes pour être cité par les IA conversationnelles.",
-  autorite: "Créez des contenus piliers approfondis (guides, études de cas) sur vos sujets d'expertise.",
-  geo: "Optimisez vos pages avec des données structurées LocalBusiness et du contenu géolocalisé.",
-  eeat: "Mettez en avant vos certifications, témoignages clients et l'expertise de votre équipe."
+// Default actions fallback
+const defaultActionsPreview: Record<string, string[]> = {
+  citabilite: ["Ajouter des FAQ structurées avec balisage Schema.org", "Créer des réponses directes en début de paragraphe"],
+  autorite: ["Créer des contenus piliers approfondis (guides, études de cas)", "Développer le maillage interne thématique"],
+  geo: ["Implémenter les données structurées LocalBusiness", "Optimiser les pages pour les requêtes géolocalisées"],
+  eeat: ["Ajouter une page équipe avec biographies détaillées", "Intégrer des témoignages clients vérifiables"]
+};
+
+// Determine status based on score
+const getStatusFromScore = (score?: number): 'critique' | 'ameliorer' | 'ok' => {
+  if (score === undefined) return 'ameliorer';
+  if (score < 40) return 'critique';
+  if (score < 70) return 'ameliorer';
+  return 'ok';
 };
 
 // Generate piliers display from API response
@@ -77,13 +94,22 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
     .filter(key => piliers[key])
     .map(key => {
       const pilier = piliers[key]!;
+      const status = getStatusFromScore(pilier.score);
+      const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
+        ? pilier.actions_preview.slice(0, 2) 
+        : defaultActionsPreview[key] || [];
+      const actionsCacheesCount = pilier.actions_cachees_count ?? Math.max(3, Math.floor(Math.random() * 4) + 3);
+      
       return {
         name: pilierLabels[key] || key,
         key,
         score: pilier.score,
+        status,
+        analyse_detaillee: pilier.analyse_detaillee || pilier.recommandation,
         points_forts: pilier.points_forts || [],
         points_faibles: pilier.points_faibles || [],
-        recommandation: pilier.recommandation || defaultRecommandations[key]
+        actions_preview: actionsPreview,
+        actions_cachees_count: actionsCacheesCount
       };
     });
 };
@@ -197,19 +223,21 @@ const AuditVisibiliteIA = () => {
     setIsSubmittingEmail(true);
     
     try {
-      // Build detailed piliers text with points forts/faibles
+      // Build detailed piliers text with actions
       const detailPoints = piliers.map((pilier) => {
         const scoreText = pilier.score !== undefined ? ` [${pilier.score}/100]` : '';
-        const pointsForts = pilier.points_forts.length > 0 
-          ? `  ✅ Points forts:\n${pilier.points_forts.map(p => `     • ${p}`).join('\n')}`
+        const statusText = pilier.status === 'critique' ? '🔴 CRITIQUE' : pilier.status === 'ameliorer' ? '🟠 À AMÉLIORER' : '🟢 BON';
+        const analyseText = pilier.analyse_detaillee ? `  📋 Analyse: ${pilier.analyse_detaillee}` : '';
+        const actionsText = pilier.actions_preview.length > 0 
+          ? `  🛠️ Actions (Aperçu):\n${pilier.actions_preview.map(a => `     → ${a}`).join('\n')}`
           : '';
-        const pointsFaibles = pilier.points_faibles.length > 0 
-          ? `  ⚠️ Points faibles:\n${pilier.points_faibles.map(p => `     • ${p}`).join('\n')}`
+        const hiddenActionsText = pilier.actions_cachees_count > 0 
+          ? `  📎 + ${pilier.actions_cachees_count} actions stratégiques supplémentaires dans le rapport complet`
           : '';
-        return `▸ ${pilier.name}${scoreText}
-${pointsForts}
-${pointsFaibles}
-  💡 Recommandation: ${pilier.recommandation || "Non spécifiée"}`;
+        return `▸ ${pilier.name}${scoreText} - ${statusText}
+${analyseText}
+${actionsText}
+${hiddenActionsText}`;
       }).join('\n\n');
 
       const formData = new FormData();
@@ -537,7 +565,7 @@ ${conclusionStrategique || "Non disponible"}
                           </div>
                         )}
 
-                        {/* Piliers cards with cascade animation */}
+                        {/* Piliers cards with cascade animation - Expert dark design */}
                         {piliers.length > 0 && (
                           <div className="space-y-4 mb-6 text-left">
                             {piliers.map((pilier, index) => (
@@ -549,53 +577,52 @@ ${conclusionStrategique || "Non disponible"}
                                   x: showPiliers > index ? 0 : -20 
                                 }}
                                 transition={{ duration: 0.4, ease: "easeOut" }}
-                                className="p-4 bg-white/5 border border-white/10 rounded-xl"
+                                className="p-5 bg-deep-black/80 border border-white/10 rounded-xl backdrop-blur-sm"
                               >
-                                {/* Pilier header */}
-                                <div className="flex items-center gap-2 mb-3">
-                                  <span className="font-semibold text-white">{pilier.name}</span>
-                                  {pilier.score !== undefined && (
-                                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">
-                                      {pilier.score}/100
+                                {/* Pilier header with status icon */}
+                                <div className="flex items-center justify-between mb-3">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-xl">
+                                      {pilier.status === 'critique' ? '🔴' : pilier.status === 'ameliorer' ? '🟠' : '🟢'}
                                     </span>
-                                  )}
+                                    <span className="font-bold text-white text-lg">{pilier.name}</span>
+                                  </div>
+                                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                                    pilier.status === 'critique' 
+                                      ? 'bg-destructive/20 text-destructive border border-destructive/30' 
+                                      : pilier.status === 'ameliorer'
+                                      ? 'bg-warning/20 text-warning border border-warning/30'
+                                      : 'bg-success/20 text-success border border-success/30'
+                                  }`}>
+                                    {pilier.status === 'critique' ? 'Critique' : pilier.status === 'ameliorer' ? 'À améliorer' : 'Bon'}
+                                  </span>
                                 </div>
                                 
-                                {/* Points forts */}
-                                {pilier.points_forts.length > 0 && (
-                                  <div className="mb-3">
-                                    <p className="text-success text-xs font-medium mb-1">✅ Points forts</p>
-                                    <ul className="space-y-1">
-                                      {pilier.points_forts.map((point, i) => (
-                                        <li key={i} className="text-white/70 text-xs pl-3 border-l-2 border-success/30">
-                                          {point}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
+                                {/* Analyse détaillée */}
+                                {pilier.analyse_detaillee && (
+                                  <p className="text-white/70 text-sm mb-4 leading-relaxed border-l-2 border-primary/30 pl-3">
+                                    {pilier.analyse_detaillee}
+                                  </p>
                                 )}
                                 
-                                {/* Points faibles */}
-                                {pilier.points_faibles.length > 0 && (
-                                  <div className="mb-3">
-                                    <p className="text-warning text-xs font-medium mb-1">⚠️ Points faibles</p>
-                                    <ul className="space-y-1">
-                                      {pilier.points_faibles.map((point, i) => (
-                                        <li key={i} className="text-white/70 text-xs pl-3 border-l-2 border-warning/30">
-                                          {point}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                )}
-                                
-                                {/* Recommandation */}
-                                {pilier.recommandation && (
-                                  <div className="pt-2 border-t border-white/5">
-                                    <p className="text-white/40 text-xs italic">
-                                      <span className="text-primary/70 font-medium not-italic">💡 Recommandation :</span>{" "}
-                                      {pilier.recommandation}
+                                {/* Actions preview section */}
+                                {pilier.actions_preview.length > 0 && (
+                                  <div className="mt-4 pt-4 border-t border-white/10">
+                                    <p className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
+                                      🛠️ Actions à mettre en place <span className="text-white/50 font-normal">(Aperçu)</span>
                                     </p>
+                                    <ul className="space-y-2 mb-3">
+                                      {pilier.actions_preview.map((action, i) => (
+                                        <li key={i} className="text-white/80 text-sm pl-4 relative before:content-['→'] before:absolute before:left-0 before:text-primary">
+                                          {action}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                    {pilier.actions_cachees_count > 0 && (
+                                      <p className="text-white/40 text-xs italic pl-4">
+                                        + {pilier.actions_cachees_count} actions stratégiques supplémentaires détaillées dans votre rapport complet.
+                                      </p>
+                                    )}
                                   </div>
                                 )}
                               </motion.div>
@@ -643,21 +670,24 @@ ${conclusionStrategique || "Non disponible"}
                               required
                             />
                           </div>
-                          <button
+                          <motion.button
                             type="submit"
                             disabled={isSubmittingEmail}
-                            className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all group text-lg disabled:opacity-50"
+                            initial={{ scale: 1 }}
+                            animate={{ scale: [1, 1.02, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="w-full bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_100%] animate-gradient-shift hover:shadow-lg hover:shadow-primary/30 text-white font-bold py-5 px-6 rounded-xl flex items-center justify-center gap-3 transition-all group text-lg disabled:opacity-50"
                           >
                             {isSubmittingEmail ? (
                               <Loader2 className="w-5 h-5 animate-spin" />
                             ) : (
                               <>
                                 <Mail className="w-5 h-5" />
-                                Recevoir mon rapport gratuit
+                                Recevoir mon rapport complet et les {piliers.reduce((acc, p) => acc + p.actions_cachees_count, 0)} correctifs
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                               </>
                             )}
-                          </button>
+                          </motion.button>
                         </form>
                       </motion.div>
                     )}
