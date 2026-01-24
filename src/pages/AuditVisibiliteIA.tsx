@@ -115,8 +115,9 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
       // PRIORITY: item.label from API is the main title source
       const name = pilier.label || pilier.name || pilierLabels[key] || `Pilier ${index + 1}`;
       const status = getStatusFromData(pilier.status, pilier.score);
+      // Display ALL actions from actions_preview (no limit)
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
-        ? pilier.actions_preview.slice(0, 2) 
+        ? pilier.actions_preview 
         : defaultActionsPreview[key] || [];
       // Full actions list for expert email - use actions_full if available, fallback to actions_preview
       const actionsFull = pilier.actions_full && pilier.actions_full.length > 0 
@@ -151,8 +152,9 @@ const generatePiliersFromApi = (piliers: ApiResponse['piliers'], globalScore: nu
     .map(key => {
       const pilier = piliersObj[key]!;
       const status = getStatusFromData(pilier.status, pilier.score);
+      // Display ALL actions from actions_preview (no limit)
       const actionsPreview = pilier.actions_preview && pilier.actions_preview.length > 0 
-        ? pilier.actions_preview.slice(0, 2) 
+        ? pilier.actions_preview 
         : defaultActionsPreview[key] || [];
       // Full actions list for expert email
       const actionsFull = pilier.actions_full && pilier.actions_full.length > 0 
