@@ -14,9 +14,9 @@ const MentionsLegales = () => {
 
         <div className="prose prose-invert prose-lg max-w-none space-y-8">
           <section>
-            <h2 className="text-2xl font-heading font-bold text-white mb-4">1. Éditeur du site</h2>
+            <h2 className="text-2xl font-heading font-bold text-white mb-4">Nom : NDIGITAL - Nicolas SCHUBLIN</h2>
             <p className="text-white/70">
-              Le site <strong className="text-white">ndigital-pro.fr</strong> est édité par :
+              Le site <strong className="text-white">Adresse : 4 rue du muguet, 68720 HOCHSTATT</strong> est édité par :
             </p>
             <ul className="text-white/70 list-none space-y-2 mt-4">
               <li><strong className="text-white">Nom :</strong>Nom : NDIGITAL - Nicolas SCHUBLIN</li>
