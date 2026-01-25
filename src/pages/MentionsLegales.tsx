@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-
 const MentionsLegales = () => {
-  return (
-    <div className="min-h-screen bg-deep-black text-white">
+  return <div className="min-h-screen bg-deep-black text-white">
       <div className="container mx-auto px-4 py-16">
-        <Link 
-          to="/" 
-          className="inline-flex items-center gap-2 text-electric-violet hover:text-electric-violet/80 transition-colors mb-8"
-        >
+        <Link to="/" className="inline-flex items-center gap-2 text-electric-violet hover:text-electric-violet/80 transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" />
           Retour à l'accueil
         </Link>
@@ -24,7 +19,7 @@ const MentionsLegales = () => {
               Le site <strong className="text-white">ndigital.fr</strong> est édité par :
             </p>
             <ul className="text-white/70 list-none space-y-2 mt-4">
-              <li><strong className="text-white">Nom :</strong> NDIGITAL</li>
+              <li><strong className="text-white">Nom :</strong>Nom : NDIGITAL - Nicolas SCHUBLIN</li>
               <li><strong className="text-white">Statut :</strong> Micro-entreprise</li>
               <li><strong className="text-white">Adresse :</strong> 2 Quai Fustel-De-Coulanges, 67000 Strasbourg</li>
               <li><strong className="text-white">Téléphone :</strong> 06 89 12 99 55</li>
@@ -86,8 +81,6 @@ const MentionsLegales = () => {
           Dernière mise à jour : Janvier 2026
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default MentionsLegales;
