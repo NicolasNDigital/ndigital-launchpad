@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ndigital-pro.fr/sitemap.xml
+Sitemap: https://www.ndigital-pro.fr/sitemap.xml
