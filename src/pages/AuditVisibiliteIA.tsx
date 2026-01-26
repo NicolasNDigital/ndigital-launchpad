@@ -939,7 +939,335 @@ ${conclusionText}
             </motion.div>
           </div>
         </div>
+
+        {/* === SECTION EXPLICATIVE === */}
+        <section className="py-20 md:py-32 relative">
+          {/* Background mesh gradient */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
+          </div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            {/* Visualization for artisans */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-4xl mx-auto text-center mb-20"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-8">
+                Votre entreprise existe-t-elle pour{" "}
+                <span className="gradient-text">l'Intelligence Artificielle</span> ?
+              </h2>
+              
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-10">
+                <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-6">
+                  Imaginez un habitant de <span className="text-primary font-semibold">Strasbourg</span> demandant à son téléphone :{" "}
+                  <em className="text-white">"Trouve-moi un artisan de confiance pour mon projet"</em>.
+                </p>
+                <p className="text-white/60 text-lg leading-relaxed mb-6">
+                  Si l'IA ne cite pas votre nom, c'est comme si votre <span className="text-secondary font-semibold">rideau de fer était resté baissé</span>.
+                </p>
+                <div className="w-16 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full" />
+              </div>
+            </motion.div>
+
+            {/* The shift explanation */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="max-w-3xl mx-auto text-center mb-20"
+            >
+              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 mb-6">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-primary text-sm font-medium">Le référencement a changé</span>
+              </div>
+              <p className="text-white/70 text-lg leading-relaxed">
+                On ne cherche plus seulement des <span className="text-white">liens bleus</span> sur Google.
+                Aujourd'hui, vos clients potentiels posent des questions à <span className="text-primary font-semibold">ChatGPT</span>,{" "}
+                <span className="text-secondary font-semibold">Gemini</span> et <span className="text-accent font-semibold">Perplexity</span>.
+                L'enjeu ? Devenir une <span className="text-white font-semibold">"réponse fiable"</span> que ces moteurs recommandent.
+              </p>
+            </motion.div>
+
+            {/* Three Pillars */}
+            <div className="grid md:grid-cols-3 gap-8 mb-20">
+              {/* SEO Local */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0 }}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-primary/30 transition-colors"
+              >
+                <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center mb-6">
+                  <Globe className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="text-xl font-heading font-bold text-white mb-4">
+                  Le SEO Local
+                </h3>
+                <p className="text-white/60 leading-relaxed">
+                  Pour être <span className="text-white font-medium">visible sur la carte</span>.
+                  Google Maps, fiches établissements, avis clients... Le socle indispensable pour les commerces de proximité en <span className="text-primary">Alsace</span> et dans le <span className="text-primary">Bas-Rhin</span>.
+                </p>
+              </motion.div>
+
+              {/* GEO */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-secondary/30 transition-colors relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 bg-gradient-to-bl from-secondary/20 to-transparent w-32 h-32 rounded-bl-full" />
+                <div className="w-14 h-14 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-xl flex items-center justify-center mb-6 relative z-10">
+                  <Bot className="w-7 h-7 text-secondary" />
+                </div>
+                <h3 className="text-xl font-heading font-bold text-white mb-4 relative z-10">
+                  Le GEO
+                </h3>
+                <p className="text-white/60 leading-relaxed relative z-10">
+                  Pour être <span className="text-white font-medium">recommandé par l'IA</span>.
+                  L'indexation sémantique, les données structurées, l'E-E-A-T... Tout ce qui fait de vous LA réponse que les moteurs de réponse citent en premier.
+                </p>
+              </motion.div>
+
+              {/* Copywriting */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-accent/30 transition-colors"
+              >
+                <div className="w-14 h-14 bg-gradient-to-br from-accent/20 to-accent/5 rounded-xl flex items-center justify-center mb-6">
+                  <Sparkles className="w-7 h-7 text-accent" />
+                </div>
+                <h3 className="text-xl font-heading font-bold text-white mb-4">
+                  Le Copywriting
+                </h3>
+                <p className="text-white/60 leading-relaxed">
+                  Pour que le <span className="text-white font-medium">visiteur devienne client</span>.
+                  Des textes persuasifs, une proposition de valeur claire, des appels à l'action qui convertissent. La touche finale qui fait la différence.
+                </p>
+              </motion.div>
+            </div>
+
+            {/* CTA Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-2xl mx-auto text-center mb-20"
+            >
+              <div className="bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent border border-primary/20 rounded-2xl p-8 md:p-10">
+                <h3 className="text-2xl font-heading font-bold text-white mb-4">
+                  Votre score est faible ?
+                </h3>
+                <p className="text-white/60 mb-6 leading-relaxed">
+                  Ne restez pas dans le flou. Découvrez exactement ce qui bloque votre visibilité sur les moteurs de réponse et comment y remédier.
+                </p>
+                <a
+                  href="#rapport-cta"
+                  className="btn-primary text-base"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('rapport-cta')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <Mail className="w-5 h-5" />
+                  Recevoir mon rapport d'analyse complet
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* FAQ Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-3xl mx-auto"
+            >
+              <h3 className="text-2xl md:text-3xl font-heading font-bold text-white text-center mb-10">
+                Questions <span className="gradient-text">Fréquentes</span>
+              </h3>
+              
+              <div className="space-y-4">
+                {/* FAQ Item 1 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Qu'est-ce que le GEO (Generative Engine Optimization) ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Le GEO est l'optimisation pour les moteurs de réponse comme ChatGPT, Gemini et Perplexity. Contrairement au SEO classique qui vise les "liens bleus", le GEO vise à faire de votre entreprise LA source que l'IA cite dans ses réponses. C'est le futur de la visibilité en ligne pour les commerces de proximité.
+                  </div>
+                </details>
+
+                {/* FAQ Item 2 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Comment améliorer mon score de visibilité IA ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Plusieurs leviers existent : les données structurées (Schema.org), la cohérence de vos informations locales (NAP), la qualité de votre contenu (E-E-A-T), et votre maillage sémantique. Notre rapport d'analyse vous donne les actions prioritaires adaptées à votre situation dans le Grand Est.
+                  </div>
+                </details>
+
+                {/* FAQ Item 3 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Pourquoi c'est important pour mon commerce à Strasbourg ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Les recherches locales évoluent. De plus en plus de clients utilisent des assistants IA pour trouver des artisans, restaurants ou services de proximité. Si vous n'êtes pas optimisé pour ces nouveaux moteurs, vous laissez vos concurrents capter ces demandes. C'est un enjeu de pérennité pour les indépendants.
+                  </div>
+                </details>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </main>
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "LocalBusiness",
+                "@id": "https://www.ndigital-pro.fr/#organization",
+                "name": "NDigital - Nicolas SCHUBLIN",
+                "additionalType": "ProfessionalService",
+                "description": "Création de sites vitrines professionnels et optimisation GEO pour artisans, commerçants et indépendants",
+                "url": "https://www.ndigital-pro.fr",
+                "email": "contact@ndigital-pro.fr",
+                "telephone": "+33689129955",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Hochstatt",
+                  "postalCode": "68720",
+                  "addressCountry": "FR"
+                },
+                "areaServed": [
+                  {
+                    "@type": "City",
+                    "name": "Strasbourg"
+                  },
+                  {
+                    "@type": "AdministrativeArea",
+                    "name": "Grand Est"
+                  },
+                  {
+                    "@type": "AdministrativeArea",
+                    "name": "Alsace"
+                  },
+                  {
+                    "@type": "AdministrativeArea",
+                    "name": "Bas-Rhin"
+                  }
+                ],
+                "priceRange": "€€",
+                "hasOfferCatalog": {
+                  "@type": "OfferCatalog",
+                  "name": "Services de création web",
+                  "itemListElement": [
+                    {
+                      "@type": "Offer",
+                      "itemOffered": {
+                        "@type": "Service",
+                        "name": "Création de site vitrine",
+                        "description": "Site vitrine professionnel livré en 14 jours"
+                      },
+                      "price": "600",
+                      "priceCurrency": "EUR"
+                    }
+                  ]
+                }
+              },
+              {
+                "@type": "Service",
+                "@id": "https://www.ndigital-pro.fr/audit-visibilite-ia/#service",
+                "name": "Audit Visibilité IA - Analyse GEO",
+                "description": "Audit gratuit de votre visibilité sur les moteurs de réponse IA comme ChatGPT, Gemini et Perplexity. Analyse de votre indexation sémantique et recommandations GEO personnalisées.",
+                "provider": {
+                  "@id": "https://www.ndigital-pro.fr/#organization"
+                },
+                "serviceType": "Audit SEO et GEO",
+                "areaServed": [
+                  {
+                    "@type": "City",
+                    "name": "Strasbourg"
+                  },
+                  {
+                    "@type": "AdministrativeArea",
+                    "name": "Grand Est"
+                  }
+                ],
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "EUR",
+                  "description": "Audit gratuit sans engagement"
+                }
+              },
+              {
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "Qu'est-ce que le GEO (Generative Engine Optimization) ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Le GEO est l'optimisation pour les moteurs de réponse comme ChatGPT, Gemini et Perplexity. Contrairement au SEO classique qui vise les 'liens bleus', le GEO vise à faire de votre entreprise LA source que l'IA cite dans ses réponses. C'est le futur de la visibilité en ligne pour les commerces de proximité."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Comment améliorer mon score de visibilité IA ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Plusieurs leviers existent : les données structurées (Schema.org), la cohérence de vos informations locales (NAP), la qualité de votre contenu (E-E-A-T), et votre maillage sémantique. Notre rapport d'analyse vous donne les actions prioritaires adaptées à votre situation dans le Grand Est."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Pourquoi c'est important pour mon commerce à Strasbourg ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Les recherches locales évoluent. De plus en plus de clients utilisent des assistants IA pour trouver des artisans, restaurants ou services de proximité. Si vous n'êtes pas optimisé pour ces nouveaux moteurs, vous laissez vos concurrents capter ces demandes. C'est un enjeu de pérennité pour les indépendants."
+                    }
+                  }
+                ]
+              }
+            ]
+          })
+        }}
+      />
     </div>;
 };
 export default AuditVisibiliteIA;
