@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Gift, Users, Euro, CheckCircle2 } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Parrainage = () => {
   return (
     <div className="min-h-screen bg-deep-black text-white">
+      <SEO
+        title="Programme Parrainage | 100€ offerts | NDigital Strasbourg"
+        description="💰 Parrainez un artisan ou commerçant de Strasbourg et recevez 100€. Votre filleul profite de -10% sur son site vitrine. Programme sans limite."
+        canonical="https://www.ndigital-pro.fr/parrainage"
+      />
       <div className="container mx-auto px-4 py-16">
         <Link 
           to="/" 

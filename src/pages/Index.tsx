@@ -12,10 +12,16 @@ import Urgency from "@/components/Urgency";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Referral from "@/components/Referral";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Site Vitrine 600€ à Strasbourg | Livré en 14 jours | NDigital"
+        description="🚀 Artisans & commerçants de Strasbourg : votre site pro livré en 14 jours pour 600€. Visible sur Google ET sur ChatGPT. Devis gratuit en 24h."
+        canonical="https://www.ndigital-pro.fr/"
+      />
       <Header />
       <main>
         <Hero />

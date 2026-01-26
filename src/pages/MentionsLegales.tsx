@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const MentionsLegales = () => {
   return (
     <div className="min-h-screen bg-deep-black text-white">
+      <SEO
+        title="Mentions Légales | NDigital - Nicolas SCHUBLIN"
+        description="Mentions légales de NDigital, micro-entreprise de création de sites web à Strasbourg. Éditeur, hébergement et propriété intellectuelle."
+        canonical="https://www.ndigital-pro.fr/mentions-legales"
+        noIndex={true}
+      />
       <div className="container mx-auto px-4 py-16">
         <Link to="/" className="inline-flex items-center gap-2 text-electric-violet hover:text-electric-violet/80 transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" />
