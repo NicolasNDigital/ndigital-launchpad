@@ -131,7 +131,7 @@ const ExpertiseGEO = () => {
                 </p>
 
                 <div className="mt-6">
-                  <Link to="/audit-visibilite-ia" className="btn-primary w-full justify-center group text-base">
+                  <Link to="/test-visibilite-ia" className="btn-primary w-full justify-center group text-base">
                     <Scan className="w-5 h-5" />
                     Analyser la visibilité IA de mon site
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

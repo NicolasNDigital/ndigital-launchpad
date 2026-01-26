@@ -19,7 +19,7 @@ const Header = () => {
   const navLinks = [
     { href: "#services", label: "Services" },
     { href: "#tarifs", label: "Tarifs" },
-    { href: "/audit-visibilite-ia", label: "Audit IA Gratuit", isRoute: true },
+    { href: "/test-visibilite-ia", label: "Test de visibilité IA", isRoute: true },
     { href: "#contact", label: "Contact" },
   ];
 
