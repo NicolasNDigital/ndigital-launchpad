@@ -9,6 +9,7 @@ import MentionsLegales from "./pages/MentionsLegales";
 import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import Parrainage from "./pages/Parrainage";
 import AuditVisibiliteIA from "./pages/AuditVisibiliteIA";
+import LexiqueIASEO from "./pages/LexiqueIASEO";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
           <Route path="/parrainage" element={<Parrainage />} />
           <Route path="/test-visibilite-ia" element={<AuditVisibiliteIA />} />
+          <Route path="/ressources/lexique-ia-seo" element={<LexiqueIASEO />} />
           {/* Redirection 301 pour préserver le SEO */}
           <Route path="/audit-visibilite-ia" element={<Navigate to="/test-visibilite-ia" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +27,10 @@ const Header = () => {
     { href: "#services", label: "Services" },
     { href: "#tarifs", label: "Tarifs" },
     { href: "/test-visibilite-ia", label: "Test de visibilité IA", isRoute: true },
-    { href: "#contact", label: "Contact" },
+  ];
+
+  const resourcesLinks = [
+    { href: "/ressources/lexique-ia-seo", label: "Lexique IA & SEO", icon: BookOpen },
   ];
 
   return (
@@ -63,6 +73,44 @@ const Header = () => {
                 </a>
               )
             ))}
+
+            {/* Dropdown Ressources */}
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={`font-medium transition-colors flex items-center gap-1 outline-none ${
+                  isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+                }`}
+              >
+                Ressources
+                <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="bg-card border-border shadow-xl min-w-[200px]"
+              >
+                {resourcesLinks.map((link) => (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <Link
+                      to={link.href}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <link.icon className="w-4 h-4 text-primary" />
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Contact */}
+            <a
+              href="#contact"
+              className={`font-medium transition-colors ${
+                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+              }`}
+            >
+              Contact
+            </a>
           </nav>
 
           {/* CTA & Badge */}
@@ -119,6 +167,51 @@ const Header = () => {
                   </a>
                 )
               ))}
+
+              {/* Ressources section mobile */}
+              <div className="border-t border-border pt-4 mt-2">
+                <button
+                  onClick={() => setIsResourcesOpen(!isResourcesOpen)}
+                  className="flex items-center justify-between w-full text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                >
+                  <span>Ressources</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isResourcesOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {isResourcesOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="pl-4 flex flex-col gap-2"
+                    >
+                      {resourcesLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsResourcesOpen(false);
+                          }}
+                          className="flex items-center gap-2 text-foreground/60 hover:text-primary py-2 transition-colors"
+                        >
+                          <link.icon className="w-4 h-4" />
+                          {link.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Contact */}
+              <a
+                href="#contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+              >
+                Contact
+              </a>
               <a
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
