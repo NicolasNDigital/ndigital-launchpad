@@ -480,9 +480,11 @@ ${conclusionText}
       </header>
 
       {/* Main content */}
-      <main className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)] py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+      <main className="relative z-10">
+        {/* Hero Section - Audit Tool */}
+        <section className="flex items-center justify-center min-h-[calc(100vh-100px)] py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
             
             {/* Hero */}
             <motion.div initial={{
@@ -939,6 +941,7 @@ ${conclusionText}
             </motion.div>
           </div>
         </div>
+        </section>
 
         {/* === SECTION EXPLICATIVE === */}
         <section className="py-20 md:py-32 relative">
