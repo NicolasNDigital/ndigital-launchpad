@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const PolitiqueConfidentialite = () => {
   return (
     <div className="min-h-screen bg-deep-black text-white">
+      <SEO
+        title="Politique de Confidentialité | RGPD | NDigital"
+        description="Politique de protection des données personnelles de NDigital. Conformité RGPD, droits des utilisateurs et gestion des cookies."
+        canonical="https://www.ndigital-pro.fr/politique-confidentialite"
+        noIndex={true}
+      />
       <div className="container mx-auto px-4 py-16">
         <Link 
           to="/" 

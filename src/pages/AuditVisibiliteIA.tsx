@@ -4,6 +4,7 @@ import { Bot, Sparkles, Search, Zap, ArrowRight, Mail, Globe, CheckCircle2, Load
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import SEO from "@/components/SEO";
 const scanMessages = ["Connexion aux moteurs IA (ChatGPT, Gemini, Perplexity)...", "Scan des données structurées (Schema.org)...", "Analyse de la citabilité sur Perplexity & Gemini...", "Vérification de l'autorité sémantique...", "Évaluation de l'indexation GEO en cours...", "Analyse de l'E-E-A-T (Expertise, Expérience, Autorité, Confiance)...", "Test de recommandation conversationnelle...", "Analyse des mentions locales et cohérence NAP...", "Vérification de la compatibilité mobile & Core Web Vitals...", "Évaluation du maillage interne sémantique...", "Génération des recommandations stratégiques...", "Compilation du rapport final..."];
 const DEEP_ANALYSIS_MESSAGE = "🔬 Analyse sémantique profonde en cours... (cela peut prendre 30s)";
 const MIN_SCAN_DURATION = 15000; // 15 seconds minimum for realistic analysis feel
@@ -464,6 +465,12 @@ ${conclusionText}
       backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
       backgroundSize: "50px 50px"
     }} />
+
+      <SEO
+        title="Test Visibilité IA Gratuit | Votre site vu par ChatGPT ? | Strasbourg"
+        description="🔍 Testez gratuitement si ChatGPT, Gemini et Perplexity recommandent votre entreprise à Strasbourg. Score instantané + rapport d'optimisation GEO offert."
+        canonical="https://www.ndigital-pro.fr/test-visibilite-ia"
+      />
 
       {/* Header */}
       <header className="relative z-10 py-6">
