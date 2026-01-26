@@ -1,21 +1,14 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="bg-deep-black text-white py-12">
+  return <footer className="bg-deep-black text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <img 
-              src={logo}
-              alt="NDIGITAL Logo" 
-              className="h-10 w-auto"
-            />
+            <img src={logo} alt="NDIGITAL Logo" className="h-10 w-auto" />
             <p className="text-white/60 mt-4 max-w-xs">
               Expert en création de sites vitrines et campagnes Google Ads pour les business locaux à Strasbourg.
             </p>
@@ -60,9 +53,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2 text-white/60">
                 <Mail className="w-4 h-4" />
-                <a href="mailto:contact@ndigital.fr" className="hover:text-white transition-colors">
-                  contact@ndigital.fr
-                </a>
+                <a href="mailto:contact@ndigital.fr" className="hover:text-white transition-colors">contact@ndigital-pro.fr</a>
               </li>
               <li className="flex items-center gap-2 text-white/60">
                 <MapPin className="w-4 h-4" />
@@ -90,8 +81,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
