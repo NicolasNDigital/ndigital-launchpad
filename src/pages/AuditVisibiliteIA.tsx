@@ -1298,6 +1298,66 @@ ${conclusionText}
                     Les recherches locales évoluent. De plus en plus de clients utilisent des assistants IA pour trouver des artisans, restaurants ou services de proximité. Si vous n'êtes pas optimisé pour ces nouveaux moteurs, vous laissez vos concurrents capter ces demandes. C'est un enjeu de pérennité pour les indépendants.
                   </div>
                 </details>
+
+                {/* FAQ Item 4 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Quelle est la différence entre SEO et GEO ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Le SEO optimise votre site pour les résultats classiques de Google (les 10 liens bleus). Le GEO optimise votre contenu pour être extrait et cité par les IA conversationnelles comme ChatGPT, Gemini et Perplexity. Les critères sont différents : le GEO privilégie les contenus factuels, structurés en question-réponse, avec des données vérifiables et un balisage Schema.org. Un bon référencement en 2026 nécessite les deux approches.
+                  </div>
+                </details>
+
+                {/* FAQ Item 5 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Qu'est-ce que le Schema.org et pourquoi est-ce important pour les IA ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Schema.org est un vocabulaire de données structurées que vous ajoutez au code de votre site pour expliquer aux machines ce qu'il contient. Par exemple, le balisage FAQPage indique aux IA que votre page contient des questions-réponses, LocalBusiness décrit votre entreprise locale, et Article structure vos contenus éditoriaux. Sans ces balises, votre contenu est du texte brut difficile à interpréter. Avec, c'est un document étiqueté que les IA peuvent facilement extraire et citer.
+                  </div>
+                </details>
+
+                {/* FAQ Item 6 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Mon site est bien positionné sur Google, est-ce suffisant pour les IA ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Pas nécessairement. Un bon positionnement Google est un atout, mais les IA utilisent des critères supplémentaires. Elles évaluent la « citabilité » de votre contenu (peut-on extraire une réponse claire ?), votre autorité sémantique (êtes-vous reconnu comme expert ?), et la présence de données structurées. De nombreux sites en première page de Google n'apparaissent jamais dans les réponses de ChatGPT ou Perplexity parce qu'ils manquent de contenu textuel riche ou de balisage technique.
+                  </div>
+                </details>
+
+                {/* FAQ Item 7 */}
+                <details className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-white font-medium text-left pr-4">
+                      Combien de temps faut-il pour améliorer sa visibilité IA ?
+                    </span>
+                    <span className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-open:rotate-45 transition-transform">
+                      <span className="text-white text-xl">+</span>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-white/60 leading-relaxed">
+                    Les premiers résultats peuvent apparaître en 4 à 8 semaines après les optimisations techniques (Schema.org, robots.txt, vitesse). L'amélioration de l'autorité sémantique (backlinks, contenu expert, avis) prend généralement 3 à 6 mois. Chez NDigital, nous priorisons les actions à fort impact immédiat dans nos recommandations pour que vous constatiez des progrès rapidement.
+                  </div>
+                </details>
               </div>
             </motion.div>
           </div>
