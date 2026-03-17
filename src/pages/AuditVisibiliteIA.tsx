@@ -469,7 +469,7 @@ ${conclusionText}
       <SEO
         title="Test Visibilité IA Gratuit | Votre site vu par ChatGPT ? | Strasbourg"
         description="🔍 Testez gratuitement si ChatGPT, Gemini et Perplexity recommandent votre entreprise à Strasbourg. Score instantané + rapport d'optimisation GEO offert."
-        canonical="https://www.ndigital-pro.fr/test-visibilite-ia"
+        canonical="https://ndigital-pro.fr/test-visibilite-ia"
       />
 
       {/* Header */}
