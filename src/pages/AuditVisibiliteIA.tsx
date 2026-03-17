@@ -1474,6 +1474,38 @@ ${conclusionText}
                       "@type": "Answer",
                       "text": "Les recherches locales évoluent. De plus en plus de clients utilisent des assistants IA pour trouver des artisans, restaurants ou services de proximité. Si vous n'êtes pas optimisé pour ces nouveaux moteurs, vous laissez vos concurrents capter ces demandes. C'est un enjeu de pérennité pour les indépendants."
                     }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Quelle est la différence entre SEO et GEO ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Le SEO optimise votre site pour les résultats classiques de Google. Le GEO optimise votre contenu pour être extrait et cité par les IA conversationnelles comme ChatGPT, Gemini et Perplexity. Les critères sont différents : le GEO privilégie les contenus factuels, structurés en question-réponse, avec des données vérifiables et un balisage Schema.org."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Qu'est-ce que le Schema.org et pourquoi est-ce important pour les IA ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Schema.org est un vocabulaire de données structurées ajouté au code de votre site pour expliquer aux machines ce qu'il contient. Sans ces balises, votre contenu est du texte brut difficile à interpréter. Avec, c'est un document étiqueté que les IA peuvent facilement extraire et citer."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Mon site est bien positionné sur Google, est-ce suffisant pour les IA ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Pas nécessairement. Les IA utilisent des critères supplémentaires comme la citabilité du contenu, l'autorité sémantique et la présence de données structurées. De nombreux sites en première page de Google n'apparaissent jamais dans les réponses de ChatGPT ou Perplexity."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Combien de temps faut-il pour améliorer sa visibilité IA ?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Les premiers résultats peuvent apparaître en 4 à 8 semaines après les optimisations techniques. L'amélioration de l'autorité sémantique prend généralement 3 à 6 mois. NDigital priorise les actions à fort impact immédiat pour des progrès rapides."
+                    }
                   }
                 ]
               }
