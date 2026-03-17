@@ -1364,7 +1364,7 @@ ${conclusionText}
               },
               {
                 "@type": "Service",
-                "@id": "https://www.ndigital-pro.fr/audit-visibilite-ia/#service",
+                "@id": "https://ndigital-pro.fr/test-visibilite-ia/#service",
                 "name": "Audit Visibilité IA - Analyse GEO",
                 "description": "Audit gratuit de votre visibilité sur les moteurs de réponse IA comme ChatGPT, Gemini et Perplexity. Analyse de votre indexation sémantique et recommandations GEO personnalisées.",
                 "provider": {
