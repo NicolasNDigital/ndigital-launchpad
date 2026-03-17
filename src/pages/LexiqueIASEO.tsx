@@ -47,12 +47,12 @@ const LexiqueIASEO = () => {
 
   return (
     <>
-      <SEO
-        title="Lexique IA & SEO : Comprendre le futur du Web | NDigital"
-        description="GEO, SEO local, Indexation sémantique... Retrouvez toutes les définitions clés pour dominer les résultats de recherche et les IA en 2026."
-        canonical="https://www.ndigital-pro.fr/ressources/lexique-ia-seo"
-        ogType="article"
-      />
+        <SEO
+          title="Lexique IA & SEO 2026 : 27 définitions clés pour comprendre le GEO, le SEO et l'IA | NDigital"
+          description="GEO, AEO, Schema.org, RAG, E-E-A-T… Découvrez 27 termes essentiels du référencement IA et SEO expliqués simplement. Guide complet par NDigital, expert en visibilité web à Strasbourg."
+          canonical="https://ndigital-pro.fr/ressources/lexique-ia-seo"
+          ogType="article"
+        />
 
       {/* Schema.org DefinedTermSet */}
       <script
