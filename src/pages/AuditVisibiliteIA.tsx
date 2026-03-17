@@ -1317,7 +1317,7 @@ ${conclusionText}
                 "name": "NDigital - Nicolas SCHUBLIN",
                 "additionalType": "ProfessionalService",
                 "description": "Création de sites vitrines professionnels et optimisation GEO pour artisans, commerçants et indépendants",
-                "url": "https://www.ndigital-pro.fr",
+                "url": "https://ndigital-pro.fr",
                 "email": "contact@ndigital-pro.fr",
                 "telephone": "+33689129955",
                 "address": {
