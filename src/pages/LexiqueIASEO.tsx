@@ -31,11 +31,11 @@ const LexiqueIASEO = () => {
     return {
       "@context": "https://schema.org",
       "@type": "DefinedTermSet",
-      "@id": "https://www.ndigital-pro.fr/ressources/lexique-ia-seo#glossary",
+      "@id": "https://ndigital-pro.fr/ressources/lexique-ia-seo#glossary",
       name: "Lexique IA & SEO - NDigital",
       description:
         "Glossaire complet des termes essentiels en Intelligence Artificielle, SEO et GEO (Generative Engine Optimization) pour comprendre le futur du web.",
-      url: "https://www.ndigital-pro.fr/ressources/lexique-ia-seo",
+      url: "https://ndigital-pro.fr/ressources/lexique-ia-seo",
       hasDefinedTerm: terms,
     };
   };
