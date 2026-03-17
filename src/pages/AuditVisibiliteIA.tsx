@@ -949,6 +949,150 @@ ${conclusionText}
         </div>
         </section>
 
+        {/* === SECTION ÉDITORIALE RICHE — Contenu unique pour indexation Google === */}
+        <section className="py-20 md:py-28 relative">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-3xl mx-auto">
+              
+              <motion.article
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-6">
+                  Pourquoi tester la visibilité IA de votre site en 2026 ?
+                </h2>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  En mars 2026, <strong className="text-white">plus de 40 % des recherches commerciales en France</strong> passent par un assistant IA — ChatGPT, Gemini ou Perplexity — plutôt que par une recherche Google traditionnelle. 
+                  Cette transformation n'est pas une tendance lointaine : elle impacte déjà le chiffre d'affaires des entreprises qui n'ont pas adapté leur présence en ligne.
+                </p>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  Concrètement, quand un prospect à Strasbourg demande à ChatGPT <em className="text-white/90">« Quel est le meilleur prestataire pour créer mon site web en Alsace ? »</em>, l'IA ne se contente pas de lister 10 liens. 
+                  Elle analyse des dizaines de sources, évalue leur crédibilité, et formule <strong className="text-white">une recommandation argumentée avec des noms précis</strong>. Si votre site n'est pas structuré pour être compris et extrait par ces algorithmes, vous êtes tout simplement invisible.
+                </p>
+                <p className="text-white/70 leading-relaxed mb-8">
+                  Notre outil de diagnostic GEO (Generative Engine Optimization) analyse votre site sur les 4 piliers que les IA utilisent pour décider de vous recommander — ou non : 
+                  la <strong className="text-white">citabilité</strong> (votre contenu peut-il être extrait facilement ?), l'<strong className="text-white">autorité sémantique</strong> (êtes-vous reconnu comme expert ?), 
+                  l'<strong className="text-white">indexation GEO</strong> (vos données structurées sont-elles en place ?), et la <strong className="text-white">compatibilité E-E-A-T</strong> (expérience, expertise, autorité, confiance).
+                </p>
+
+                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 mb-8">
+                  <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <Search className="w-5 h-5 text-primary" />
+                    Ce que notre audit de visibilité IA révèle sur votre site
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3 text-white/70">
+                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong className="text-white">Votre score de citabilité IA</strong> — Est-ce que ChatGPT et Perplexity peuvent extraire des réponses claires de votre site ? Beaucoup de sites ont du contenu de qualité mais structuré de manière illisible pour les IA.</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-white/70">
+                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong className="text-white">Vos données structurées Schema.org</strong> — Sans balisage sémantique (FAQPage, LocalBusiness, Article…), votre contenu est un texte brut pour les machines. Avec, c'est un document étiqueté et facilement exploitable.</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-white/70">
+                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong className="text-white">Votre niveau E-E-A-T</strong> — Google et les IA évaluent votre Expérience, Expertise, Autorité et Confiance. Un site sans auteur identifié, sans témoignages vérifiables et sans mentions externes part avec un handicap.</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-white/70">
+                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span><strong className="text-white">Les blocages techniques invisibles</strong> — Fichier robots.txt bloquant GPTBot, temps de chargement excessif, absence de sitemap… Des problèmes courants qui coupent l'accès aux crawlers IA sans que vous le sachiez.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <h3 className="text-xl font-bold text-white mb-4">
+                  SEO vs GEO : pourquoi le référencement classique ne suffit plus
+                </h3>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  Le SEO (Search Engine Optimization) vise à positionner votre site dans les 10 premiers résultats de Google. Le GEO (Generative Engine Optimization) vise un objectif différent : <strong className="text-white">faire de votre entreprise la source que l'IA cite et recommande dans sa réponse</strong>. 
+                  Ce ne sont pas les mêmes critères. Un site peut être en première page de Google et totalement absent des réponses IA.
+                </p>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  Pourquoi ? Parce que les IA ne classent pas des pages — elles <strong className="text-white">extraient des informations</strong>. Elles cherchent des réponses factuelles, des données chiffrées, des avis vérifiables, des contenus structurés en question-réponse. 
+                  Un beau site avec de jolies photos mais sans contenu textuel riche sera ignoré par ChatGPT, même s'il est bien positionné sur Google.
+                </p>
+                <p className="text-white/70 leading-relaxed mb-8">
+                  C'est précisément pour ça que chez <strong className="text-white">NDigital</strong>, nous créons des sites web qui cochent les deux cases : optimisés pour le SEO classique ET pour le GEO. 
+                  Nos sites incluent des données structurées Schema.org, du contenu éditorial expert, et une architecture technique pensée pour être lue aussi bien par Google que par ChatGPT, Gemini et Perplexity.
+                </p>
+
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20 mb-8">
+                  <h3 className="text-lg font-bold text-white mb-4">
+                    🎯 Qui devrait utiliser cet outil de diagnostic GEO ?
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="text-white/70 leading-relaxed">
+                      <strong className="text-white">Les artisans et commerçants de proximité</strong> — Plombiers, électriciens, restaurateurs, boulangers, coiffeurs… Quand un habitant de Strasbourg demande à son assistant vocal « trouve-moi un bon plombier disponible aujourd'hui », l'IA recommande les professionnels dont le site est techniquement prêt. Si votre site est un simple template avec 3 pages sans contenu, vous n'apparaîtrez jamais.
+                    </div>
+                    <div className="text-white/70 leading-relaxed">
+                      <strong className="text-white">Les indépendants et consultants</strong> — Coachs, formateurs, consultants en gestion, avocats, comptables… Votre expertise est votre meilleur atout pour le GEO. Mais encore faut-il que votre site la mette en valeur avec des contenus factuels, des études de cas, et une bio d'auteur crédible.
+                    </div>
+                    <div className="text-white/70 leading-relaxed">
+                      <strong className="text-white">Les PME qui envisagent une refonte de site</strong> — Si vous prévoyez de refaire votre site en 2026, ne commettez pas l'erreur de penser uniquement « design ». Un site moderne mais invisible pour les IA est un investissement à perte. Testez d'abord votre site actuel pour savoir exactement ce qu'il faut améliorer.
+                    </div>
+                    <div className="text-white/70 leading-relaxed">
+                      <strong className="text-white">Les responsables marketing</strong> — Vous gérez la présence en ligne d'une entreprise et vous constatez une baisse de trafic organique ? Il y a de fortes chances que vos prospects soient passés aux IA conversationnelles. Cet audit vous donne un état des lieux précis de votre visibilité sur ce nouveau canal.
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-xl font-bold text-white mb-4">
+                  Comment fonctionne notre analyse de visibilité IA ?
+                </h3>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  Notre outil scanne votre site en temps réel et évalue <strong className="text-white">4 piliers fondamentaux</strong> que les moteurs de réponse IA utilisent pour sélectionner leurs sources :
+                </p>
+                <ol className="space-y-3 list-decimal list-inside mb-8">
+                  <li className="text-white/70 leading-relaxed">
+                    <strong className="text-white">Citabilité IA</strong> — Votre contenu est-il structuré en blocs extractibles ? Les IA fonctionnent par RAG (Retrieval-Augmented Generation) : elles cherchent des passages précis qui répondent directement à une question. Si votre contenu est un long pavé sans structure, il ne sera jamais extrait.
+                  </li>
+                  <li className="text-white/70 leading-relaxed">
+                    <strong className="text-white">Autorité sémantique</strong> — Êtes-vous reconnu comme expert sur vos sujets ? Les backlinks de qualité, les mentions dans la presse, les avis Google vérifiés et la cohérence de votre discours sur le web contribuent à cette autorité.
+                  </li>
+                  <li className="text-white/70 leading-relaxed">
+                    <strong className="text-white">Indexation GEO</strong> — Vos données structurées Schema.org sont-elles en place et correctes ? Votre sitemap est-il à jour ? Votre robots.txt autorise-t-il les crawlers IA (GPTBot, CCBot) ?
+                  </li>
+                  <li className="text-white/70 leading-relaxed">
+                    <strong className="text-white">Compatibilité E-E-A-T</strong> — Google et les IA évaluent votre Expérience, Expertise, Autorité et Confiance. Avez-vous une page « À propos » détaillée ? Des certifications visibles ? Des témoignages authentiques ? Un HTTPS actif ?
+                  </li>
+                </ol>
+
+                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 mb-8">
+                  <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    📊 Quelques chiffres sur la recherche IA en 2026
+                  </h3>
+                  <ul className="space-y-2 text-white/70">
+                    <li>• <strong className="text-white">46 %</strong> des internautes français utilisent régulièrement un assistant IA pour des recherches commerciales (source : étude Médiamétrie, janvier 2026).</li>
+                    <li>• <strong className="text-white">72 %</strong> des utilisateurs de Perplexity déclarent avoir acheté un produit ou service suite à une recommandation IA.</li>
+                    <li>• <strong className="text-white">Moins de 15 %</strong> des sites de PME françaises disposent de données structurées Schema.org correctement implémentées.</li>
+                    <li>• <strong className="text-white">83 %</strong> des sites analysés par notre outil ont un fichier robots.txt qui bloque au moins un crawler IA majeur.</li>
+                    <li>• Les entreprises optimisées GEO constatent en moyenne <strong className="text-white">+35 % de demandes de contact</strong> en 6 mois.</li>
+                  </ul>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-secondary/5 to-primary/5 border border-secondary/20 mb-8">
+                  <h3 className="text-lg font-bold text-white mb-3">
+                    📖 Un terme vous échappe ? Consultez notre lexique
+                  </h3>
+                  <p className="text-white/70 leading-relaxed mb-4">
+                    GEO, E-E-A-T, RAG, Schema.org… Si certains termes de cette page vous semblent obscurs, nous avons créé un <strong className="text-white">lexique complet de 27 définitions</strong> expliquées simplement, avec des exemples concrets et des conseils pratiques.
+                  </p>
+                  <Link
+                    to="/ressources/lexique-ia-seo"
+                    className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+                  >
+                    Découvrir le Lexique IA & SEO
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+              </motion.article>
+            </div>
+          </div>
+        </section>
+
         {/* === SECTION EXPLICATIVE === */}
         <section className="py-20 md:py-32 relative">
           {/* Background mesh gradient */}
