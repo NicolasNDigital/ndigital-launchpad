@@ -25,7 +25,7 @@ const LexiqueIASEO = () => {
       "@type": "DefinedTerm",
       name: term.term,
       description: term.definition,
-      inDefinedTermSet: "https://www.ndigital-pro.fr/ressources/lexique-ia-seo",
+      inDefinedTermSet: "https://ndigital-pro.fr/ressources/lexique-ia-seo",
     }));
 
     return {
