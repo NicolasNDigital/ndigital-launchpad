@@ -1313,7 +1313,7 @@ ${conclusionText}
             "@graph": [
               {
                 "@type": "LocalBusiness",
-                "@id": "https://www.ndigital-pro.fr/#organization",
+                "@id": "https://ndigital-pro.fr/#organization",
                 "name": "NDigital - Nicolas SCHUBLIN",
                 "additionalType": "ProfessionalService",
                 "description": "Création de sites vitrines professionnels et optimisation GEO pour artisans, commerçants et indépendants",
