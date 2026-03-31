@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MentionsLegales from "./pages/MentionsLegales";
@@ -12,6 +13,7 @@ import Parrainage from "./pages/Parrainage";
 import AuditVisibiliteIA from "./pages/AuditVisibiliteIA";
 import LexiqueIASEO from "./pages/LexiqueIASEO";
 import BulkSms from "./pages/BulkSms";
+import SmsLanding from "./pages/SmsLanding";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -30,7 +32,12 @@ const App = () => (
           <Route path="/ressources/lexique-ia-seo" element={<LexiqueIASEO />} />
           {/* Redirection 301 pour préserver le SEO */}
           <Route path="/audit-visibilite-ia" element={<Navigate to="/test-visibilite-ia" replace />} />
-          <Route path="/envoi-groupe" element={<BulkSms />} />
+          <Route path="/sms-groupes" element={<SmsLanding />} />
+          <Route path="/envoi-groupe" element={
+            <ProtectedRoute redirectTo="/sms-groupes">
+              <BulkSms />
+            </ProtectedRoute>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

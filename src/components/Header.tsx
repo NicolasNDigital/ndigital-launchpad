@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, ChevronDown, BookOpen } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, BookOpen, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -102,6 +102,15 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* SMS Groupés — lien mis en avant */}
+            <Link
+              to="/sms-groupes"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-electric-violet/15 border border-electric-violet/30 text-electric-violet hover:bg-electric-violet/25 transition-colors text-sm font-medium"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              SMS Groupés
+            </Link>
+
             {/* Contact */}
             <a
               href="#contact"
@@ -203,6 +212,16 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
+
+              {/* SMS Groupés mobile */}
+              <Link
+                to="/sms-groupes"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-electric-violet font-medium py-2 transition-colors"
+              >
+                <MessageSquare className="w-4 h-4" />
+                SMS Groupés
+              </Link>
 
               {/* Contact */}
               <a
