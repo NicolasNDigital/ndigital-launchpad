@@ -109,7 +109,7 @@ export default function CampaignSidebar({
                 className="text-white text-xs font-mono truncate"
                 style={{ textShadow: "0 0 8px rgba(139,92,246,0.6)" }}
               >
-                {shortUrl}
+                {shortUrl?.replace("https://", "")}
               </p>
             </div>
             <div className="flex gap-1 flex-shrink-0">
