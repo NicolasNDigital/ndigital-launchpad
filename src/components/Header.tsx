@@ -105,7 +105,7 @@ const Header = () => {
             {/* SMS Groupés — lien mis en avant */}
             <Link
               to="/sms-groupes"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-electric-violet/15 border border-electric-violet/30 text-electric-violet hover:bg-electric-violet/25 transition-colors text-sm font-medium"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-electric-violet text-white hover:bg-electric-violet/85 transition-colors text-sm font-semibold shadow-sm"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               SMS Groupés

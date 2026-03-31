@@ -3,7 +3,7 @@ import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import {
   Upload, CreditCard, ShieldCheck, Zap, FileSpreadsheet,
-  MessageSquare, BarChart3, ArrowRight, Check, Users
+  MessageSquare, BarChart3, ArrowRight, Check, Users, Star
 } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 
@@ -33,33 +33,33 @@ function FadeIn({ children, delay = 0, className = "" }: {
 
 const WHY_CARDS = [
   {
-    icon: Zap,
-    title: "Envoi en quelques secondes",
-    body: "Importez votre liste, rédigez votre message et lancez l'envoi en trois clics. Pas de formation nécessaire.",
+    icon: Star,
+    title: "Plus d'avis, plus de clients",
+    body: "Un SMS avec votre lien Google reçu juste après la prestation = taux de conversion jusqu'à 5× supérieur à un simple email.",
     color: "text-warning",
     bg: "bg-warning/10",
   },
   {
-    icon: ShieldCheck,
-    title: "Sécurité & conformité RGPD",
-    body: "Vos données restent sur nos serveurs européens. Aucune revente, aucun partage. Conformité RGPD totale.",
+    icon: Zap,
+    title: "Campagne lancée en 3 clics",
+    body: "Importez votre liste, personnalisez le message avec votre lien d'avis et envoyez. Aucune compétence technique requise.",
     color: "text-neon-cyan",
     bg: "bg-neon-cyan/10",
   },
   {
     icon: BarChart3,
-    title: "Suivi en temps réel",
-    body: "Chaque envoi est journalisé. Consultez l'historique complet : destinataire, statut, date, coût.",
+    title: "Suivi complet de chaque envoi",
+    body: "Consultez l'historique en temps réel : qui a reçu le lien, quand, avec quel statut. Zéro angle mort.",
     color: "text-electric-violet",
     bg: "bg-electric-violet/10",
   },
 ]
 
 const IMPORT_FEATURES = [
-  "Colonnes détectées automatiquement (phone, mobile, téléphone…)",
-  "Glisser-déposer ou sélection de fichier",
-  "Aperçu du nombre de contacts avant envoi",
-  "Sélecteur manuel si plusieurs colonnes présentes",
+  "Colonnes de numéros détectées automatiquement (phone, mobile, téléphone…)",
+  "Glisser-déposer ou sélection de fichier — CSV ou Excel",
+  "Aperçu du nombre de destinataires avant envoi",
+  "Personnalisez le message avec votre lien Google Reviews intégré",
 ]
 
 const PRICING_POINTS = [
@@ -75,7 +75,7 @@ export default function SmsLanding() {
   const { user } = useAuth()
 
   const ctaHref = user ? "/envoi-groupe" : "/auth"
-  const ctaLabel = user ? "Accéder à l'outil" : "Essayer gratuitement"
+  const ctaLabel = user ? "Accéder à l'outil" : "Commencer maintenant"
 
   return (
     <div className="min-h-screen bg-deep-black text-white overflow-x-hidden">
@@ -93,10 +93,10 @@ export default function SmsLanding() {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric-violet/15 border border-electric-violet/30 text-electric-violet text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-warning/15 border border-warning/30 text-warning text-sm font-medium mb-6"
           >
-            <MessageSquare className="w-4 h-4" />
-            Envoi SMS Groupé professionnel
+            <Star className="w-4 h-4" />
+            Réputation locale · Avis Google
           </motion.div>
 
           <motion.h1
@@ -105,9 +105,8 @@ export default function SmsLanding() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="text-4xl md:text-6xl font-heading font-bold leading-tight mb-6"
           >
-            Touchez{" "}
-            <span className="gradient-text">des centaines de clients</span>
-            {" "}en un seul envoi
+            Boostez vos avis Google{" "}
+            <span className="gradient-text">en un clic</span>
           </motion.h1>
 
           <motion.p
@@ -116,8 +115,8 @@ export default function SmsLanding() {
             transition={{ duration: 0.55, delay: 0.2 }}
             className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10"
           >
-            Importez votre liste Excel ou CSV, rédigez votre message et envoyez.
-            Paiement à l'usage, sans abonnement. Zéro friction.
+            Envoyez un SMS avec votre lien d'avis Google à toute votre base clients en quelques secondes.
+            Paiement à l'usage, sans abonnement.
           </motion.p>
 
           <motion.div
@@ -151,7 +150,7 @@ export default function SmsLanding() {
             <span className="w-px h-4 bg-white/10" />
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4" /> Hébergement 🇫🇷</span>
             <span className="w-px h-4 bg-white/10" />
-            <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Livraison instantanée</span>
+            <span className="flex items-center gap-1.5"><Star className="w-4 h-4" /> Conçu pour les avis Google</span>
           </motion.div>
         </div>
       </section>
@@ -161,11 +160,11 @@ export default function SmsLanding() {
         <div className="container mx-auto max-w-5xl">
           <FadeIn className="text-center mb-14">
             <h2 className="section-title mb-4">
-              Pourquoi choisir{" "}
+              Pourquoi les pros choisissent{" "}
               <span className="gradient-text">Ndigital SMS ?</span>
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto">
-              Conçu pour les professionnels qui veulent aller droit au but, sans complexité technique.
+              La réputation locale se joue sur Google. Un SMS au bon moment transforme un client satisfait en ambassadeur.
             </p>
           </FadeIn>
 
@@ -197,12 +196,12 @@ export default function SmsLanding() {
                 Import Excel &amp; CSV
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold mb-5 leading-tight">
-                Vos contacts en{" "}
-                <span className="gradient-text">10 secondes chrono</span>
+                Vos clients reçoivent votre lien Google{" "}
+                <span className="gradient-text">en 10 secondes</span>
               </h2>
               <p className="text-white/55 mb-8 leading-relaxed">
-                Exportez votre base clients depuis votre logiciel de caisse, votre CRM ou un simple tableur.
-                Glissez le fichier dans Ndigital SMS : les numéros sont détectés automatiquement.
+                Exportez votre base clients depuis votre logiciel de caisse, votre CRM ou un tableur.
+                Glissez le fichier : les numéros sont détectés automatiquement et votre lien d'avis Google est intégré dans le message.
               </p>
               <ul className="space-y-3">
                 {IMPORT_FEATURES.map((f) => (
@@ -220,7 +219,7 @@ export default function SmsLanding() {
                 {/* Fake file drop zone */}
                 <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center mb-4">
                   <Upload className="w-8 h-8 text-white/25 mx-auto mb-2" />
-                  <p className="text-white/40 text-sm">clients_juillet.xlsx</p>
+                  <p className="text-white/40 text-sm">clients_avis_juillet.xlsx</p>
                   <p className="text-white/25 text-xs mt-1">Déposez votre fichier ici</p>
                 </div>
                 {/* Fake result */}
@@ -294,11 +293,11 @@ export default function SmsLanding() {
         <div className="container mx-auto max-w-2xl text-center">
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-5">
-              Prêt à envoyer votre{" "}
-              <span className="gradient-text">premier envoi groupé ?</span>
+              Prêt à décrocher vos{" "}
+              <span className="gradient-text">prochains avis Google ?</span>
             </h2>
             <p className="text-white/55 mb-10 text-lg">
-              Créez votre compte en 30 secondes, aucune carte bancaire requise.
+              Vos clients reçoivent un SMS avec votre lien Google. Ils laissent un avis en 15 secondes.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to={ctaHref} className="btn-orange text-base px-8 py-3.5">
