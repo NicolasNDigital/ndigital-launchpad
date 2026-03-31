@@ -14,7 +14,79 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          id: string
+          email: string | null
+          full_name: string | null
+          sms_credits: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          email?: string | null
+          full_name?: string | null
+          sms_credits?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string | null
+          full_name?: string | null
+          sms_credits?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_logs: {
+        Row: {
+          id: string
+          user_id: string
+          recipient: string
+          message: string
+          status: string
+          cost: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          recipient: string
+          message: string
+          status?: string
+          cost?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          recipient?: string
+          message?: string
+          status?: string
+          cost?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
