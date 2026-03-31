@@ -78,7 +78,7 @@ export default function CampaignSidebar({
 
         <div className="mt-4 flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-white/40 text-xs">Twilio · Prêt</span>
+          <span className="text-white/40 text-xs">Service · Prêt</span>
         </div>
       </div>
 
