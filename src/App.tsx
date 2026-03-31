@@ -12,7 +12,7 @@ import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import Parrainage from "./pages/Parrainage";
 import AuditVisibiliteIA from "./pages/AuditVisibiliteIA";
 import LexiqueIASEO from "./pages/LexiqueIASEO";
-import BulkSms from "./pages/BulkSms";
+import Dashboard from "./pages/Dashboard";
 import SmsLanding from "./pages/SmsLanding";
 import Auth from "./pages/Auth";
 const queryClient = new QueryClient();
@@ -37,7 +37,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/envoi-groupe" element={
             <ProtectedRoute redirectTo="/sms-groupes">
-              <BulkSms />
+              <Dashboard />
             </ProtectedRoute>
           } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
