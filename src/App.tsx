@@ -14,6 +14,7 @@ import AuditVisibiliteIA from "./pages/AuditVisibiliteIA";
 import LexiqueIASEO from "./pages/LexiqueIASEO";
 import BulkSms from "./pages/BulkSms";
 import SmsLanding from "./pages/SmsLanding";
+import Auth from "./pages/Auth";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -33,6 +34,7 @@ const App = () => (
           {/* Redirection 301 pour préserver le SEO */}
           <Route path="/audit-visibilite-ia" element={<Navigate to="/test-visibilite-ia" replace />} />
           <Route path="/sms-groupes" element={<SmsLanding />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/envoi-groupe" element={
             <ProtectedRoute redirectTo="/sms-groupes">
               <BulkSms />
