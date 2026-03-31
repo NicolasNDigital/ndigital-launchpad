@@ -8,7 +8,7 @@ import {
   Check, CheckCircle2, AlertCircle, Loader2,
   ChevronLeft, ChevronRight, FileSpreadsheet, X, Eye,
   AlertTriangle, UserX, ArrowRight, Star, Smartphone,
-  LayoutDashboard, Pencil, Trash2,
+  LayoutDashboard, Pencil, Trash2, User, UserCheck, Phone,
 } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
@@ -275,41 +275,74 @@ function SuccessScreen({ onBack }: { onBack: () => void }) {
 // ── Mapping row ────────────────────────────────────────────────────────────
 
 function MappingRow({
-  label, required, value, columns, detected, onChange,
+  label, required, icon: Icon, value, columns, detected, onChange,
 }: {
   label: string
   required?: boolean
+  icon: React.ElementType
   value: string
   columns: string[]
   detected: boolean
   onChange: (v: string) => void
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-32 flex-shrink-0">
-        <span className="text-white/60 text-sm">{label}</span>
-        {required && <span className="text-red-400 ml-0.5">*</span>}
+    <div className="flex items-center gap-3 py-3">
+      {/* Field label */}
+      <div className="flex items-center gap-2.5 w-32 flex-shrink-0">
+        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+          value ? (detected ? "bg-green-500/10 border border-green-500/20" : "bg-electric-violet/10 border border-electric-violet/20")
+                : required ? "bg-red-500/8 border border-red-500/20" : "bg-white/5 border border-white/10"
+        }`}>
+          <Icon className={`w-3.5 h-3.5 ${
+            value ? (detected ? "text-green-400" : "text-electric-violet")
+                  : required ? "text-red-400/60" : "text-white/30"
+          }`} />
+        </div>
+        <div className="flex items-center gap-0.5">
+          <span className="text-white/75 text-sm font-medium">{label}</span>
+          {required && <span className="text-electric-violet text-sm">*</span>}
+        </div>
       </div>
-      <ArrowRight className="w-4 h-4 text-white/20 flex-shrink-0" />
-      <div className="flex-1 relative">
+
+      {/* Arrow */}
+      <ArrowRight className="w-3.5 h-3.5 text-white/15 flex-shrink-0" />
+
+      {/* Select */}
+      <div className="flex-1">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
           style={SELECT_STYLE}
-          className={`w-full border rounded-xl px-3 py-2.5 text-sm outline-none transition-colors ${
+          className={`w-full border rounded-xl px-3 py-2 text-sm outline-none transition-all ${
             value
-              ? detected ? "border-green-500/40" : "border-electric-violet/40"
-              : required ? "border-red-500/40" : "border-white/10"
+              ? detected
+                ? "border-green-500/30 focus:border-green-400/60"
+                : "border-electric-violet/35 focus:border-electric-violet/70"
+              : required
+                ? "border-red-500/25 focus:border-red-400/50"
+                : "border-white/8 focus:border-white/20"
           }`}
         >
           <option value="" style={{ backgroundColor: "#0f0f1a" }}>— non mappé —</option>
           {columns.map((c) => <option key={c} value={c} style={{ backgroundColor: "#0f0f1a" }}>{c}</option>)}
         </select>
       </div>
-      <div className="w-16 text-right flex-shrink-0">
-        {value && detected && <span className="text-green-400 text-[10px]">Auto</span>}
-        {value && !detected && <span className="text-electric-violet text-[10px]">Manuel</span>}
-        {!value && required && <span className="text-red-400 text-[10px]">Requis</span>}
+
+      {/* Status pill */}
+      <div className="w-16 flex justify-end flex-shrink-0">
+        {value && detected && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full border border-green-400/15">
+            <Check className="w-2.5 h-2.5" /> Auto
+          </span>
+        )}
+        {value && !detected && (
+          <span className="text-[10px] font-medium text-electric-violet bg-electric-violet/10 px-2 py-0.5 rounded-full border border-electric-violet/20">
+            Manuel
+          </span>
+        )}
+        {!value && required && (
+          <span className="text-[10px] text-red-400/60">Requis</span>
+        )}
       </div>
     </div>
   )
@@ -576,84 +609,127 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
       {/* Mapping */}
       {state.allColumns.length > 0 && (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-3">
-          <p className="text-white/50 text-xs uppercase tracking-wide font-medium mb-1">Mapping des colonnes</p>
-          <MappingRow
-            label="Prénom" value={state.firstNameColumn ?? ""}
-            columns={state.allColumns}
-            detected={state.firstNameColumn === detectCol(state.allColumns, FIRSTNAME_CANDIDATES)}
-            onChange={(v) => remapColumns(state.phoneColumn!, v || null, state.lastNameColumn)}
-          />
-          <MappingRow
-            label="Nom" value={state.lastNameColumn ?? ""}
-            columns={state.allColumns}
-            detected={state.lastNameColumn === detectCol(state.allColumns, LASTNAME_CANDIDATES)}
-            onChange={(v) => remapColumns(state.phoneColumn!, state.firstNameColumn, v || null)}
-          />
-          <MappingRow
-            label="Téléphone" required value={state.phoneColumn ?? ""}
-            columns={state.allColumns}
-            detected={state.phoneColumn === detectCol(state.allColumns, PHONE_CANDIDATES)}
-            onChange={(v) => v && remapColumns(v, state.firstNameColumn, state.lastNameColumn)}
-          />
+        <div className="bg-white/[0.03] border border-white/8 rounded-2xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/8 flex items-center gap-2"
+               style={{ background: "rgba(139,92,246,0.04)" }}>
+            <div className="w-5 h-5 rounded-md bg-electric-violet/15 border border-electric-violet/20 flex items-center justify-center">
+              <ArrowRight className="w-3 h-3 text-electric-violet" />
+            </div>
+            <span className="text-white/55 text-xs font-medium uppercase tracking-wider">Mapping des colonnes</span>
+          </div>
+          <div className="px-4 divide-y divide-white/[0.06]">
+            <MappingRow
+              label="Prénom" icon={User} value={state.firstNameColumn ?? ""}
+              columns={state.allColumns}
+              detected={state.firstNameColumn === detectCol(state.allColumns, FIRSTNAME_CANDIDATES)}
+              onChange={(v) => remapColumns(state.phoneColumn!, v || null, state.lastNameColumn)}
+            />
+            <MappingRow
+              label="Nom" icon={UserCheck} value={state.lastNameColumn ?? ""}
+              columns={state.allColumns}
+              detected={state.lastNameColumn === detectCol(state.allColumns, LASTNAME_CANDIDATES)}
+              onChange={(v) => remapColumns(state.phoneColumn!, state.firstNameColumn, v || null)}
+            />
+            <MappingRow
+              label="Téléphone" required icon={Phone} value={state.phoneColumn ?? ""}
+              columns={state.allColumns}
+              detected={state.phoneColumn === detectCol(state.allColumns, PHONE_CANDIDATES)}
+              onChange={(v) => v && remapColumns(v, state.firstNameColumn, state.lastNameColumn)}
+            />
+          </div>
         </div>
       )}
 
       {/* Contact list */}
       {state.contactRows.length > 0 && (
-        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-white/[0.03] border border-white/8 rounded-2xl overflow-hidden">
+
           {/* Summary bar */}
-          <div className="px-4 py-3 border-b border-white/8 flex items-center gap-3 flex-wrap">
-            <span className="text-white/60 text-xs">{state.contactRows.length} ligne{state.contactRows.length > 1 ? "s" : ""}</span>
-            {okCount     > 0 && <span className="flex items-center gap-1 text-green-400  text-xs"><span className="w-1.5 h-1.5 rounded-full bg-green-400"  />{okCount} OK</span>}
-            {recentCount > 0 && <span className="flex items-center gap-1 text-warning    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-warning"    />{recentCount} récent{recentCount > 1 ? "s" : ""}</span>}
-            {dupeCount   > 0 && <span className="flex items-center gap-1 text-red-400    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-red-400"    />{dupeCount} doublon{dupeCount > 1 ? "s" : ""}</span>}
-            {badCount    > 0 && <span className="flex items-center gap-1 text-red-400    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-red-400"    />{badCount} invalide{badCount > 1 ? "s" : ""}</span>}
+          <div className="px-4 py-3 border-b border-white/8 flex items-center gap-2 flex-wrap"
+               style={{ background: "rgba(255,255,255,0.02)" }}>
+            <span className="text-white/40 text-xs mr-1">{state.contactRows.length} contact{state.contactRows.length > 1 ? "s" : ""}</span>
+            {okCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-400 bg-green-400/10 border border-green-400/15 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />{okCount} OK
+              </span>
+            )}
+            {recentCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-warning bg-warning/10 border border-warning/15 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-warning flex-shrink-0" />{recentCount} récent{recentCount > 1 ? "s" : ""}
+              </span>
+            )}
+            {dupeCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-red-400 bg-red-400/10 border border-red-400/15 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />{dupeCount} doublon{dupeCount > 1 ? "s" : ""}
+              </span>
+            )}
+            {badCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-red-400 bg-red-400/10 border border-red-400/15 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />{badCount} invalide{badCount > 1 ? "s" : ""}
+              </span>
+            )}
           </div>
 
           {/* Table */}
-          <div className="max-h-64 overflow-y-auto">
-            <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-[#0d0d1a]">
+          <div className="max-h-72 overflow-y-auto">
+            <table className="w-full">
+              <thead className="sticky top-0 z-10" style={{ background: "#0c0c18" }}>
                 <tr>
                   {["#", "Prénom", "Nom", "Téléphone", "Statut", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 text-left text-white/30 font-medium uppercase tracking-wide">{h}</th>
+                    <th key={h} className="px-4 py-2.5 text-left text-[10px] font-semibold text-white/25 uppercase tracking-widest">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody>
-                {state.contactRows.map((row, i) => (
-                  <tr key={row.id} className={`border-t border-white/5 ${row.status === "invalid" || row.status === "duplicate" ? "opacity-60" : ""}`}>
-                    <td className="px-3 py-2 text-white/25">{i + 1}</td>
-                    <td className="px-3 py-2 text-white/70">{row.firstName || <span className="text-white/20">—</span>}</td>
-                    <td className="px-3 py-2 text-white/70">{row.lastName  || <span className="text-white/20">—</span>}</td>
-                    <td className="px-3 py-2 font-mono">
-                      {editingId === row.id ? (
-                        <input
-                          autoFocus
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          onBlur={() => commitEdit(row.id)}
-                          onKeyDown={(e) => { if (e.key === "Enter") commitEdit(row.id); if (e.key === "Escape") setEditingId(null) }}
-                          className="bg-white/10 border border-electric-violet/50 rounded px-2 py-0.5 text-white w-32 outline-none text-xs"
-                        />
-                      ) : (
-                        <span className={row.status === "invalid" ? "text-red-400" : "text-white/80"}>{row.phone || row.rawPhone}</span>
-                      )}
-                    </td>
-                    <td className="px-3 py-2"><StatusBadge status={row.status} /></td>
-                    <td className="px-3 py-2">
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => startEdit(row)} className="p-1 rounded text-white/30 hover:text-electric-violet hover:bg-electric-violet/10 transition-colors">
-                          <Pencil className="w-3 h-3" />
-                        </button>
-                        <button onClick={() => deleteRow(row.id)} className="p-1 rounded text-white/30 hover:text-red-400 hover:bg-red-400/10 transition-colors">
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-white/[0.04]">
+                {state.contactRows.map((row, i) => {
+                  const isOk = row.status === "ok" || row.status === "recent"
+                  return (
+                    <tr
+                      key={row.id}
+                      className={`group transition-colors hover:bg-white/[0.025] ${!isOk ? "opacity-55" : ""}`}
+                    >
+                      <td className="px-4 py-2.5 text-[11px] text-white/20 tabular-nums">{i + 1}</td>
+                      <td className="px-4 py-2.5 text-xs text-white/60">{row.firstName || <span className="text-white/15">—</span>}</td>
+                      <td className="px-4 py-2.5 text-xs text-white/60">{row.lastName  || <span className="text-white/15">—</span>}</td>
+                      <td className="px-4 py-2.5">
+                        {editingId === row.id ? (
+                          <input
+                            autoFocus
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            onBlur={() => commitEdit(row.id)}
+                            onKeyDown={(e) => { if (e.key === "Enter") commitEdit(row.id); if (e.key === "Escape") setEditingId(null) }}
+                            className="bg-white/8 border border-electric-violet/50 rounded-lg px-2 py-1 text-white/90 w-36 outline-none text-xs font-mono focus:ring-1 focus:ring-electric-violet/30"
+                          />
+                        ) : (
+                          <span className={`text-xs font-mono ${
+                            row.status === "invalid" ? "text-red-400" :
+                            row.status === "duplicate" ? "text-red-400/60" :
+                            row.status === "recent" ? "text-warning/80" :
+                            "text-white/75"
+                          }`}>{row.phone || row.rawPhone}</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5"><StatusBadge status={row.status} /></td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => startEdit(row)}
+                            className="p-1.5 rounded-lg text-white/30 hover:text-electric-violet hover:bg-electric-violet/10 transition-colors"
+                          >
+                            <Pencil className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={() => deleteRow(row.id)}
+                            className="p-1.5 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
