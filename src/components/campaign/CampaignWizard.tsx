@@ -35,7 +35,15 @@ const TEMPLATES = [
   },
 ]
 
-const FAKE_LINK = "https://g.page/r/exemple-avis"
+const FAKE_LINK = "avis-pro.eu/nXXXX"
+const SMS_DOMAIN = "avis-pro.eu"
+
+function generateShortCode(): string {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+  let code = "n"
+  for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)]
+  return code
+}
 
 // ── Phone cleaning ─────────────────────────────────────────────────────────
 
@@ -91,6 +99,8 @@ interface WizardState {
   rgpdAccepted: boolean
   selectedTemplate: number | null
   googleLink: string
+  shortCode: string | null
+  shortLinkSaved: boolean
   message: string
   campaignName: string
 }
@@ -276,8 +286,9 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
     contacts: [], fileName: null, phoneColumn: null,
     allColumns: [], allRows: [], duplicatesRemoved: 0, autoDetected: false,
     recentlySent: [], recentChecked: false, recentExcluded: false,
-    rgpdAccepted: false, selectedTemplate: null, googleLink: "", message: "",
-    campaignName: "",
+    rgpdAccepted: false, selectedTemplate: null,
+    googleLink: "", shortCode: null, shortLinkSaved: false,
+    message: "", campaignName: "",
   })
 
   const credits   = profile?.sms_credits ?? 0
@@ -286,31 +297,51 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
   // ── Template helpers ──────────────────────────────────────────────────
 
-  function buildMessage(templateIdx: number, googleLink: string) {
-    const link = googleLink.trim() || FAKE_LINK
-    return TEMPLATES[templateIdx].text.replace("[LIEN]", link)
+  function buildMessage(templateIdx: number, shortCode: string | null) {
+    const smsLink = shortCode ? `${SMS_DOMAIN}/${shortCode}` : FAKE_LINK
+    return TEMPLATES[templateIdx].text.replace("[LIEN]", smsLink)
   }
 
   function selectTemplate(idx: number) {
     setState((s) => ({
       ...s,
       selectedTemplate: idx,
-      message: buildMessage(idx, s.googleLink),
+      message: buildMessage(idx, s.shortCode),
     }))
   }
 
   function setGoogleLink(link: string) {
-    setState((s) => ({
-      ...s,
-      googleLink: link,
-      message: s.selectedTemplate !== null ? buildMessage(s.selectedTemplate, link) : s.message,
-    }))
+    setState((s) => {
+      // Generate a new short code when a valid link is entered for the first time
+      const newCode = link.trim() && !s.shortCode ? generateShortCode() : s.shortCode
+      return {
+        ...s,
+        googleLink: link,
+        shortCode: newCode,
+        shortLinkSaved: false, // reset: link changed, needs re-save
+        message: s.selectedTemplate !== null ? buildMessage(s.selectedTemplate, newCode) : s.message,
+      }
+    })
   }
 
-  // Computed preview: always show fake link in mockup, real link in summary
+  // Persist short link to DB before sending (idempotent)
+  async function ensureShortLinkSaved(): Promise<boolean> {
+    if (!user || !state.shortCode || !state.googleLink.trim()) return false
+    if (state.shortLinkSaved) return true
+
+    const { error } = await supabase.from("short_links").upsert(
+      { short_code: state.shortCode, destination_url: state.googleLink.trim(), user_id: user.id },
+      { onConflict: "short_code" }
+    )
+    if (error) { toast.error("Erreur lors de la création du lien court."); return false }
+    setState((s) => ({ ...s, shortLinkSaved: true }))
+    return true
+  }
+
+  // Computed preview: always show the real short code (or placeholder) in the mockup
   const previewMessage =
     state.selectedTemplate !== null
-      ? TEMPLATES[state.selectedTemplate].text.replace("[LIEN]", FAKE_LINK)
+      ? buildMessage(state.selectedTemplate, state.shortCode)
       : ""
 
   // ── Navigation ────────────────────────────────────────────────────────
@@ -399,6 +430,8 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
   async function handleSend() {
     if (!user) return
+    const saved = await ensureShortLinkSaved()
+    if (!saved) return
     setSending(true)
     setProgress(0)
     const timer = setInterval(() => setProgress((p) => (p < 88 ? p + 4 : p)), 350)

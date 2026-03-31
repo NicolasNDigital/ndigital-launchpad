@@ -49,6 +49,33 @@ export type Database = {
           },
         ]
       }
+      short_links: {
+        Row: {
+          id: string
+          short_code: string
+          destination_url: string
+          clicks_count: number
+          user_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          short_code: string
+          destination_url: string
+          clicks_count?: number
+          user_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          short_code?: string
+          destination_url?: string
+          clicks_count?: number
+          user_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       sms_logs: {
         Row: {
           id: string
