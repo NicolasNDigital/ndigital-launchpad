@@ -6,6 +6,7 @@ import {
   MessageSquare, BarChart3, ArrowRight, Check, Users, Star
 } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
+import Header from "@/components/Header"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -79,6 +80,7 @@ export default function SmsLanding() {
 
   return (
     <div className="min-h-screen bg-deep-black text-white overflow-x-hidden">
+      <Header />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative pt-32 pb-24 px-4">
