@@ -8,7 +8,7 @@ import {
   Check, CheckCircle2, AlertCircle, Loader2,
   ChevronLeft, ChevronRight, FileSpreadsheet, X, Eye,
   AlertTriangle, UserX, ArrowRight, Star, Smartphone,
-  LayoutDashboard,
+  LayoutDashboard, Pencil, Trash2,
 } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
@@ -45,7 +45,7 @@ function generateShortCode(): string {
   return code
 }
 
-// ── Phone cleaning ─────────────────────────────────────────────────────────
+// ── Phone helpers ──────────────────────────────────────────────────────────
 
 function cleanPhoneNumber(raw: string): string {
   const n = raw.replace(/[\s.\-()\/]/g, "").trim()
@@ -56,12 +56,8 @@ function cleanPhoneNumber(raw: string): string {
   return n
 }
 
-function processContacts(raw: string[]): { cleaned: string[]; duplicatesRemoved: number } {
-  const cleaned = raw.map(cleanPhoneNumber).filter(Boolean)
-  const seen = new Set<string>()
-  const unique: string[] = []
-  for (const c of cleaned) { if (!seen.has(c)) { seen.add(c); unique.push(c) } }
-  return { cleaned: unique, duplicatesRemoved: cleaned.length - unique.length }
+function isValidPhone(phone: string): boolean {
+  return /^\+[1-9]\d{7,14}$/.test(phone)
 }
 
 // ── Column detection ───────────────────────────────────────────────────────
@@ -70,15 +66,52 @@ const PHONE_CANDIDATES = [
   "phone", "telephone", "téléphone", "tel", "tél", "mobile",
   "numero", "numéro", "recipient", "destinataire", "portable", "gsm", "number",
 ]
+const FIRSTNAME_CANDIDATES = ["prenom", "prénom", "firstname", "first_name", "first", "givenname"]
+const LASTNAME_CANDIDATES  = ["nom", "lastname", "last_name", "last", "surname", "familyname"]
 
-function detectPhoneColumn(headers: string[]): string | null {
+function detectCol(headers: string[], candidates: string[]): string | null {
   const norm = headers.map((h) => h.toLowerCase().trim())
-  for (const c of PHONE_CANDIDATES) { const i = norm.indexOf(c); if (i !== -1) return headers[i] }
+  for (const c of candidates) { const i = norm.indexOf(c); if (i !== -1) return headers[i] }
   return null
 }
 
-function extractRaw(rows: Record<string, string>[], col: string): string[] {
-  return rows.map((r) => r[col]?.toString().trim()).filter(Boolean)
+// ── ContactRow ─────────────────────────────────────────────────────────────
+
+type RowStatus = "ok" | "recent" | "duplicate" | "invalid"
+
+interface ContactRow {
+  id: number
+  phone: string       // cleaned/normalized
+  rawPhone: string    // as read from file
+  firstName: string
+  lastName: string
+  status: RowStatus
+}
+
+function buildContactRows(
+  rows: Record<string, string>[],
+  phoneCol: string,
+  firstNameCol: string | null,
+  lastNameCol: string | null,
+): ContactRow[] {
+  const seen = new Set<string>()
+  return rows
+    .filter((r) => r[phoneCol]?.toString().trim())
+    .map((r, i) => {
+      const rawPhone  = r[phoneCol]?.toString().trim() ?? ""
+      const phone     = cleanPhoneNumber(rawPhone)
+      const firstName = firstNameCol ? (r[firstNameCol]?.toString().trim() ?? "") : ""
+      const lastName  = lastNameCol  ? (r[lastNameCol]?.toString().trim()  ?? "") : ""
+      let status: RowStatus = "ok"
+      if (!phone || !isValidPhone(phone)) {
+        status = "invalid"
+      } else if (seen.has(phone)) {
+        status = "duplicate"
+      } else {
+        seen.add(phone)
+      }
+      return { id: i, phone, rawPhone, firstName, lastName, status }
+    })
 }
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -86,14 +119,13 @@ function extractRaw(rows: Record<string, string>[], col: string): string[] {
 type SmsResult = { recipient: string; status: "sent" | "failed"; error?: string }
 
 interface WizardState {
-  contacts: string[]
+  contactRows: ContactRow[]
   fileName: string | null
   phoneColumn: string | null
+  firstNameColumn: string | null
+  lastNameColumn: string | null
   allColumns: string[]
   allRows: Record<string, string>[]
-  duplicatesRemoved: number
-  autoDetected: boolean
-  recentlySent: string[]
   recentChecked: boolean
   recentExcluded: boolean
   rgpdAccepted: boolean
@@ -118,25 +150,44 @@ const SLIDE = {
   exit:  (dir: number) => ({ opacity: 0, x: dir > 0 ? -40 : 40 }),
 }
 
+// ── Select dark style (native select ignores Tailwind bg) ─────────────────
+
+const SELECT_STYLE: React.CSSProperties = {
+  backgroundColor: "#0f0f1a",
+  color: "rgba(255,255,255,0.85)",
+}
+
+// ── Status badge ───────────────────────────────────────────────────────────
+
+const STATUS_CONFIG: Record<RowStatus, { label: string; cls: string; dot: string }> = {
+  ok:        { label: "OK",        cls: "text-green-400 bg-green-400/10 border-green-400/20",  dot: "bg-green-400"  },
+  recent:    { label: "Récent",    cls: "text-warning bg-warning/10 border-warning/20",         dot: "bg-warning"    },
+  duplicate: { label: "Doublon",   cls: "text-red-400 bg-red-400/10 border-red-400/20",         dot: "bg-red-400"    },
+  invalid:   { label: "Invalide",  cls: "text-red-400 bg-red-400/10 border-red-400/20",         dot: "bg-red-400"    },
+}
+
+function StatusBadge({ status }: { status: RowStatus }) {
+  const cfg = STATUS_CONFIG[status]
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium ${cfg.cls}`}>
+      <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cfg.dot}`} />
+      {cfg.label}
+    </span>
+  )
+}
+
 // ── Smartphone mockup ──────────────────────────────────────────────────────
 
 function SmartphonePreview({ message }: { message: string }) {
   return (
-    <div
-      className="relative mx-auto select-none"
-      style={{ width: 200 }}
-    >
-      {/* Body */}
+    <div className="relative mx-auto select-none" style={{ width: 200 }}>
       <div
         className="bg-[#0d0d1a] rounded-[2.2rem] border-2 border-electric-violet/40 overflow-hidden"
         style={{ boxShadow: "0 0 40px rgba(139,92,246,0.18), inset 0 0 0 1px rgba(139,92,246,0.1)" }}
       >
-        {/* Notch bar */}
         <div className="flex justify-center pt-3 pb-2 bg-black/40">
           <div className="w-16 h-4 bg-black rounded-full" />
         </div>
-
-        {/* Status bar */}
         <div className="flex justify-between items-center px-4 py-1 text-white/25 text-[9px]">
           <span>9:41</span>
           <span className="flex gap-0.5">
@@ -145,8 +196,6 @@ function SmartphonePreview({ message }: { message: string }) {
             ))}
           </span>
         </div>
-
-        {/* Contact header */}
         <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-full bg-electric-violet/20 border border-electric-violet/30 flex items-center justify-center flex-shrink-0">
             <Star className="w-3.5 h-3.5 text-electric-violet" />
@@ -156,39 +205,25 @@ function SmartphonePreview({ message }: { message: string }) {
             <p className="text-white/30 text-[9px] mt-0.5">SMS</p>
           </div>
         </div>
-
-        {/* Screen / bubble area */}
         <div className="bg-[#0a0a18] px-3 py-4 min-h-[140px]">
           <AnimatePresence mode="wait">
-            <motion.div
-              key={message}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex justify-start"
-            >
-              {message ? (
-                <div className="max-w-[90%] bg-[#1e1e30] border border-white/8 rounded-2xl rounded-tl-sm px-3 py-2.5">
-                  <p className="text-white/80 text-[11px] leading-relaxed">{message}</p>
-                  <p className="text-white/25 text-[9px] text-right mt-1.5">Maintenant</p>
-                </div>
-              ) : (
-                <p className="text-white/20 text-[10px] italic">Choisissez un modèle…</p>
-              )}
+            <motion.div key={message} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="flex justify-start">
+              {message
+                ? <div className="max-w-[90%] bg-[#1e1e30] border border-white/8 rounded-2xl rounded-tl-sm px-3 py-2.5">
+                    <p className="text-white/80 text-[11px] leading-relaxed">{message}</p>
+                    <p className="text-white/25 text-[9px] text-right mt-1.5">Maintenant</p>
+                  </div>
+                : <p className="text-white/20 text-[10px] italic">Choisissez un modèle…</p>
+              }
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Bottom bar */}
         <div className="px-3 py-2 bg-black/30 flex items-center gap-2">
           <div className="flex-1 h-6 rounded-full bg-white/5 border border-white/8" />
           <div className="w-6 h-6 rounded-full bg-electric-violet/30 flex items-center justify-center flex-shrink-0">
             <Send className="w-3 h-3 text-electric-violet" />
           </div>
         </div>
-
-        {/* Home bar */}
         <div className="flex justify-center pb-2 pt-1">
           <div className="w-10 h-1 bg-white/20 rounded-full" />
         </div>
@@ -197,72 +232,86 @@ function SmartphonePreview({ message }: { message: string }) {
   )
 }
 
-// ── Success animation ──────────────────────────────────────────────────────
+// ── Success screen ─────────────────────────────────────────────────────────
 
 function SuccessScreen({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     const end = Date.now() + 2200
     const colors = ["#8b5cf6", "#06b6d4", "#f59e0b", "#ffffff"]
     const frame = () => {
-      confetti({
-        particleCount: 6,
-        angle: 60,  spread: 55, origin: { x: 0 }, colors,
-        startVelocity: 45, gravity: 0.8,
-      })
-      confetti({
-        particleCount: 6,
-        angle: 120, spread: 55, origin: { x: 1 }, colors,
-        startVelocity: 45, gravity: 0.8,
-      })
+      confetti({ particleCount: 6, angle: 60,  spread: 55, origin: { x: 0 }, colors, startVelocity: 45, gravity: 0.8 })
+      confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 }, colors, startVelocity: 45, gravity: 0.8 })
       if (Date.now() < end) requestAnimationFrame(frame)
     }
     frame()
   }, [])
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="text-center py-10"
-    >
-      {/* Pulsing rings */}
+    <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
       <div className="relative w-24 h-24 mx-auto mb-8">
         {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="absolute inset-0 rounded-full border-2 border-electric-violet"
-            initial={{ scale: 1, opacity: 0.6 }}
-            animate={{ scale: 2.2 + i * 0.5, opacity: 0 }}
-            transition={{ duration: 1.8, delay: i * 0.35, repeat: Infinity, ease: "easeOut" }}
-          />
+          <motion.div key={i} className="absolute inset-0 rounded-full border-2 border-electric-violet"
+            initial={{ scale: 1, opacity: 0.6 }} animate={{ scale: 2.2 + i * 0.5, opacity: 0 }}
+            transition={{ duration: 1.8, delay: i * 0.35, repeat: Infinity, ease: "easeOut" }} />
         ))}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
           transition={{ type: "spring", damping: 12, stiffness: 200, delay: 0.1 }}
           className="w-24 h-24 rounded-full bg-electric-violet/15 border-2 border-electric-violet flex items-center justify-center"
-          style={{ boxShadow: "0 0 40px rgba(139,92,246,0.4)" }}
-        >
+          style={{ boxShadow: "0 0 40px rgba(139,92,246,0.4)" }}>
           <CheckCircle2 className="w-11 h-11 text-electric-violet" />
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <h3 className="text-2xl font-heading font-bold text-white mb-2">Campagne envoyée !</h3>
         <p className="text-white/50 mb-8">Vos clients vont recevoir votre demande d'avis sous peu.</p>
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-electric-violet hover:bg-electric-violet/80 text-white font-semibold transition-all"
-        >
-          <LayoutDashboard className="w-4 h-4" />
-          Retour au Dashboard
+        <button onClick={onBack} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-electric-violet hover:bg-electric-violet/80 text-white font-semibold transition-all">
+          <LayoutDashboard className="w-4 h-4" /> Retour au Dashboard
         </button>
       </motion.div>
     </motion.div>
+  )
+}
+
+// ── Mapping row ────────────────────────────────────────────────────────────
+
+function MappingRow({
+  label, required, value, columns, detected, onChange,
+}: {
+  label: string
+  required?: boolean
+  value: string
+  columns: string[]
+  detected: boolean
+  onChange: (v: string) => void
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-32 flex-shrink-0">
+        <span className="text-white/60 text-sm">{label}</span>
+        {required && <span className="text-red-400 ml-0.5">*</span>}
+      </div>
+      <ArrowRight className="w-4 h-4 text-white/20 flex-shrink-0" />
+      <div className="flex-1 relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={SELECT_STYLE}
+          className={`w-full border rounded-xl px-3 py-2.5 text-sm outline-none transition-colors ${
+            value
+              ? detected ? "border-green-500/40" : "border-electric-violet/40"
+              : required ? "border-red-500/40" : "border-white/10"
+          }`}
+        >
+          <option value="" style={{ backgroundColor: "#0f0f1a" }}>— non mappé —</option>
+          {columns.map((c) => <option key={c} value={c} style={{ backgroundColor: "#0f0f1a" }}>{c}</option>)}
+        </select>
+      </div>
+      <div className="w-16 text-right flex-shrink-0">
+        {value && detected && <span className="text-green-400 text-[10px]">Auto</span>}
+        {value && !detected && <span className="text-electric-violet text-[10px]">Manuel</span>}
+        {!value && required && <span className="text-red-400 text-[10px]">Requis</span>}
+      </div>
+    </div>
   )
 }
 
@@ -275,25 +324,37 @@ interface CampaignWizardProps {
 
 export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps) {
   const { user, profile } = useAuth()
-  const [step, setStep]       = useState(0)
-  const [dir,  setDir]        = useState(1)
-  const [sending, setSending] = useState(false)
+  const [step, setStep]         = useState(0)
+  const [dir,  setDir]          = useState(1)
+  const [sending, setSending]   = useState(false)
   const [progress, setProgress] = useState(0)
-  const [done, setDone]       = useState(false)
+  const [done, setDone]         = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  // Inline edit state
+  const [editingId,  setEditingId]  = useState<number | null>(null)
+  const [editValue,  setEditValue]  = useState("")
+
   const [state, setState] = useState<WizardState>({
-    contacts: [], fileName: null, phoneColumn: null,
-    allColumns: [], allRows: [], duplicatesRemoved: 0, autoDetected: false,
-    recentlySent: [], recentChecked: false, recentExcluded: false,
+    contactRows: [], fileName: null,
+    phoneColumn: null, firstNameColumn: null, lastNameColumn: null,
+    allColumns: [], allRows: [],
+    recentChecked: false, recentExcluded: false,
     rgpdAccepted: false, selectedTemplate: null,
     googleLink: "", shortCode: null, shortLinkSaved: false,
     message: "", campaignName: "",
   })
 
-  const credits   = profile?.sms_credits ?? 0
-  const cost      = state.contacts.length
-  const hasEnough = credits >= cost
+  // ── Derived values ────────────────────────────────────────────────────
+
+  const contacts  = state.contactRows
+    .filter((r) => r.status === "ok" || r.status === "recent")
+    .map((r) => r.phone)
+
+  const recentRows = state.contactRows.filter((r) => r.status === "recent")
+  const credits    = profile?.sms_credits ?? 0
+  const cost       = contacts.length
+  const hasEnough  = credits >= cost
 
   // ── Template helpers ──────────────────────────────────────────────────
 
@@ -303,54 +364,37 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
   }
 
   function selectTemplate(idx: number) {
-    setState((s) => ({
-      ...s,
-      selectedTemplate: idx,
-      message: buildMessage(idx, s.shortCode),
-    }))
+    setState((s) => ({ ...s, selectedTemplate: idx, message: buildMessage(idx, s.shortCode) }))
   }
 
   function setGoogleLink(link: string) {
     setState((s) => {
-      // Generate code on first valid input; reset to null if link is fully cleared
-      const newCode = link.trim()
-        ? (s.shortCode ?? generateShortCode())
-        : null
+      const newCode = link.trim() ? (s.shortCode ?? generateShortCode()) : null
       return {
-        ...s,
-        googleLink: link,
-        shortCode: newCode,
-        shortLinkSaved: false, // reset: link changed, needs re-save
+        ...s, googleLink: link, shortCode: newCode, shortLinkSaved: false,
         message: s.selectedTemplate !== null ? buildMessage(s.selectedTemplate, newCode) : s.message,
       }
     })
   }
 
-  // ── Auto-save short link as soon as code + link are ready ────────────
+  const previewMessage = state.selectedTemplate !== null
+    ? buildMessage(state.selectedTemplate, state.shortCode) : ""
+
+  // ── Auto-save short link ──────────────────────────────────────────────
+
   useEffect(() => {
     if (!user || !state.shortCode || !state.googleLink.trim() || state.shortLinkSaved) return
-
-    supabase
-      .from("short_links")
-      .upsert(
-        { short_code: state.shortCode, destination_url: state.googleLink.trim(), user_id: user.id },
-        { onConflict: "short_code" }
-      )
-      .then(({ error }) => {
-        if (error) {
-          console.error("[short_links upsert]", error)
-          // Don't toast here — user is still filling the form, silent fail is fine
-        } else {
-          setState((s) => ({ ...s, shortLinkSaved: true }))
-        }
-      })
+    supabase.from("short_links").upsert(
+      { short_code: state.shortCode, destination_url: state.googleLink.trim(), user_id: user.id },
+      { onConflict: "short_code" }
+    ).then(({ error }) => {
+      if (!error) setState((s) => ({ ...s, shortLinkSaved: true }))
+    })
   }, [state.shortCode, state.googleLink, user])
 
-  // Before send: ensure saved (covers edge case where effect hasn't resolved yet)
   async function ensureShortLinkSaved(): Promise<boolean> {
     if (!user || !state.shortCode || !state.googleLink.trim()) return false
     if (state.shortLinkSaved) return true
-
     const { error } = await supabase.from("short_links").upsert(
       { short_code: state.shortCode, destination_url: state.googleLink.trim(), user_id: user.id },
       { onConflict: "short_code" }
@@ -360,17 +404,11 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
     return true
   }
 
-  // Computed preview: always show the real short code (or placeholder) in the mockup
-  const previewMessage =
-    state.selectedTemplate !== null
-      ? buildMessage(state.selectedTemplate, state.shortCode)
-      : ""
-
   // ── Navigation ────────────────────────────────────────────────────────
 
   async function go(next: number) {
-    if (next === 1 && !state.recentChecked && state.contacts.length > 0) {
-      await checkRecentlySent(state.contacts)
+    if (next === 1 && !state.recentChecked && contacts.length > 0) {
+      await checkRecentlySent(contacts)
     }
     setDir(next > step ? 1 : -1)
     setStep(next)
@@ -390,9 +428,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
       const reader = new FileReader()
       reader.onload = (e) => {
         const wb   = XLSX.read(e.target?.result, { type: "binary" })
-        const rows = XLSX.utils.sheet_to_json<Record<string, string>>(
-          wb.Sheets[wb.SheetNames[0]], { defval: "" }
-        )
+        const rows = XLSX.utils.sheet_to_json<Record<string, string>>(wb.Sheets[wb.SheetNames[0]], { defval: "" })
         applyRows(rows, rows.length > 0 ? Object.keys(rows[0]) : [], file.name)
       }
       reader.readAsBinaryString(file)
@@ -402,48 +438,84 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
   }
 
   function applyRows(rows: Record<string, string>[], headers: string[], fileName: string) {
-    const detected = detectPhoneColumn(headers)
-    const col      = detected ?? headers[0] ?? null
-    const raw      = col ? extractRaw(rows, col) : []
-    const { cleaned, duplicatesRemoved } = processContacts(raw)
-    if (duplicatesRemoved > 0)
-      toast.info(`${duplicatesRemoved} doublon${duplicatesRemoved > 1 ? "s" : ""} supprimé${duplicatesRemoved > 1 ? "s" : ""} automatiquement.`)
+    const phoneCol     = detectCol(headers, PHONE_CANDIDATES)     ?? headers[0] ?? null
+    const firstNameCol = detectCol(headers, FIRSTNAME_CANDIDATES)
+    const lastNameCol  = detectCol(headers, LASTNAME_CANDIDATES)
+
+    if (!phoneCol) { toast.error("Aucune colonne valide trouvée."); return }
+
+    const contactRows = buildContactRows(rows, phoneCol, firstNameCol, lastNameCol)
+    const dupes = contactRows.filter((r) => r.status === "duplicate").length
+    const invalids = contactRows.filter((r) => r.status === "invalid").length
+    if (dupes > 0) toast.info(`${dupes} doublon${dupes > 1 ? "s" : ""} détecté${dupes > 1 ? "s" : ""} (rouge).`)
+    if (invalids > 0) toast.warning(`${invalids} numéro${invalids > 1 ? "s" : ""} invalide${invalids > 1 ? "s" : ""} détecté${invalids > 1 ? "s" : ""} (rouge).`)
+
     setState((s) => ({
       ...s, fileName, allColumns: headers, allRows: rows,
-      phoneColumn: col, autoDetected: !!detected,
-      contacts: cleaned, duplicatesRemoved,
-      recentlySent: [], recentChecked: false, recentExcluded: false,
+      phoneColumn: phoneCol,
+      firstNameColumn: firstNameCol,
+      lastNameColumn: lastNameCol,
+      contactRows,
+      recentChecked: false, recentExcluded: false,
     }))
   }
 
-  function changeColumn(col: string) {
-    const { cleaned, duplicatesRemoved } = processContacts(extractRaw(state.allRows, col))
+  function remapColumns(phoneCol: string, firstNameCol: string | null, lastNameCol: string | null) {
+    const rows = buildContactRows(state.allRows, phoneCol, firstNameCol, lastNameCol)
     setState((s) => ({
-      ...s, phoneColumn: col, autoDetected: false,
-      contacts: cleaned, duplicatesRemoved,
-      recentlySent: [], recentChecked: false, recentExcluded: false,
+      ...s, phoneColumn: phoneCol, firstNameColumn: firstNameCol, lastNameColumn: lastNameCol,
+      contactRows: rows, recentChecked: false, recentExcluded: false,
     }))
+  }
+
+  // ── Row inline edit ───────────────────────────────────────────────────
+
+  function startEdit(row: ContactRow) {
+    setEditingId(row.id)
+    setEditValue(row.rawPhone)
+  }
+
+  function commitEdit(rowId: number) {
+    const cleaned = cleanPhoneNumber(editValue.trim())
+    setState((s) => {
+      const others = s.contactRows.filter((r) => r.id !== rowId)
+      const otherPhones = new Set(others.map((r) => r.phone))
+      let status: RowStatus = "ok"
+      if (!cleaned || !isValidPhone(cleaned)) status = "invalid"
+      else if (otherPhones.has(cleaned)) status = "duplicate"
+      const updated = s.contactRows.map((r) =>
+        r.id === rowId ? { ...r, rawPhone: editValue.trim(), phone: cleaned, status } : r
+      )
+      return { ...s, contactRows: updated }
+    })
+    setEditingId(null)
+  }
+
+  function deleteRow(rowId: number) {
+    setState((s) => ({ ...s, contactRows: s.contactRows.filter((r) => r.id !== rowId) }))
   }
 
   // ── Anti-spam check ───────────────────────────────────────────────────
 
-  async function checkRecentlySent(contacts: string[]) {
-    if (!user || contacts.length === 0) return
-    const since = new Date()
-    since.setDate(since.getDate() - 30)
-    const { data } = await supabase
-      .from("sms_logs").select("recipient")
-      .eq("user_id", user.id).gte("created_at", since.toISOString())
-      .in("recipient", contacts)
-    const recent = [...new Set((data ?? []).map((r) => r.recipient))]
-    setState((s) => ({ ...s, recentlySent: recent, recentChecked: true }))
+  async function checkRecentlySent(contactList: string[]) {
+    if (!user || contactList.length === 0) return
+    const since = new Date(); since.setDate(since.getDate() - 30)
+    const { data } = await supabase.from("sms_logs").select("recipient")
+      .eq("user_id", user.id).gte("created_at", since.toISOString()).in("recipient", contactList)
+    const recent = new Set((data ?? []).map((r) => r.recipient))
+    setState((s) => ({
+      ...s,
+      recentChecked: true,
+      contactRows: s.contactRows.map((r) => ({
+        ...r, status: r.status === "ok" && recent.has(r.phone) ? "recent" : r.status,
+      })),
+    }))
   }
 
   function excludeRecentlySent() {
-    const excluded = new Set(state.recentlySent)
     setState((s) => ({
       ...s,
-      contacts: s.contacts.filter((c) => !excluded.has(c)),
+      contactRows: s.contactRows.filter((r) => r.status !== "recent"),
       recentExcluded: true,
     }))
   }
@@ -454,25 +526,19 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
     if (!user) return
     const saved = await ensureShortLinkSaved()
     if (!saved) return
-    setSending(true)
-    setProgress(0)
+    setSending(true); setProgress(0)
     const timer = setInterval(() => setProgress((p) => (p < 88 ? p + 4 : p)), 350)
     try {
       const { data, error } = await supabase.functions.invoke<{
         sent: number; failed: number; results: SmsResult[]
-      }>("send-bulk-sms", {
-        body: { recipients: state.contacts, message: state.message },
-      })
-      clearInterval(timer)
-      setProgress(100)
+      }>("send-bulk-sms", { body: { recipients: contacts, message: state.message } })
+      clearInterval(timer); setProgress(100)
       if (error) throw error
       const { sent, failed } = data!
       setDone(true)
       toast.success(`${sent} SMS envoyé${sent > 1 ? "s" : ""}.${failed > 0 ? ` ${failed} échec(s).` : ""}`)
     } catch (err) {
-      clearInterval(timer)
-      setProgress(0)
-      setSending(false)
+      clearInterval(timer); setProgress(0); setSending(false)
       const msg = err instanceof Error ? err.message : String(err)
       toast.error(msg.includes("Insufficient") ? "Crédits insuffisants." : `Erreur : ${msg}`)
     }
@@ -480,74 +546,117 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
   // ── Step content ──────────────────────────────────────────────────────
 
+  const okCount     = state.contactRows.filter((r) => r.status === "ok").length
+  const recentCount = state.contactRows.filter((r) => r.status === "recent").length
+  const dupeCount   = state.contactRows.filter((r) => r.status === "duplicate").length
+  const badCount    = state.contactRows.filter((r) => r.status === "invalid").length
+
   const stepContent = [
 
     /* ── STEP 1 : Import & Mapping ──────────────────────────────────── */
     <div key="s1" className="space-y-5">
+
+      {/* Drop zone */}
       <div
-        className="border-2 border-dashed border-white/15 hover:border-electric-violet/50 transition-colors rounded-2xl p-10 text-center cursor-pointer group"
+        className="border-2 border-dashed border-white/15 hover:border-electric-violet/50 transition-colors rounded-2xl p-8 text-center cursor-pointer group"
         onClick={() => fileRef.current?.click()}
         onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f) }}
         onDragOver={(e) => e.preventDefault()}
       >
-        <div className="w-14 h-14 rounded-2xl bg-electric-violet/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-electric-violet/20 transition-colors">
-          <Upload className="w-7 h-7 text-electric-violet" />
+        <div className="w-12 h-12 rounded-2xl bg-electric-violet/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-electric-violet/20 transition-colors">
+          <Upload className="w-6 h-6 text-electric-violet" />
         </div>
         {state.fileName
-          ? <><p className="text-white font-medium">{state.fileName}</p><p className="text-white/40 text-sm mt-1">Cliquez pour changer</p></>
-          : <><p className="text-white/60 mb-1">Glissez votre fichier ici</p><p className="text-white/30 text-sm">.csv ou .xlsx acceptés</p></>
+          ? <><p className="text-white font-medium text-sm">{state.fileName}</p><p className="text-white/40 text-xs mt-1">Cliquez pour changer</p></>
+          : <><p className="text-white/60 text-sm mb-1">Glissez votre fichier ici</p><p className="text-white/30 text-xs">.csv ou .xlsx acceptés</p></>
         }
         <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls" className="hidden"
           onChange={(e) => { if (e.target.files?.[0]) handleFile(e.target.files[0]) }} />
       </div>
 
+      {/* Mapping */}
       {state.allColumns.length > 0 && (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-4">
-          <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg ${
-            state.autoDetected ? "bg-green-500/10 text-green-400" : "bg-warning/10 text-warning"
-          }`}>
-            {state.autoDetected
-              ? <><CheckCircle2 className="w-4 h-4" /> Colonne téléphone détectée automatiquement</>
-              : <><AlertTriangle className="w-4 h-4" /> Aucune colonne reconnue — sélectionnez ci-dessous</>
-            }
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-3">
+          <p className="text-white/50 text-xs uppercase tracking-wide font-medium mb-1">Mapping des colonnes</p>
+          <MappingRow
+            label="Prénom" value={state.firstNameColumn ?? ""}
+            columns={state.allColumns}
+            detected={state.firstNameColumn === detectCol(state.allColumns, FIRSTNAME_CANDIDATES)}
+            onChange={(v) => remapColumns(state.phoneColumn!, v || null, state.lastNameColumn)}
+          />
+          <MappingRow
+            label="Nom" value={state.lastNameColumn ?? ""}
+            columns={state.allColumns}
+            detected={state.lastNameColumn === detectCol(state.allColumns, LASTNAME_CANDIDATES)}
+            onChange={(v) => remapColumns(state.phoneColumn!, state.firstNameColumn, v || null)}
+          />
+          <MappingRow
+            label="Téléphone" required value={state.phoneColumn ?? ""}
+            columns={state.allColumns}
+            detected={state.phoneColumn === detectCol(state.allColumns, PHONE_CANDIDATES)}
+            onChange={(v) => v && remapColumns(v, state.firstNameColumn, state.lastNameColumn)}
+          />
+        </div>
+      )}
+
+      {/* Contact list */}
+      {state.contactRows.length > 0 && (
+        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+          {/* Summary bar */}
+          <div className="px-4 py-3 border-b border-white/8 flex items-center gap-3 flex-wrap">
+            <span className="text-white/60 text-xs">{state.contactRows.length} ligne{state.contactRows.length > 1 ? "s" : ""}</span>
+            {okCount     > 0 && <span className="flex items-center gap-1 text-green-400  text-xs"><span className="w-1.5 h-1.5 rounded-full bg-green-400"  />{okCount} OK</span>}
+            {recentCount > 0 && <span className="flex items-center gap-1 text-warning    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-warning"    />{recentCount} récent{recentCount > 1 ? "s" : ""}</span>}
+            {dupeCount   > 0 && <span className="flex items-center gap-1 text-red-400    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-red-400"    />{dupeCount} doublon{dupeCount > 1 ? "s" : ""}</span>}
+            {badCount    > 0 && <span className="flex items-center gap-1 text-red-400    text-xs"><span className="w-1.5 h-1.5 rounded-full bg-red-400"    />{badCount} invalide{badCount > 1 ? "s" : ""}</span>}
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/50">Numéro de téléphone</div>
-            <ArrowRight className="w-4 h-4 text-white/30 flex-shrink-0" />
-            <select
-              value={state.phoneColumn ?? ""}
-              onChange={(e) => changeColumn(e.target.value)}
-              className="flex-1 bg-white/8 border border-electric-violet/40 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-electric-violet transition-colors"
-            >
-              {state.allColumns.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-
-          {state.contacts.length > 0 && (
-            <div className="border-t border-white/8 pt-4 space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
-                  <span className="text-white font-medium">{state.contacts.length}</span>
-                  <span className="text-white/60">numéro{state.contacts.length > 1 ? "s" : ""} valide{state.contacts.length > 1 ? "s" : ""}</span>
-                </div>
-                {state.duplicatesRemoved > 0 && (
-                  <span className="text-white/40 text-xs bg-white/5 px-2 py-1 rounded-lg">
-                    {state.duplicatesRemoved} doublon{state.duplicatesRemoved > 1 ? "s" : ""} retiré{state.duplicatesRemoved > 1 ? "s" : ""}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {state.contacts.slice(0, 6).map((c, i) => (
-                  <span key={i} className="px-2.5 py-1 rounded-lg bg-white/5 text-white/60 text-xs font-mono">{c}</span>
+          {/* Table */}
+          <div className="max-h-64 overflow-y-auto">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-[#0d0d1a]">
+                <tr>
+                  {["#", "Prénom", "Nom", "Téléphone", "Statut", ""].map((h) => (
+                    <th key={h} className="px-3 py-2 text-left text-white/30 font-medium uppercase tracking-wide">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {state.contactRows.map((row, i) => (
+                  <tr key={row.id} className={`border-t border-white/5 ${row.status === "invalid" || row.status === "duplicate" ? "opacity-60" : ""}`}>
+                    <td className="px-3 py-2 text-white/25">{i + 1}</td>
+                    <td className="px-3 py-2 text-white/70">{row.firstName || <span className="text-white/20">—</span>}</td>
+                    <td className="px-3 py-2 text-white/70">{row.lastName  || <span className="text-white/20">—</span>}</td>
+                    <td className="px-3 py-2 font-mono">
+                      {editingId === row.id ? (
+                        <input
+                          autoFocus
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onBlur={() => commitEdit(row.id)}
+                          onKeyDown={(e) => { if (e.key === "Enter") commitEdit(row.id); if (e.key === "Escape") setEditingId(null) }}
+                          className="bg-white/10 border border-electric-violet/50 rounded px-2 py-0.5 text-white w-32 outline-none text-xs"
+                        />
+                      ) : (
+                        <span className={row.status === "invalid" ? "text-red-400" : "text-white/80"}>{row.phone || row.rawPhone}</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2"><StatusBadge status={row.status} /></td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => startEdit(row)} className="p-1 rounded text-white/30 hover:text-electric-violet hover:bg-electric-violet/10 transition-colors">
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                        <button onClick={() => deleteRow(row.id)} className="p-1 rounded text-white/30 hover:text-red-400 hover:bg-red-400/10 transition-colors">
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 ))}
-                {state.contacts.length > 6 && (
-                  <span className="px-2.5 py-1 rounded-lg bg-white/5 text-white/40 text-xs">+{state.contacts.length - 6}</span>
-                )}
-              </div>
-            </div>
-          )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>,
@@ -560,10 +669,10 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
           <h3 className="font-medium text-white">Vérification des contacts</h3>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          {[["destinataires", state.contacts.length, "text-white"],
+          {[
+            ["destinataires", contacts.length, "text-white"],
             ["crédits requis", cost, "text-white"],
-            ["déjà contactés", state.recentExcluded ? 0 : state.recentlySent.length,
-              state.recentlySent.length > 0 && !state.recentExcluded ? "text-warning" : "text-green-400"]
+            ["déjà contactés", recentRows.length, recentRows.length > 0 && !state.recentExcluded ? "text-warning" : "text-green-400"],
           ].map(([label, val, color]) => (
             <div key={String(label)} className="bg-white/5 rounded-xl p-3 text-center">
               <p className={`text-2xl font-bold ${color}`}>{val}</p>
@@ -573,27 +682,24 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
         </div>
       </div>
 
-      {state.recentlySent.length > 0 && !state.recentExcluded && (
+      {recentRows.length > 0 && !state.recentExcluded && (
         <div className="bg-warning/8 border border-warning/30 rounded-2xl p-5">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-warning font-medium text-sm mb-1">
-                {state.recentlySent.length} contact{state.recentlySent.length > 1 ? "s" : ""} déjà contacté{state.recentlySent.length > 1 ? "s" : ""} ce mois-ci
+                {recentRows.length} contact{recentRows.length > 1 ? "s" : ""} déjà contacté{recentRows.length > 1 ? "s" : ""} ce mois-ci
               </p>
               <p className="text-white/50 text-xs mb-3">Les inclure peut nuire à votre réputation d'expéditeur.</p>
               <div className="flex flex-wrap gap-1.5 mb-4">
-                {state.recentlySent.slice(0, 8).map((n, i) => (
-                  <span key={i} className="px-2 py-0.5 rounded bg-warning/15 text-warning text-xs font-mono">{n}</span>
+                {recentRows.slice(0, 8).map((r, i) => (
+                  <span key={i} className="px-2 py-0.5 rounded bg-warning/15 text-warning text-xs font-mono">{r.phone}</span>
                 ))}
-                {state.recentlySent.length > 8 && (
-                  <span className="px-2 py-0.5 rounded bg-warning/10 text-warning/60 text-xs">+{state.recentlySent.length - 8}</span>
-                )}
+                {recentRows.length > 8 && <span className="px-2 py-0.5 rounded bg-warning/10 text-warning/60 text-xs">+{recentRows.length - 8}</span>}
               </div>
               <button onClick={excludeRecentlySent}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-warning/20 hover:bg-warning/30 border border-warning/30 text-warning text-sm font-medium transition-colors">
-                <UserX className="w-4 h-4" />
-                Exclure ces {state.recentlySent.length} contact{state.recentlySent.length > 1 ? "s" : ""}
+                <UserX className="w-4 h-4" /> Exclure ces {recentRows.length} contact{recentRows.length > 1 ? "s" : ""}
               </button>
             </div>
           </div>
@@ -607,9 +713,9 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
       )}
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-4 max-h-40 overflow-y-auto">
-        <p className="text-white/40 text-xs mb-2">Liste finale ({state.contacts.length} numéros)</p>
+        <p className="text-white/40 text-xs mb-2">Liste finale ({contacts.length} numéros)</p>
         <div className="space-y-0.5">
-          {state.contacts.map((c, i) => (
+          {contacts.map((c, i) => (
             <div key={i} className="flex items-center gap-2 py-0.5">
               <span className="text-white/20 text-xs w-6 text-right flex-shrink-0">{i + 1}</span>
               <span className="text-white/65 text-sm font-mono">{c}</span>
@@ -624,8 +730,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
           <div className="flex-1">
             <p className="text-white/80 text-sm font-medium mb-1">Conformité RGPD</p>
             <p className="text-white/50 text-xs leading-relaxed mb-4">
-              En cochant cette case, vous confirmez que les destinataires ont consenti à recevoir
-              des communications SMS de votre établissement conformément au RGPD.
+              En cochant cette case, vous confirmez que les destinataires ont consenti à recevoir des communications SMS de votre établissement conformément au RGPD.
             </p>
             <label className="flex items-center gap-3 cursor-pointer">
               <div
@@ -645,19 +750,13 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
     /* ── STEP 3 : Message / Templates ────────────────────────────────── */
     <div key="s3" className="space-y-5">
-
-      {/* Template cards */}
       <div className="grid grid-cols-2 gap-4">
         {TEMPLATES.map((tpl, idx) => {
           const selected = state.selectedTemplate === idx
           return (
-            <button
-              key={idx}
-              onClick={() => selectTemplate(idx)}
+            <button key={idx} onClick={() => selectTemplate(idx)}
               className={`text-left rounded-2xl p-4 border-2 transition-all duration-200 ${
-                selected
-                  ? "border-electric-violet bg-electric-violet/10"
-                  : "border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/[0.08]"
+                selected ? "border-electric-violet bg-electric-violet/10" : "border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/[0.08]"
               }`}
               style={selected ? { boxShadow: "0 0 20px rgba(139,92,246,0.2)" } : {}}
             >
@@ -666,28 +765,19 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
                 <span className={`text-xs px-2 py-0.5 rounded-full border ${tpl.tagColor}`}>{tpl.tag}</span>
               </div>
               <p className="text-white/45 text-xs leading-relaxed mb-3">{tpl.description}</p>
-              <p className="text-white/60 text-[11px] leading-relaxed line-clamp-3 font-mono">
-                {tpl.text.replace("[LIEN]", FAKE_LINK)}
-              </p>
-              {selected && (
-                <div className="mt-3 flex items-center gap-1.5 text-electric-violet text-xs font-medium">
-                  <Check className="w-3.5 h-3.5" /> Sélectionné
-                </div>
-              )}
+              <p className="text-white/60 text-[11px] leading-relaxed line-clamp-3 font-mono">{tpl.text.replace("[LIEN]", FAKE_LINK)}</p>
+              {selected && <div className="mt-3 flex items-center gap-1.5 text-electric-violet text-xs font-medium"><Check className="w-3.5 h-3.5" /> Sélectionné</div>}
             </button>
           )
         })}
       </div>
 
-      {/* Alerte si lien Google manquant */}
       {state.selectedTemplate !== null && !state.googleLink.trim() && (
         <div className="flex items-center gap-2 bg-warning/8 border border-warning/30 rounded-xl px-4 py-3 text-sm text-warning">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          Renseignez votre lien d'avis Google dans le panneau de droite pour continuer.
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" /> Renseignez votre lien d'avis Google dans le panneau de droite pour continuer.
         </div>
       )}
 
-      {/* Smartphone preview */}
       <div className="flex items-center gap-6">
         <div className="flex-1 bg-white/[0.03] border border-white/8 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
@@ -701,20 +791,17 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
     /* ── STEP 4 : Résumé & Envoi ─────────────────────────────────────── */
     <div key="s4" className="space-y-5">
-      {done ? (
-        <SuccessScreen onBack={onSent} />
-      ) : (
+      {done ? <SuccessScreen onBack={onSent} /> : (
         <>
-          {/* Résumé ultra-pro */}
           <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
             <div className="px-5 py-3 border-b border-white/8 bg-white/[0.03]">
               <h3 className="text-sm font-semibold text-white/70">Résumé de la campagne</h3>
             </div>
             {[
-              ["Campagne",               state.campaignName || "Sans nom"],
-              ["Modèle choisi",          state.selectedTemplate !== null ? TEMPLATES[state.selectedTemplate].name : "—"],
-              ["Destinataires valides",  `${state.contacts.length}`],
-              ["Crédits à débiter",      `${cost}`],
+              ["Campagne",              state.campaignName || "Sans nom"],
+              ["Modèle choisi",         state.selectedTemplate !== null ? TEMPLATES[state.selectedTemplate].name : "—"],
+              ["Destinataires valides", `${contacts.length}`],
+              ["Crédits à débiter",     `${cost}`],
             ].map(([label, value], i) => (
               <div key={i} className="px-5 py-3.5 flex justify-between text-sm border-b border-white/5 last:border-0">
                 <span className="text-white/50">{label}</span>
@@ -723,7 +810,6 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
             ))}
           </div>
 
-          {/* Aperçu final du message avec le vrai lien */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <p className="text-white/40 text-xs mb-3 flex items-center gap-1.5">
               <MessageSquare className="w-3.5 h-3.5" /> Aperçu final du message
@@ -745,9 +831,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
           {sending && (
             <div>
-              <div className="flex justify-between text-xs text-white/50 mb-1.5">
-                <span>Envoi en cours…</span><span>{progress}%</span>
-              </div>
+              <div className="flex justify-between text-xs text-white/50 mb-1.5"><span>Envoi en cours…</span><span>{progress}%</span></div>
               <div className="w-full bg-white/10 rounded-full h-1.5">
                 <div className="bg-electric-violet h-1.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
               </div>
@@ -756,15 +840,10 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
           <button
             onClick={handleSend}
-            disabled={sending || !hasEnough || state.contacts.length === 0 || !state.message.trim()}
-            className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-semibold transition-all
-              bg-electric-violet hover:bg-electric-violet/80 active:scale-[0.98]
-              disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-electric-violet"
+            disabled={sending || !hasEnough || contacts.length === 0 || !state.message.trim()}
+            className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-semibold transition-all bg-electric-violet hover:bg-electric-violet/80 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-electric-violet"
           >
-            {sending
-              ? <><Loader2 className="w-5 h-5 animate-spin" /> Envoi en cours…</>
-              : <><Send className="w-5 h-5" /> Lancer l'envoi ({state.contacts.length} SMS)</>
-            }
+            {sending ? <><Loader2 className="w-5 h-5 animate-spin" /> Envoi en cours…</> : <><Send className="w-5 h-5" /> Lancer l'envoi ({contacts.length} SMS)</>}
           </button>
         </>
       )}
@@ -774,7 +853,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
   // ── Nav guards ────────────────────────────────────────────────────────
 
   const canNext = [
-    state.contacts.length > 0,
+    contacts.length > 0,
     state.rgpdAccepted,
     state.selectedTemplate !== null && state.googleLink.trim().length > 0,
     true,
@@ -799,9 +878,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
         <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-6 min-h-[340px]">
           <AnimatePresence custom={dir} mode="wait">
-            <motion.div key={step} custom={dir} variants={SLIDE}
-              initial="enter" animate="center" exit="exit"
-              transition={{ duration: 0.22, ease: "easeInOut" }}>
+            <motion.div key={step} custom={dir} variants={SLIDE} initial="enter" animate="center" exit="exit" transition={{ duration: 0.22, ease: "easeInOut" }}>
               {stepContent[step]}
             </motion.div>
           </AnimatePresence>
@@ -829,7 +906,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
         googleLink={state.googleLink}
         onGoogleLinkChange={setGoogleLink}
         shortCode={state.shortCode}
-        contactCount={state.contacts.length}
+        contactCount={contacts.length}
         credits={credits}
         currentStep={step}
       />
