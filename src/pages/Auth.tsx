@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Navigate, Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { Navigate, Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
@@ -10,6 +10,7 @@ type Mode = "login" | "signup"
 
 export default function Auth() {
   const { user, signIn, signUp } = useAuth()
+  const navigate = useNavigate()
   const [mode, setMode] = useState<Mode>("login")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -17,6 +18,16 @@ export default function Auth() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
+
+  // Gère le lien de confirmation email (hash contient access_token)
+  useEffect(() => {
+    if (window.location.hash.includes("access_token")) {
+      // Le SDK Supabase va détecter le token et déclencher onAuthStateChange
+      // On attend juste que user soit défini pour rediriger
+      const timer = setTimeout(() => navigate("/envoi-groupe", { replace: true }), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [navigate])
 
   // Déjà connecté → rediriger vers l'outil
   if (user) return <Navigate to="/envoi-groupe" replace />
