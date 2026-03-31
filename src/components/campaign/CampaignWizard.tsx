@@ -312,8 +312,10 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
 
   function setGoogleLink(link: string) {
     setState((s) => {
-      // Generate a new short code when a valid link is entered for the first time
-      const newCode = link.trim() && !s.shortCode ? generateShortCode() : s.shortCode
+      // Generate code on first valid input; reset to null if link is fully cleared
+      const newCode = link.trim()
+        ? (s.shortCode ?? generateShortCode())
+        : null
       return {
         ...s,
         googleLink: link,
@@ -806,6 +808,7 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
         onCampaignNameChange={(v) => setState((s) => ({ ...s, campaignName: v }))}
         googleLink={state.googleLink}
         onGoogleLinkChange={setGoogleLink}
+        shortCode={state.shortCode}
         contactCount={state.contacts.length}
         credits={credits}
         currentStep={step}

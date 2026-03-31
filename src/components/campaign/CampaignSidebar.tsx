@@ -1,10 +1,14 @@
-import { CreditCard, Settings2, Zap, Info, Link2, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { useState } from "react"
+import { CreditCard, Settings2, Zap, Info, Link2, AlertTriangle, CheckCircle2, Copy, Check as CheckIcon } from "lucide-react"
+
+const SMS_DOMAIN = "avis-pro.eu"
 
 interface CampaignSidebarProps {
   campaignName: string
   onCampaignNameChange: (v: string) => void
   googleLink: string
   onGoogleLinkChange: (v: string) => void
+  shortCode: string | null
   contactCount: number
   credits: number
   currentStep: number
@@ -15,13 +19,24 @@ export default function CampaignSidebar({
   onCampaignNameChange,
   googleLink,
   onGoogleLinkChange,
+  shortCode,
   contactCount,
   credits,
   currentStep,
 }: CampaignSidebarProps) {
+  const [copied, setCopied] = useState(false)
   const cost = contactCount
   const hasEnough = credits >= cost
   const linkOk = googleLink.trim().length > 0
+  const shortUrl = shortCode ? `https://${SMS_DOMAIN}/${shortCode}` : null
+
+  function copyShortUrl() {
+    if (!shortUrl) return
+    navigator.clipboard.writeText(shortUrl).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   const stepHints = [
     "Importez un fichier CSV ou Excel contenant les numéros de vos clients.",
@@ -74,6 +89,40 @@ export default function CampaignSidebar({
             <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
             Lien inséré automatiquement dans le modèle
           </p>
+        )}
+
+        {/* Short link preview */}
+        {shortUrl && (
+          <div
+            className="mt-3 rounded-xl px-3 py-2.5 flex items-center justify-between gap-2"
+            style={{
+              background: "rgba(139,92,246,0.08)",
+              border: "1px solid rgba(139,92,246,0.35)",
+              boxShadow: "0 0 12px rgba(139,92,246,0.12)",
+            }}
+          >
+            <div className="min-w-0">
+              <p className="text-electric-violet text-[10px] font-medium uppercase tracking-wide mb-0.5">
+                Lien court généré
+              </p>
+              <p
+                className="text-white text-xs font-mono truncate"
+                style={{ textShadow: "0 0 8px rgba(139,92,246,0.6)" }}
+              >
+                {shortUrl}
+              </p>
+            </div>
+            <button
+              onClick={copyShortUrl}
+              title="Copier le lien"
+              className="flex-shrink-0 p-1.5 rounded-lg text-electric-violet hover:bg-electric-violet/20 transition-colors"
+            >
+              {copied
+                ? <CheckIcon className="w-3.5 h-3.5 text-green-400" />
+                : <Copy className="w-3.5 h-3.5" />
+              }
+            </button>
+          </div>
         )}
 
         <div className="mt-4 flex items-center gap-2">
