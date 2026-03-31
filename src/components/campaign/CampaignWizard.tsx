@@ -326,7 +326,27 @@ export default function CampaignWizard({ onClose, onSent }: CampaignWizardProps)
     })
   }
 
-  // Persist short link to DB before sending (idempotent)
+  // ── Auto-save short link as soon as code + link are ready ────────────
+  useEffect(() => {
+    if (!user || !state.shortCode || !state.googleLink.trim() || state.shortLinkSaved) return
+
+    supabase
+      .from("short_links")
+      .upsert(
+        { short_code: state.shortCode, destination_url: state.googleLink.trim(), user_id: user.id },
+        { onConflict: "short_code" }
+      )
+      .then(({ error }) => {
+        if (error) {
+          console.error("[short_links upsert]", error)
+          // Don't toast here — user is still filling the form, silent fail is fine
+        } else {
+          setState((s) => ({ ...s, shortLinkSaved: true }))
+        }
+      })
+  }, [state.shortCode, state.googleLink, user])
+
+  // Before send: ensure saved (covers edge case where effect hasn't resolved yet)
   async function ensureShortLinkSaved(): Promise<boolean> {
     if (!user || !state.shortCode || !state.googleLink.trim()) return false
     if (state.shortLinkSaved) return true

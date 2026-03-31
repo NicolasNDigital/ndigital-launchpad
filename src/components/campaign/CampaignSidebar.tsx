@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CreditCard, Settings2, Zap, Info, Link2, AlertTriangle, CheckCircle2, Copy, Check as CheckIcon } from "lucide-react"
+import { CreditCard, Settings2, Zap, Info, Link2, AlertTriangle, CheckCircle2, Copy, Check as CheckIcon, ExternalLink } from "lucide-react"
 
 const SMS_DOMAIN = "avis-pro.eu"
 
@@ -112,16 +112,27 @@ export default function CampaignSidebar({
                 {shortUrl}
               </p>
             </div>
-            <button
-              onClick={copyShortUrl}
-              title="Copier le lien"
-              className="flex-shrink-0 p-1.5 rounded-lg text-electric-violet hover:bg-electric-violet/20 transition-colors"
-            >
-              {copied
-                ? <CheckIcon className="w-3.5 h-3.5 text-green-400" />
-                : <Copy className="w-3.5 h-3.5" />
-              }
-            </button>
+            <div className="flex gap-1 flex-shrink-0">
+              <button
+                onClick={copyShortUrl}
+                title="Copier le lien"
+                className="p-1.5 rounded-lg text-electric-violet hover:bg-electric-violet/20 transition-colors"
+              >
+                {copied
+                  ? <CheckIcon className="w-3.5 h-3.5 text-green-400" />
+                  : <Copy className="w-3.5 h-3.5" />
+                }
+              </button>
+              <a
+                href={shortUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Tester le lien"
+                className="p-1.5 rounded-lg text-electric-violet hover:bg-electric-violet/20 transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         )}
 
