@@ -24,8 +24,8 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { href: "#services", label: "Services" },
-    { href: "#tarifs", label: "Tarifs" },
+    { href: "/#services", label: "Services" },
+    { href: "/#tarifs", label: "Tarifs" },
     { href: "/test-visibilite-ia", label: "Test de visibilité IA", isRoute: true },
   ];
 
@@ -113,7 +113,7 @@ const Header = () => {
 
             {/* Contact */}
             <a
-              href="#contact"
+              href="/#contact"
               className={`font-medium transition-colors ${
                 isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
               }`}
@@ -127,7 +127,7 @@ const Header = () => {
             <div className="badge-pulse bg-warning/10 text-warning text-xs">
               ⚡ Mise en ligne en 2 semaines
             </div>
-            <a href="#contact" className="btn-primary text-sm">
+            <a href="/#contact" className="btn-primary text-sm">
               <Phone className="w-4 h-4" />
               Devis Gratuit
             </a>
@@ -225,14 +225,14 @@ const Header = () => {
 
               {/* Contact */}
               <a
-                href="#contact"
+                href="/#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
               >
                 Contact
               </a>
               <a
-                href="#contact"
+                href="/#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="btn-primary text-center mt-4"
               >
