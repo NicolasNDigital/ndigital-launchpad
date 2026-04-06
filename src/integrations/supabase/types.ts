@@ -14,112 +14,192 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
+      pending_campaigns: {
         Row: {
-          id: string
-          email: string | null
-          full_name: string | null
-          sms_credits: number
           created_at: string
-          updated_at: string
+          email: string | null
+          failed_count: number
+          first_names: string[]
+          id: string
+          message: string
+          names_remaining: string[]
+          phone_numbers: string[]
+          phones_remaining: string[]
+          review_link: string
+          scheduled_for: string | null
+          sent_at: string | null
+          sent_count: number
+          short_code: string
+          status: string
+          stripe_session_id: string | null
+          template_idx: number
         }
         Insert: {
-          id: string
-          email?: string | null
-          full_name?: string | null
-          sms_credits?: number
           created_at?: string
-          updated_at?: string
+          email?: string | null
+          failed_count?: number
+          first_names?: string[]
+          id?: string
+          message: string
+          names_remaining?: string[]
+          phone_numbers: string[]
+          phones_remaining?: string[]
+          review_link: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          sent_count?: number
+          short_code: string
+          status?: string
+          stripe_session_id?: string | null
+          template_idx?: number
         }
         Update: {
-          id?: string
-          email?: string | null
-          full_name?: string | null
-          sms_credits?: number
           created_at?: string
-          updated_at?: string
+          email?: string | null
+          failed_count?: number
+          first_names?: string[]
+          id?: string
+          message?: string
+          names_remaining?: string[]
+          phone_numbers?: string[]
+          phones_remaining?: string[]
+          review_link?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          sent_count?: number
+          short_code?: string
+          status?: string
+          stripe_session_id?: string | null
+          template_idx?: number
+        }
+        Relationships: []
+      }
+      platform_short_links: {
+        Row: {
+          campaign_id: string | null
+          clicks_count: number
+          created_at: string
+          id: string
+          original_url: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          clicks_count?: number
+          created_at?: string
+          id: string
+          original_url: string
+        }
+        Update: {
+          campaign_id?: string | null
+          clicks_count?: number
+          created_at?: string
+          id?: string
+          original_url?: string
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
+            foreignKeyName: "platform_short_links_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "pending_campaigns"
             referencedColumns: ["id"]
           },
         ]
       }
-      short_links: {
+      profiles: {
         Row: {
+          email: string | null
+          full_name: string | null
           id: string
-          short_code: string
-          destination_url: string
-          clicks_count: number
-          user_id: string | null
-          created_at: string
+          sms_credits: number | null
+          updated_at: string | null
         }
         Insert: {
-          id?: string
-          short_code: string
-          destination_url: string
-          clicks_count?: number
-          user_id?: string | null
-          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          sms_credits?: number | null
+          updated_at?: string | null
         }
         Update: {
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          sms_credits?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      short_links: {
+        Row: {
+          clicks_count: number
+          created_at: string
+          destination_url: string
+          id: string
+          short_code: string
+          user_id: string | null
+        }
+        Insert: {
+          clicks_count?: number
+          created_at?: string
+          destination_url: string
+          id?: string
+          short_code: string
+          user_id?: string | null
+        }
+        Update: {
+          clicks_count?: number
+          created_at?: string
+          destination_url?: string
           id?: string
           short_code?: string
-          destination_url?: string
-          clicks_count?: number
           user_id?: string | null
-          created_at?: string
         }
         Relationships: []
       }
       sms_logs: {
         Row: {
+          cost: number | null
+          created_at: string | null
           id: string
-          user_id: string
-          recipient: string
           message: string
-          status: string
-          cost: number
-          created_at: string
+          recipient: string
+          status: string | null
+          user_id: string | null
         }
         Insert: {
+          cost?: number | null
+          created_at?: string | null
           id?: string
-          user_id: string
-          recipient: string
           message: string
-          status?: string
-          cost?: number
-          created_at?: string
+          recipient: string
+          status?: string | null
+          user_id?: string | null
         }
         Update: {
+          cost?: number | null
+          created_at?: string | null
           id?: string
-          user_id?: string
-          recipient?: string
           message?: string
-          status?: string
-          cost?: number
-          created_at?: string
+          recipient?: string
+          status?: string | null
+          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "sms_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_platform_link_click: {
+        Args: { link_id: string }
+        Returns: undefined
+      }
+      increment_short_link_clicks: {
+        Args: { link_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
