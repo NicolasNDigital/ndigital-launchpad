@@ -31,7 +31,7 @@ const Header = () => {
   const resourcesLinks = [
     { href: "/ressources/lexique-ia-seo", label: "Lexique IA & SEO", icon: BookOpen },
     { href: "/test-visibilite-ia", label: "Test de visibilité IA", icon: Eye },
-    { href: "/sms-groupes", label: "Envoyer des demandes d'Avis", icon: Star },
+    
   ];
 
   return (
