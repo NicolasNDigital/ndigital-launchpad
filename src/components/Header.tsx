@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, ChevronDown, BookOpen, Star, Eye } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, BookOpen, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
