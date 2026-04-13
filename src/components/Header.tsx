@@ -26,11 +26,12 @@ const Header = () => {
   const navLinks = [
     { href: "/#services", label: "Services" },
     { href: "/#tarifs", label: "Tarifs" },
-    { href: "/test-visibilite-ia", label: "Test de visibilité IA", isRoute: true },
   ];
 
   const resourcesLinks = [
     { href: "/ressources/lexique-ia-seo", label: "Lexique IA & SEO", icon: BookOpen },
+    { href: "/test-visibilite-ia", label: "Test de visibilité IA", icon: Eye },
+    { href: "/sms-groupes", label: "Envoyer des demandes d'Avis", icon: Star },
   ];
 
   return (
