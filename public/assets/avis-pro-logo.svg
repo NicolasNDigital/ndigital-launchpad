@@ -1,7 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 44" width="138" height="44">
-  <rect x="0" y="4" width="36" height="36" rx="8" fill="#1a56db"/>
-  <g transform="translate(9, 13) scale(0.75)">
-    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="44"
+   viewBox="0 0 138 44"
+   width="138"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="avispro-logo-blue-white.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="138"
+       height="44"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <rect
+     fill="#1a56db"
+     height="40.422699"
+     rx="8.7713709"
+     width="39.471172"
+     y="1.7886505"
+     id="rect1"
+     x="0.31590706"
+     style="stroke-width:1.10956" />
+  <g
+     fill="#ffffff"
+     id="g1"
+     transform="matrix(1.0964214,0,0,1.1228527,0.31590707,-2.7027604)">
+    <path
+       d="M 12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 Z"
+       stroke="#ffffff"
+       stroke-linejoin="round"
+       stroke-width="1.5"
+       transform="matrix(0.75,0,0,0.75,9,13)"
+       id="path1" />
+    <text
+       font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+       font-size="20px"
+       font-weight="700"
+       letter-spacing="-0.5"
+       x="48"
+       y="28"
+       id="text1">Avis-Pro</text>
   </g>
-  <text x="48" y="28" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="20" letter-spacing="-0.5" fill="#ffffff">Avis-Pro</text>
 </svg>
