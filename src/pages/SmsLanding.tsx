@@ -95,7 +95,7 @@ export default function SmsLanding() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex items-center justify-center mb-10"
           >
-            <img src="/assets/avis-pro-logo.svg" alt="Avis-Pro" className="h-11 md:h-14 object-contain" />
+            <img src="/assets/avis-pro-logo.svg" alt="Avis-Pro" className="h-11 md:h-14 block mx-auto" />
           </motion.div>
 
           <motion.h1
