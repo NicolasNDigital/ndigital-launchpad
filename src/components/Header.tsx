@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, ChevronDown, BookOpen, Star, Eye } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, BookOpen, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -31,7 +31,7 @@ const Header = () => {
   const resourcesLinks = [
     { href: "/ressources/lexique-ia-seo", label: "Lexique IA & SEO", icon: BookOpen },
     { href: "/test-visibilite-ia", label: "Test de visibilité IA", icon: Eye },
-    { href: "/sms-groupes", label: "Envoyer des demandes d'Avis", icon: Star },
+    
   ];
 
   return (
