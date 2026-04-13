@@ -52,27 +52,15 @@ const Header = () => {
 
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.isRoute ? (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`font-medium transition-colors ${
-                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`font-medium transition-colors ${
-                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-                  }`}
-                >
-                  {link.label}
-                </a>
-              )
+              <a
+                key={link.href}
+                href={link.href}
+                className={`font-medium transition-colors ${
+                  isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </a>
             ))}
 
             {/* Dropdown Ressources */}
