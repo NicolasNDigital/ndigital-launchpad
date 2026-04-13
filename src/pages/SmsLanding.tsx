@@ -95,16 +95,7 @@ export default function SmsLanding() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex items-center justify-center mb-10"
           >
-            <div className="relative group">
-              {/* Animated glow ring behind */}
-              <div className="absolute -inset-3 bg-gradient-to-r from-electric-violet via-neon-cyan to-dynamic-orange rounded-2xl opacity-60 blur-lg group-hover:opacity-80 transition-opacity duration-500 animate-pulse-glow" />
-              {/* Gradient border wrapper */}
-              <div className="relative p-[2px] rounded-2xl bg-gradient-to-br from-electric-violet via-neon-cyan/50 to-dynamic-orange">
-                <div className="bg-white rounded-[14px] px-5 py-3 flex items-center gap-3">
-                  <img src="/assets/avis-pro-logo.png" alt="Avis-Pro" className="h-10 md:h-12 object-contain" />
-                </div>
-              </div>
-            </div>
+            <img src="/assets/avis-pro-logo.svg" alt="Avis-Pro" className="h-11 md:h-14 object-contain" />
           </motion.div>
 
           <motion.h1
