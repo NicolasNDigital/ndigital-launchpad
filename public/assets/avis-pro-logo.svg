@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 44" width="200" height="44">
+  <rect x="0" y="4" width="36" height="36" rx="8" fill="#1a56db"/>
+  <g transform="translate(9, 13) scale(0.75)">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+  <text x="48" y="28" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="20" letter-spacing="-0.5" fill="#ffffff">Avis-Pro</text>
+</svg>
