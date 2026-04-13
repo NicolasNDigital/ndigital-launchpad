@@ -1,11 +1,9 @@
-import { Link } from "react-router-dom"
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import {
   Upload, CreditCard, ShieldCheck, Zap, FileSpreadsheet,
   MessageSquare, BarChart3, ArrowRight, Check, Users, Star
 } from "lucide-react"
-import { useAuth } from "@/contexts/AuthContext"
 import Header from "@/components/Header"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -70,14 +68,12 @@ const PRICING_POINTS = [
   "Le solde est vérifié avant chaque envoi — zéro surprise",
 ]
 
+const CTA_HREF = "https://avis-pro.eu"
+const CTA_LABEL = "Commencer maintenant"
+
 // ── Component ──────────────────────────────────────────────────────────────
 
 export default function SmsLanding() {
-  const { user } = useAuth()
-
-  const ctaHref = user ? "/envoi-groupe" : "/auth"
-  const ctaLabel = user ? "Accéder à l'outil" : "Commencer maintenant"
-
   return (
     <div className="min-h-screen bg-deep-black text-white overflow-x-hidden">
       <Header />
@@ -91,14 +87,14 @@ export default function SmsLanding() {
         </div>
 
         <div className="container mx-auto max-w-4xl text-center relative">
+          {/* Avis-Pro logo */}
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-warning/15 border border-warning/30 text-warning text-sm font-medium mb-6"
+            className="flex items-center justify-center gap-3 mb-8"
           >
-            <Star className="w-4 h-4" />
-            Réputation locale · Avis Google
+            <img src="/assets/avis-pro-logo.png" alt="Avis-Pro" className="h-12 md:h-16 object-contain" />
           </motion.div>
 
           <motion.h1
@@ -107,8 +103,12 @@ export default function SmsLanding() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="text-4xl md:text-6xl font-heading font-bold leading-tight mb-6"
           >
-            Boostez vos avis Google{" "}
-            <span className="gradient-text">en un clic</span>
+            Découvrez{" "}
+            <span className="gradient-text">Avis-Pro</span>
+            <br />
+            <span className="text-2xl md:text-3xl font-medium text-white/60 mt-2 block">
+              par NDigital
+            </span>
           </motion.h1>
 
           <motion.p
@@ -125,20 +125,16 @@ export default function SmsLanding() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Link to={ctaHref} className="btn-primary text-base px-8 py-3.5">
-              {ctaLabel}
+            <a
+              href={CTA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-base px-8 py-3.5 inline-flex items-center gap-2"
+            >
+              {CTA_LABEL}
               <ArrowRight className="w-5 h-5" />
-            </Link>
-            {!user && (
-              <Link
-                to="/auth"
-                className="btn-outline text-base px-8 py-3.5 border border-white/20 rounded-xl font-semibold hover:bg-white/5 transition-colors"
-              >
-                Se connecter
-              </Link>
-            )}
+            </a>
           </motion.div>
 
           {/* Social proof */}
@@ -157,13 +153,13 @@ export default function SmsLanding() {
         </div>
       </section>
 
-      {/* ── Pourquoi choisir Ndigital SMS ? ─────────────────────────────── */}
+      {/* ── Pourquoi choisir Avis-Pro ? ──────────────────────────────────── */}
       <section className="py-24 px-4 bg-white/[0.02] border-y border-white/5">
         <div className="container mx-auto max-w-5xl">
           <FadeIn className="text-center mb-14">
             <h2 className="section-title mb-4">
               Pourquoi les pros choisissent{" "}
-              <span className="gradient-text">Ndigital SMS ?</span>
+              <span className="gradient-text">Avis-Pro ?</span>
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto">
               La réputation locale se joue sur Google. Un SMS au bon moment transforme un client satisfait en ambassadeur.
@@ -294,6 +290,7 @@ export default function SmsLanding() {
       <section className="py-24 px-4">
         <div className="container mx-auto max-w-2xl text-center">
           <FadeIn>
+            <img src="/assets/avis-pro-icon.png" alt="Avis-Pro" className="h-14 mx-auto mb-6" />
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-5">
               Prêt à décrocher vos{" "}
               <span className="gradient-text">prochains avis Google ?</span>
@@ -301,20 +298,15 @@ export default function SmsLanding() {
             <p className="text-white/55 mb-10 text-lg">
               Vos clients reçoivent un SMS avec votre lien Google. Ils laissent un avis en 15 secondes.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to={ctaHref} className="btn-orange text-base px-8 py-3.5">
-                {ctaLabel}
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              {!user && (
-                <Link
-                  to="/auth"
-                  className="text-white/60 hover:text-white transition-colors text-sm underline underline-offset-4"
-                >
-                  J'ai déjà un compte — me connecter
-                </Link>
-              )}
-            </div>
+            <a
+              href={CTA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-orange text-base px-8 py-3.5 inline-flex items-center gap-2"
+            >
+              {CTA_LABEL}
+              <ArrowRight className="w-5 h-5" />
+            </a>
           </FadeIn>
         </div>
       </section>
