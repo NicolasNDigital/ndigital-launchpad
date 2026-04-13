@@ -79,42 +79,57 @@ export default function SmsLanding() {
       <Header />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-24 px-4">
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-electric-violet/8 rounded-full blur-[120px]" />
-          <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-neon-cyan/6 rounded-full blur-[100px]" />
+      <section className="relative pt-32 pb-28 px-4">
+        {/* Background effects */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-electric-violet/[0.06] rounded-full blur-[160px]" />
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-neon-cyan/[0.04] rounded-full blur-[120px]" />
+          <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-dynamic-orange/[0.04] rounded-full blur-[100px]" />
         </div>
 
         <div className="container mx-auto max-w-4xl text-center relative">
-          {/* Avis-Pro logo */}
+          {/* Logo with creative frame */}
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center justify-center gap-3 mb-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex items-center justify-center mb-10"
           >
-            <img src="/assets/avis-pro-logo.png" alt="Avis-Pro" className="h-12 md:h-16 object-contain" />
+            <div className="relative group">
+              {/* Animated glow ring behind */}
+              <div className="absolute -inset-3 bg-gradient-to-r from-electric-violet via-neon-cyan to-dynamic-orange rounded-2xl opacity-60 blur-lg group-hover:opacity-80 transition-opacity duration-500 animate-pulse-glow" />
+              {/* Gradient border wrapper */}
+              <div className="relative p-[2px] rounded-2xl bg-gradient-to-br from-electric-violet via-neon-cyan/50 to-dynamic-orange">
+                <div className="bg-white rounded-[14px] px-5 py-3 flex items-center gap-3">
+                  <img src="/assets/avis-pro-logo.png" alt="Avis-Pro" className="h-10 md:h-12 object-contain" />
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-heading font-bold leading-tight mb-6"
+            transition={{ duration: 0.55, delay: 0.15 }}
+            className="text-4xl md:text-6xl font-heading font-bold leading-tight mb-3"
           >
             Découvrez{" "}
             <span className="gradient-text">Avis-Pro</span>
-            <br />
-            <span className="text-2xl md:text-3xl font-medium text-white/60 mt-2 block">
-              par NDigital
-            </span>
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.25 }}
+            className="text-lg md:text-xl text-white/40 font-medium mb-8"
+          >
+            par NDigital
+          </motion.p>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.2 }}
+            transition={{ duration: 0.55, delay: 0.3 }}
             className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10"
           >
             Envoyez un SMS avec votre lien d'avis Google à toute votre base clients en quelques secondes.
@@ -124,7 +139,7 @@ export default function SmsLanding() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.4 }}
           >
             <a
               href={CTA_HREF}
@@ -141,8 +156,8 @@ export default function SmsLanding() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-6 mt-12 text-white/40 text-sm"
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex flex-wrap items-center justify-center gap-6 mt-14 text-white/40 text-sm"
           >
             <span className="flex items-center gap-1.5"><Users className="w-4 h-4" /> Artisans & commerçants</span>
             <span className="w-px h-4 bg-white/10" />
