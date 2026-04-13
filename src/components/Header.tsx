@@ -70,7 +70,7 @@ const Header = () => {
                   isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
                 }`}
               >
-                Ressources
+                Ressources & Outils
                 <ChevronDown className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -91,14 +91,6 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* SMS Groupés — lien mis en avant */}
-            <Link
-              to="/sms-groupes"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-electric-violet text-white hover:bg-electric-violet/85 transition-colors text-sm font-semibold shadow-sm"
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              SMS Groupés
-            </Link>
 
             {/* Contact */}
             <a
@@ -145,25 +137,14 @@ const Header = () => {
           >
             <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
               {navLinks.map((link) => (
-                link.isRoute ? (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                )
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
+                >
+                  {link.label}
+                </a>
               ))}
 
               {/* Ressources section mobile */}
@@ -172,7 +153,7 @@ const Header = () => {
                   onClick={() => setIsResourcesOpen(!isResourcesOpen)}
                   className="flex items-center justify-between w-full text-foreground/80 hover:text-primary font-medium py-2 transition-colors"
                 >
-                  <span>Ressources</span>
+                  <span>Ressources & Outils</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${isResourcesOpen ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
@@ -202,15 +183,6 @@ const Header = () => {
                 </AnimatePresence>
               </div>
 
-              {/* SMS Groupés mobile */}
-              <Link
-                to="/sms-groupes"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 text-electric-violet font-medium py-2 transition-colors"
-              >
-                <MessageSquare className="w-4 h-4" />
-                SMS Groupés
-              </Link>
 
               {/* Contact */}
               <a
